@@ -3,10 +3,10 @@
  */
 package com.sparqline.metrics.system;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.MetricScope;
 import com.sparqline.metrics.SystemMetric;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 public class PRC extends SystemMetric {
 
@@ -15,13 +15,13 @@ public class PRC extends SystemMetric {
      */
     private static final long serialVersionUID = -2854251477298835565L;
 
-    public static PRC getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static PRC getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new PRC("", "", "PRC", MetricScope.ClassLevel, entity, graph);
     }
 
     private PRC(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }

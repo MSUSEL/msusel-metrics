@@ -1,13 +1,9 @@
 package com.sparqline.metrics.classmetrics;
 
-import java.util.List;
-
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.Connection;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.relations.DirectedRelationshipType;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * NUIV - Number of Unused Instance Variables. Count of a classes fields which
@@ -27,10 +23,9 @@ public class NUIV extends ClassMetric {
      * @param graph
      * @return
      */
-    public static NUIV getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static NUIV getInstance(final CodeNode entity, final CodeTree graph)
     {
-        return new NUIV(
-                "Number of Unused Instance Variables",
+        return new NUIV("Number of Unused Instance Variables",
                 "Count of a classes fields which are not either read from or written to in any of the class\'s methods.",
                 "NUIV", MetricScope.ClassLevel, entity, graph);
     }
@@ -44,7 +39,7 @@ public class NUIV extends ClassMetric {
      * @param graph
      */
     private NUIV(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -57,17 +52,18 @@ public class NUIV extends ClassMetric {
     public double measure()
     {
         double nuiv = 0;
-        final List<ProgramNode> fields = tree.getFields(entity);
-
-        for (final ProgramNode field : fields)
-        {
-            final List<Connection> edges = tree.getEdgesContainingRelationType(field,
-                    DirectedRelationshipType.IntraClassAssociation);
-            if (edges.isEmpty())
-            {
-                nuiv++;
-            }
-        }
+        // final List<CodeNode> fields = tree.getFields(entity);
+        //
+        // for (final CodeNode field : fields)
+        // {
+        // final List<Connection> edges =
+        // tree.getEdgesContainingRelationType(field,
+        // DirectedRelationshipType.IntraClassAssociation);
+        // if (edges.isEmpty())
+        // {
+        // nuiv++;
+        // }
+        // }
 
         return nuiv;
     }

@@ -1,13 +1,9 @@
 package com.sparqline.metrics.classmetrics;
 
-import java.util.List;
-
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.expression.MethodCallExpression;
-import com.sparqline.graph.nodes.type.ClassOrInterfaceNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * MPC - Message Passing Coupling. The number of send statments defined in a
@@ -27,7 +23,7 @@ public class MPC extends ClassMetric {
      * @param graph
      * @return
      */
-    public static MPC getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static MPC getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new MPC("Message Passing Coupling", "The number of send statements defined in a class.", "MPC",
                 MetricScope.ClassLevel, entity, graph);
@@ -42,7 +38,7 @@ public class MPC extends ClassMetric {
      * @param graph
      */
     private MPC(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -56,13 +52,14 @@ public class MPC extends ClassMetric {
     {
         double mpc = 0;
 
-        if (entity instanceof ClassOrInterfaceNode)
-        {
-            final ClassOrInterfaceNode cls = (ClassOrInterfaceNode) entity;
-
-            final List<MethodCallExpression> calls = cls.findExpressionByType(MethodCallExpression.class);
-            mpc = calls.size();
-        }
+        // if (entity instanceof ClassOrInterfaceNode)
+        // {
+        // final ClassOrInterfaceNode cls = (ClassOrInterfaceNode) entity;
+        //
+        // final List<MethodCallExpression> calls =
+        // cls.findExpressionByType(MethodCallExpression.class);
+        // mpc = calls.size();
+        // }
 
         return mpc;
     }

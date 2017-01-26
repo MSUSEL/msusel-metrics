@@ -3,11 +3,11 @@
  */
 package com.sparqline.metrics.classmetrics;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.type.ClassOrInterfaceNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
+import com.sparqline.quamoco.codetree.TypeNode;
 
 /**
  * NMA - Number of Methods Added by a Subclass. Number of methods newly added by
@@ -27,7 +27,7 @@ public class NMA extends ClassMetric {
      * @param graph
      * @return
      */
-    public static NMA getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static NMA getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new NMA("Number of Methods Added by a Subclass",
                 "Number of methods newly added by the class (and not overridden or inherited).", "NMA",
@@ -48,7 +48,7 @@ public class NMA extends ClassMetric {
      * @param graph
      */
     private NMA(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
         // TODO Auto-generated constructor stub
@@ -63,9 +63,9 @@ public class NMA extends ClassMetric {
     {
         double nma = 0;
 
-        if (entity instanceof ClassOrInterfaceNode)
+        if (entity instanceof TypeNode)
         {
-            final double nm = tree.getMethods(entity).size();
+            final double nm = ((TypeNode) entity).getMethods().size();
             nma = nm - nmo;
         }
 
@@ -79,6 +79,7 @@ public class NMA extends ClassMetric {
     @Override
     public void setPrerequisites()
     {
-        nmo = taskMap.containsKey("NMO") ? taskMap.get("NMO").join().getValue() : entity.getMetric("NMO");
+        // nmo = taskMap.containsKey("NMO") ?
+        // taskMap.get("NMO").join().getValue() : entity.getMetric("NMO");
     }
 }

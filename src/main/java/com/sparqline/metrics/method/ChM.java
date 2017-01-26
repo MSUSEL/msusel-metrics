@@ -1,14 +1,10 @@
 package com.sparqline.metrics.method;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.body.MethodNode;
-import com.sparqline.graph.nodes.type.ClassOrInterfaceNode;
 import com.sparqline.metrics.MethodMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
+import com.sparqline.quamoco.codetree.MethodNode;
 
 /**
  * ChM - Changing Methods. The number of distinct methods that call the measured
@@ -28,7 +24,7 @@ public class ChM extends MethodMetric {
      * @param graph
      * @return
      */
-    public static ChM getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static ChM getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new ChM("Changing Methods", "The number of distinct methods that call the measured method", "ChM",
                 MetricScope.MethodLevel, entity, graph);
@@ -43,7 +39,7 @@ public class ChM extends MethodMetric {
      * @param graph
      */
     private ChM(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -59,22 +55,22 @@ public class ChM extends MethodMetric {
 
         if (entity instanceof MethodNode)
         {
-            final Set<ProgramNode> callSet = new HashSet<>();
-            final MethodNode method = (MethodNode) entity;
-
-            ClassOrInterfaceNode methodOwner = (ClassOrInterfaceNode) tree.getMethodOwner(method);
-            Set<ProgramNode> others = new HashSet<>();
-            others.addAll(tree.getMethods());
-            others.remove(method);
-
-            for (ProgramNode pe : others)
-            {
-                MethodNode other = (MethodNode) pe;
-                if (other.getCalledMethods().contains(method))
-                    callSet.add(other);
-            }
-
-            chm = callSet.size();
+            /*
+             * final Set<ProgramNode> callSet = new HashSet<>();
+             * final MethodNode method = (MethodNode) entity;
+             * ClassOrInterfaceNode methodOwner = (ClassOrInterfaceNode)
+             * tree.getMethodOwner(method);
+             * Set<ProgramNode> others = new HashSet<>();
+             * others.addAll(tree.getMethods());
+             * others.remove(method);
+             * for (ProgramNode pe : others)
+             * {
+             * MethodNode other = (MethodNode) pe;
+             * if (other.getCalledMethods().contains(method))
+             * callSet.add(other);
+             * }
+             * chm = callSet.size();
+             */
         }
 
         return chm;
@@ -87,6 +83,7 @@ public class ChM extends MethodMetric {
     @Override
     public void setPrerequisites()
     {
-        double CINT = taskMap.containsKey("CINT") ? taskMap.get("CINT").join().getValue() : entity.getMetric("CINT");
+        // double CINT = taskMap.containsKey("CINT") ?
+        // taskMap.get("CINT").join().getValue() : entity.getMetric("CINT");
     }
 }

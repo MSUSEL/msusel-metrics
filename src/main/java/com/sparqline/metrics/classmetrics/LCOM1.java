@@ -3,10 +3,10 @@
  */
 package com.sparqline.metrics.classmetrics;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * LCOM1 - Lack of Cohesion in Object Methods. Indicates the level of cohesion
@@ -28,10 +28,9 @@ public class LCOM1 extends ClassMetric {
      * @param graph
      * @return
      */
-    public static LCOM1 getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static LCOM1 getInstance(final CodeNode entity, final CodeTree graph)
     {
-        return new LCOM1(
-                "Lack of Cohesion in Object Methods - 1",
+        return new LCOM1("Lack of Cohesion in Object Methods - 1",
                 "Indicates the level of cohesion between the methods in an object. It is a count of the number of method pairs whose similarity is 0 minus the count of method pairs whose similarity is not zero.",
                 "LCOM1", MetricScope.ClassLevel, entity, graph);
     }
@@ -45,7 +44,7 @@ public class LCOM1 extends ClassMetric {
      * @param graph
      */
     private LCOM1(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }

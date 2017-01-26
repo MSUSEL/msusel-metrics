@@ -3,12 +3,10 @@
  */
 package com.sparqline.metrics.system;
 
-import java.util.List;
-
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.MetricScope;
 import com.sparqline.metrics.SystemMetric;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * AIF - Attribute Inheritance Factor. Counts the number of inherited attributes
@@ -28,7 +26,7 @@ public class AIF extends SystemMetric {
      * @param graph
      * @return
      */
-    public static AIF getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static AIF getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new AIF("Attribute Inheritance Factor",
                 "Counts the number of inherited attributes as a ratio of total attributes.", "AIF",
@@ -44,29 +42,30 @@ public class AIF extends SystemMetric {
      * @param graph
      */
     private AIF(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see net.siliconcode.truerefactor.metrics.Metric#measure()
-     */
-    @Override
+/*
+ * (non-Javadoc)
+ * @see net.siliconcode.truerefactor.metrics.Metric#measure()
+ */
+@Override
     public double measure()
     {
-        final List<ProgramNode> classes = tree.getClasses();
+        // final List<CodeNode> classes = tree.getClasses();
 
         double totalInheritedAttributes = 0;
         double totalAttributes = 0;
 
-        for (final ProgramNode cls : classes)
+        /*for (final CodeNode cls : classes)
         {
             totalInheritedAttributes += cls.getMetric("IDM");
             totalAttributes += cls.getMetric("IDM") + cls.getMetric("NOF");
-        }
+        }*/
 
         return totalInheritedAttributes / totalAttributes;
     }
 }
+

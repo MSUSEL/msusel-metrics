@@ -3,11 +3,10 @@
  */
 package com.sparqline.metrics.classmetrics;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.type.ClassOrInterfaceNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * NDC - Number of Descendant Classes. This metric measures the number of
@@ -29,10 +28,9 @@ public class NDC extends ClassMetric {
      * @param graph
      * @return
      */
-    public static NDC getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static NDC getInstance(final CodeNode entity, final CodeTree graph)
     {
-        return new NDC(
-                "Number of Descendant Classes",
+        return new NDC("Number of Descendant Classes",
                 "This metric measures the number of classes that may potentially be influenced by the class because of inheritance relations. It addresses a problem wit the CK NOC metric. A class influences all its subclasses and not just the immediate children.",
                 "NDC", MetricScope.ClassLevel, entity, graph);
     }
@@ -46,7 +44,7 @@ public class NDC extends ClassMetric {
      * @param graph
      */
     private NDC(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -58,6 +56,7 @@ public class NDC extends ClassMetric {
     @Override
     public double measure()
     {
-        return tree.getAllSubClasses((ClassOrInterfaceNode) entity).size();
+        // return tree.getAllSubClasses((ClassOrInterfaceNode) entity).size();
+        return 0;
     }
 }

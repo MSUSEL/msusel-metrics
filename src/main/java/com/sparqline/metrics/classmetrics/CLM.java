@@ -3,10 +3,10 @@
  */
 package com.sparqline.metrics.classmetrics;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * CLM -
@@ -25,7 +25,7 @@ public class CLM extends ClassMetric {
      * @param graph
      * @return
      */
-    public static CLM getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static CLM getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new CLM("", "", "CLM", MetricScope.ClassLevel, entity, graph);
     }
@@ -39,7 +39,7 @@ public class CLM extends ClassMetric {
      * @param graph
      */
     private CLM(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }

@@ -3,11 +3,11 @@
  */
 package com.sparqline.metrics.system;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.SystemNode;
 import com.sparqline.metrics.MetricScope;
 import com.sparqline.metrics.SystemMetric;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
+import com.sparqline.quamoco.codetree.ProjectNode;
 
 /**
  * CBC - Coupling Between Classes. The average number of couplings per class.
@@ -27,7 +27,7 @@ public class CBC extends SystemMetric {
      * @param graph
      * @return
      */
-    public static CBC getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static CBC getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new CBC("Coupling Between Classes", "The average number of couplings per class. CBC = Total CBO / NC.",
                 "CBC", MetricScope.SystemLevel, entity, graph);
@@ -47,7 +47,7 @@ public class CBC extends SystemMetric {
      * @param graph
      */
     private CBC(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
         // TODO Auto-generated constructor stub
@@ -63,12 +63,14 @@ public class CBC extends SystemMetric {
         double cbc = 0;
         double totalCBO = 0;
 
-        if (entity instanceof SystemNode)
+        if (entity instanceof ProjectNode)
         {
-            for (final ProgramNode cls : tree.getClasses((SystemNode) entity))
-            {
-                totalCBO += cls.getMetric("CBO");
-            }
+            /*
+             * for (final CodeNode cls : tree.getClasses((ProjectNode) entity))
+             * {
+             * totalCBO += cls.getMetric("CBO");
+             * }
+             */
 
             cbc = totalCBO / numClasses;
         }
@@ -83,7 +85,8 @@ public class CBC extends SystemMetric {
     @Override
     public void setPrerequisites()
     {
-        numClasses = taskMap.containsKey("NC") ? taskMap.get("NC").join().getValue() : entity.getMetric("NC");
+        // numClasses = taskMap.containsKey("NC") ?
+        // taskMap.get("NC").join().getValue() : entity.getMetric("NC");
     }
 
 }

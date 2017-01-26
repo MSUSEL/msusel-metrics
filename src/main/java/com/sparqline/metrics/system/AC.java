@@ -3,12 +3,11 @@
  */
 package com.sparqline.metrics.system;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.SystemNode;
-import com.sparqline.graph.nodes.type.ClassOrInterfaceNode;
 import com.sparqline.metrics.MetricScope;
 import com.sparqline.metrics.SystemMetric;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
+import com.sparqline.quamoco.codetree.ProjectNode;
 
 /**
  * AC - Abstract Classes. Number of abstract classes in a system.
@@ -27,7 +26,7 @@ public class AC extends SystemMetric {
      * @param graph
      * @return
      */
-    public static AC getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static AC getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new AC("Abstract Classes", "Number of abstract classes in a system", "AC", MetricScope.SystemLevel,
                 entity, graph);
@@ -42,7 +41,7 @@ public class AC extends SystemMetric {
      * @param graph
      */
     public AC(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
         // TODO Auto-generated constructor stub
@@ -56,20 +55,23 @@ public class AC extends SystemMetric {
     public double measure()
     {
         int count = 0;
-        if (entity instanceof SystemNode)
+        if (entity instanceof ProjectNode)
         {
 
-            for (final ProgramNode pe : tree.getSystemClasses((SystemNode) entity))
-            {
-                if (pe instanceof ClassOrInterfaceNode)
-                {
-                    if (((ClassOrInterfaceNode) entity).isAbstract()
-                            || ((ClassOrInterfaceNode) entity).isInterface())
-                    {
-                        count++;
-                    }
-                }
-            }
+            /*
+             * for (final CodeNode pe : tree.getSystemClasses((ProjectNode)
+             * entity))
+             * {
+             * if (pe instanceof TypeNode)
+             * {
+             * if (((TypeNode) entity).isAbstract()
+             * || ((TypeNode) entity).isInterface())
+             * {
+             * count++;
+             * }
+             * }
+             * }
+             */
         }
 
         return count;

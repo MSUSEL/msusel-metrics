@@ -3,8 +3,8 @@
  */
 package com.sparqline.metrics;
 
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.relations.RelationshipType;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.RelationshipType;
 
 /**
  * @author Isaac Griffith
@@ -20,12 +20,12 @@ public interface RelationshipExcludable {
      * @param type
      * @param entity
      */
-    void exclude(RelationshipType type, ProgramNode entity);
+    void exclude(RelationshipType type, CodeNode entity);
 
     /**
      * @param type
      * @param source
      * @param dest
      */
-    void exclude(RelationshipType type, ProgramNode source, ProgramNode dest);
+    void exclude(RelationshipType type, CodeNode source, CodeNode dest);
 }

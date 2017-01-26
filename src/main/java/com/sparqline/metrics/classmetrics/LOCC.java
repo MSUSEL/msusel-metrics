@@ -3,12 +3,10 @@
  */
 package com.sparqline.metrics.classmetrics;
 
-import java.util.List;
-
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * LOCC - Lines of Code per Class. Sum of the LOC for each method.
@@ -27,7 +25,7 @@ public class LOCC extends ClassMetric {
      * @param graph
      * @return
      */
-    public static LOCC getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static LOCC getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new LOCC("Lines of Code per Class", "Sum of the LOC for each method.", "LOCC", MetricScope.ClassLevel,
                 entity, graph);
@@ -42,7 +40,7 @@ public class LOCC extends ClassMetric {
      * @param graph
      */
     private LOCC(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -54,13 +52,13 @@ public class LOCC extends ClassMetric {
     @Override
     public double measure()
     {
-        final List<ProgramNode> methods = tree.getMethods(entity);
+        // final List<CodeNode> methods = tree.getMethods(entity);
 
         double locc = 0;
-        for (final ProgramNode entity : methods)
-        {
-            locc += entity.getMetric("SLOC");
-        }
+        // for (final CodeNode entity : methods)
+        // {
+        // locc += entity.getMetric("SLOC");
+        // }
 
         return locc;
     }

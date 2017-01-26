@@ -3,11 +3,11 @@
  */
 package com.sparqline.metrics.system;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.SystemNode;
 import com.sparqline.metrics.MetricScope;
 import com.sparqline.metrics.SystemMetric;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
+import com.sparqline.quamoco.codetree.ProjectNode;
 
 /**
  * ASC - Average Size per Class.
@@ -23,10 +23,10 @@ public class ASC extends SystemMetric {
 
     /**
      * @param entity
-     * @param graph
+     * @param graphGraph
      * @return
      */
-    public static ASC getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static ASC getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new ASC("Average Size per Class", "", "ASC", MetricScope.ClassLevel, entity, graph);
     }
@@ -40,7 +40,7 @@ public class ASC extends SystemMetric {
      * @param graph
      */
     private ASC(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -54,15 +54,17 @@ public class ASC extends SystemMetric {
     {
         double asc = 0;
 
-        if (entity instanceof SystemNode)
+        if (entity instanceof ProjectNode)
         {
             double totalSize = 0;
             double numClasses = 0;
-            for (final ProgramNode cls : tree.getClasses((SystemNode) entity))
-            {
-                numClasses++;
-                totalSize += cls.getMetric("SIZE2");
-            }
+            /*
+             * for (final CodeNode cls : tree.getClasses((ProjectNode) entity))
+             * {
+             * numClasses++;
+             * totalSize += cls.getMetric("SIZE2");
+             * }
+             */
 
             asc = totalSize / numClasses;
         }

@@ -3,17 +3,10 @@
  */
 package com.sparqline.metrics.classmetrics;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.body.MethodNode;
-import com.sparqline.graph.nodes.type.ClassOrInterfaceNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * NMI - Number of Methods Inherited. Count of the number of methods a class has
@@ -33,7 +26,7 @@ public class NMI extends ClassMetric {
      * @param graph
      * @return
      */
-    public static NMI getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static NMI getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new NMI("Number of Methods Inherited by a Subclass",
                 "Count of the number of methods a class has from inheritance alone.", "NMI", MetricScope.ClassLevel,
@@ -49,7 +42,7 @@ public class NMI extends ClassMetric {
      * @param graph
      */
     private NMI(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -58,108 +51,113 @@ public class NMI extends ClassMetric {
      * @param cls
      * @return
      */
-    private Set<MethodNode> getFunctionalMethods(final ClassOrInterfaceNode cls)
-    {
-        final Set<MethodNode> retVal = new HashSet<>();
-
-        for (final MethodNode method : cls.getMethods())
-        {
-            if (!method.isAbstract())
-            {
-                retVal.add(method);
-            }
-
-        }
-
-        return retVal;
-    }
+    // private Set<MethodNode> getFunctionalMethods(final ClassOrInterfaceNode
+    // cls)
+    // {
+    // final Set<MethodNode> retVal = new HashSet<>();
+    //
+    // for (final MethodNode method : cls.getMethods())
+    // {
+    // if (!method.isAbstract())
+    // {
+    // retVal.add(method);
+    // }
+    //
+    // }
+    //
+    // return retVal;
+    // }
 
     /**
      * @param supCls
      * @return
      */
-    private Set<MethodNode> getFunctionalSuperMethods(final ClassOrInterfaceNode supCls)
-    {
-        final Set<MethodNode> retVal = new HashSet<>();
-
-        for (final MethodNode method : supCls.getMethods())
-        {
-            if (method.isVirtual())
-            {
-                retVal.add(method);
-            }
-        }
-
-        return retVal;
-    }
-
-    /**
-     * @param cls
-     * @return
-     */
-    private Set<MethodNode> getInheritedMethods(final ClassOrInterfaceNode cls)
-    {
-        final List<ClassOrInterfaceNode> superClasses = new ArrayList<>();
-        superClasses.addAll(cls.getExtendsSet());
-        superClasses.addAll(cls.getImplementsSet());
-
-        final Set<MethodNode> supMethods = new HashSet<>();
-
-        for (final ClassOrInterfaceNode sup : superClasses)
-        {
-            for (final MethodNode method : sup.getMethods())
-            {
-                if (method.isVirtual())
-                {
-                    supMethods.add(method);
-                }
-            }
-        }
-
-        return supMethods;
-    }
+    // private Set<MethodNode> getFunctionalSuperMethods(final
+    // ClassOrInterfaceNode supCls)
+    // {
+    // final Set<MethodNode> retVal = new HashSet<>();
+    //
+    // for (final MethodNode method : supCls.getMethods())
+    // {
+    // if (method.isVirtual())
+    // {
+    // retVal.add(method);
+    // }
+    // }
+    //
+    // return retVal;
+    // }
 
     /**
      * @param cls
      * @return
      */
-    private Set<MethodNode> getOverriddenMethods(final ClassOrInterfaceNode cls)
-    {
-        final List<ProgramNode> superClasses = tree.getSuperClasses(cls);
-        final Set<MethodNode> overridden = new HashSet<>();
+    // private Set<MethodNode> getInheritedMethods(final ClassOrInterfaceNode
+    // cls)
+    // {
+    // final List<ClassOrInterfaceNode> superClasses = new ArrayList<>();
+    // superClasses.addAll(cls.getExtendsSet());
+    // superClasses.addAll(cls.getImplementsSet());
+    //
+    // final Set<MethodNode> supMethods = new HashSet<>();
+    //
+    // for (final ClassOrInterfaceNode sup : superClasses)
+    // {
+    // for (final MethodNode method : sup.getMethods())
+    // {
+    // if (method.isVirtual())
+    // {
+    // supMethods.add(method);
+    // }
+    // }
+    // }
+    //
+    // return supMethods;
+    // }
 
-        if (superClasses.isEmpty())
-        {
-            return new HashSet<>();
-        }
-        else
-        {
-            final Set<MethodNode> functionalMethods = getFunctionalMethods(cls);
-            for (final ProgramNode pe : superClasses)
-            {
-                if (pe instanceof ClassOrInterfaceNode)
-                {
-                    final ClassOrInterfaceNode supCls = (ClassOrInterfaceNode) pe;
-                    final Set<MethodNode> functionalSupMethods = getFunctionalSuperMethods(supCls);
-
-                    for (final MethodNode me : functionalMethods)
-                    {
-                        for (final MethodNode sme : functionalSupMethods)
-                        {
-                            if (me.overrides(sme, tree))
-                            {
-                                overridden.add(sme);
-                            }
-                        }
-                    }
-
-                    overridden.addAll(getOverriddenMethods(supCls));
-                }
-            }
-        }
-
-        return overridden;
-    }
+    /**
+     * @param cls
+     * @return
+     */
+    // private Set<MethodNode> getOverriddenMethods(final ClassOrInterfaceNode
+    // cls)
+    // {
+    // final List<ProgramNode> superClasses = tree.getSuperClasses(cls);
+    // final Set<MethodNode> overridden = new HashSet<>();
+    //
+    // if (superClasses.isEmpty())
+    // {
+    // return new HashSet<>();
+    // }
+    // else
+    // {
+    // final Set<MethodNode> functionalMethods = getFunctionalMethods(cls);
+    // for (final ProgramNode pe : superClasses)
+    // {
+    // if (pe instanceof ClassOrInterfaceNode)
+    // {
+    // final ClassOrInterfaceNode supCls = (ClassOrInterfaceNode) pe;
+    // final Set<MethodNode> functionalSupMethods =
+    // getFunctionalSuperMethods(supCls);
+    //
+    // for (final MethodNode me : functionalMethods)
+    // {
+    // for (final MethodNode sme : functionalSupMethods)
+    // {
+    // if (me.overrides(sme, tree))
+    // {
+    // overridden.add(sme);
+    // }
+    // }
+    // }
+    //
+    // overridden.addAll(getOverriddenMethods(supCls));
+    // }
+    // }
+    // }
+    //
+    // return overridden;
+    // }
 
     /*
      * (non-Javadoc)
@@ -170,14 +168,14 @@ public class NMI extends ClassMetric {
     {
         double nmi = 0;
 
-        if (entity instanceof ClassOrInterfaceNode)
-        {
-            final ClassOrInterfaceNode cls = (ClassOrInterfaceNode) entity;
-            final Set<MethodNode> inherited = getInheritedMethods(cls);
-
-            nmi = inherited.size();
-            // System.out.println("\nNMI="+nmi+"\n");
-        }
+        // if (entity instanceof ClassOrInterfaceNode)
+        // {
+        // final ClassOrInterfaceNode cls = (ClassOrInterfaceNode) entity;
+        // final Set<MethodNode> inherited = getInheritedMethods(cls);
+        //
+        // nmi = inherited.size();
+        // // System.out.println("\nNMI="+nmi+"\n");
+        // }
 
         return nmi;
     }

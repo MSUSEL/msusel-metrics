@@ -3,12 +3,10 @@
  */
 package com.sparqline.metrics.system;
 
-import java.util.List;
-
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.MetricScope;
 import com.sparqline.metrics.SystemMetric;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * PF - Polymorphism Factor. Number of overriding methods of a class as a ratio
@@ -29,10 +27,9 @@ public class PF extends SystemMetric {
      * @param graph
      * @return
      */
-    public static PF getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static PF getInstance(final CodeNode entity, final CodeTree graph)
     {
-        return new PF(
-                "Polymorphism Factor",
+        return new PF("Polymorphism Factor",
                 "Number of overriding methods of a class as a ratio of the total possible number of overridden methods. Measures understandability and maintainability.",
                 "PF", MetricScope.SystemLevel, entity, graph);
     }
@@ -46,7 +43,7 @@ public class PF extends SystemMetric {
      * @param graph
      */
     private PF(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
         // TODO Auto-generated constructor stub
@@ -59,16 +56,16 @@ public class PF extends SystemMetric {
     @Override
     public double measure()
     {
-        final List<ProgramNode> classes = tree.getClasses();
+        // final List<ProgramNode> classes = tree.getClasses();
 
         double totalOverridenMethods = 0;
         double newMethodsFactor = 0;
 
-        for (final ProgramNode cls : classes)
-        {
-            totalOverridenMethods += cls.getMetric("NMO");
-            newMethodsFactor += cls.getMetric("NMA") * cls.getMetric("NDC");
-        }
+        // for (final ProgramNode cls : classes)
+        // {
+        // totalOverridenMethods += cls.getMetric("NMO");
+        // newMethodsFactor += cls.getMetric("NMA") * cls.getMetric("NDC");
+        // }
 
         return totalOverridenMethods / newMethodsFactor;
     }

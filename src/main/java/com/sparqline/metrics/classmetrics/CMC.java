@@ -3,12 +3,10 @@
  */
 package com.sparqline.metrics.classmetrics;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.body.MethodNode;
-import com.sparqline.graph.nodes.type.ClassOrInterfaceNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * CMC - Class Methods Complexity. This metrics is the sum of the internal
@@ -29,7 +27,7 @@ public class CMC extends ClassMetric {
      * @param graph
      * @return
      */
-    public static CMC getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static CMC getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new CMC(
                 "Class Methods Complexity",
@@ -46,7 +44,7 @@ public class CMC extends ClassMetric {
      * @param graph
      */
     private CMC(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -60,16 +58,16 @@ public class CMC extends ClassMetric {
     {
         double cmc = 0;
 
-        if (entity instanceof ClassOrInterfaceNode)
-        {
-            for (final ProgramNode method : tree.getMethods(entity))
-            {
-                if (method instanceof MethodNode)
-                {
-                    cmc += method.getMetric("CYCLO");
-                }
-            }
-        }
+        // if (entity instanceof TypeNode)
+        // {
+        // for (final CodeNode method : tree.getMethods(entity))
+        // {
+        // if (method instanceof MethodNode)
+        // {
+        // cmc += method.getMetric("CYCLO");
+        // }
+        // }
+        // }
 
         return cmc;
     }

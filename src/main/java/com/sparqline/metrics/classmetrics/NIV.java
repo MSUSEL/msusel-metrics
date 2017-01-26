@@ -3,15 +3,10 @@
  */
 package com.sparqline.metrics.classmetrics;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.body.FieldNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * NIV - Number of Instance Variables. Measures relations of a class with other
@@ -31,7 +26,7 @@ public class NIV extends ClassMetric {
      * @param graph
      * @return
      */
-    public static NIV getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static NIV getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new NIV("Number of Instance Variables in a Class",
                 "Measures relations of a class with other objects in the program.", "NIV", MetricScope.ClassLevel,
@@ -47,7 +42,7 @@ public class NIV extends ClassMetric {
      * @param graph
      */
     private NIV(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -59,23 +54,28 @@ public class NIV extends ClassMetric {
     @Override
     public double measure()
     {
-        final List<ProgramNode> fields = new LinkedList<>(tree.getFields(entity));
-        for (final Iterator<ProgramNode> iter = fields.iterator(); iter.hasNext();)
-        {
-            final ProgramNode entity = iter.next();
-            final FieldNode field = entity instanceof FieldNode ? (FieldNode) entity : null;
+        // final List<ProgramNode> fields = new
+        // LinkedList<>(tree.getFields(entity));
+        // for (final Iterator<ProgramNode> iter = fields.iterator();
+        // iter.hasNext();)
+        // {
+        // final ProgramNode entity = iter.next();
+        // final FieldNode field = entity instanceof FieldNode ? (FieldNode)
+        // entity : null;
+        //
+        // if (field == null)
+        // {
+        // continue;
+        // }
+        //
+        // if (field.isStatic())
+        // {
+        // iter.remove();
+        // }
+        // }
+        //
+        // return fields.size();
 
-            if (field == null)
-            {
-                continue;
-            }
-
-            if (field.isStatic())
-            {
-                iter.remove();
-            }
-        }
-
-        return fields.size();
+        return 0;
     }
 }

@@ -1,9 +1,9 @@
 package com.sparqline.metrics.packagemetrics;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.MetricScope;
 import com.sparqline.metrics.PackageMetric;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * I - Instability. Measures the ratio between the outgoing and the total number
@@ -35,10 +35,9 @@ public class I extends PackageMetric {
      * @param graph
      * @return
      */
-    public static I getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static I getInstance(final CodeNode entity, final CodeTree graph)
     {
-        return new I(
-                "Instability",
+        return new I("Instability",
                 "Measures the ratio between the outgoing and the total number of in- and out-going couplings from classes inside the package from/to classes outside the package. Each class counts only once. Zero if the package does not contain classes or if external classes are not used by the package's classes. I(p) = Ce / (Ca + Ce)",
                 "I", MetricScope.PackageLevel, entity, graph);
     }
@@ -52,7 +51,7 @@ public class I extends PackageMetric {
      * @param graph
      */
     private I(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -74,7 +73,9 @@ public class I extends PackageMetric {
     @Override
     public void setPrerequisites()
     {
-        Ca = taskMap.containsKey("Ca") ? taskMap.get("Ca").join().getValue() : entity.getMetric("Ca");
-        Ce = taskMap.containsKey("Ce") ? taskMap.get("Ce").join().getValue() : entity.getMetric("Ce");
+        // Ca = taskMap.containsKey("Ca") ? taskMap.get("Ca").join().getValue()
+        // : entity.getMetric("Ca");
+        // Ce = taskMap.containsKey("Ce") ? taskMap.get("Ce").join().getValue()
+        // : entity.getMetric("Ce");
     }
 }

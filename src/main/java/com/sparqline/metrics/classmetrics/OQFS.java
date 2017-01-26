@@ -3,10 +3,10 @@
  */
 package com.sparqline.metrics.classmetrics;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * OQFS -
@@ -25,7 +25,7 @@ public class OQFS extends ClassMetric {
      * @param graph
      * @return
      */
-    public static OQFS getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static OQFS getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new OQFS("", "", "OQFS", MetricScope.ClassLevel, entity, graph);
     }
@@ -39,7 +39,7 @@ public class OQFS extends ClassMetric {
      * @param graph
      */
     private OQFS(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }

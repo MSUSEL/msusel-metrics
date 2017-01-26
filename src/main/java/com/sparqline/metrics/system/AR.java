@@ -1,9 +1,9 @@
 package com.sparqline.metrics.system;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.MetricScope;
 import com.sparqline.metrics.SystemMetric;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * AR - Abstraction Ratio. The number of abstract classes divided by the total
@@ -32,7 +32,7 @@ public class AR extends SystemMetric {
      * @param graph
      * @return
      */
-    public static AR getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static AR getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new AR("Abstraction Ratio", "The number of abstract classes divided by the total number of classes.",
                 "AR", MetricScope.ClassLevel, entity, graph);
@@ -47,7 +47,7 @@ public class AR extends SystemMetric {
      * @param graph
      */
     private AR(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -68,7 +68,9 @@ public class AR extends SystemMetric {
     @Override
     public void setPrerequisites()
     {
-        nc = taskMap.containsKey("NC") ? taskMap.get("NC").join().getValue() : entity.getMetric("NC");
-        ac = taskMap.containsKey("AC") ? taskMap.get("AC").join().getValue() : entity.getMetric("AC");
+        // nc = taskMap.containsKey("NC") ? taskMap.get("NC").join().getValue()
+        // : entity.getMetric("NC");
+        // ac = taskMap.containsKey("AC") ? taskMap.get("AC").join().getValue()
+        // : entity.getMetric("AC");
     }
 }

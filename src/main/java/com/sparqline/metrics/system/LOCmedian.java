@@ -3,14 +3,10 @@
  */
 package com.sparqline.metrics.system;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.MetricScope;
 import com.sparqline.metrics.SystemMetric;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * LOC_median - Median Lines of Code. This metric calculates the median lines of
@@ -30,7 +26,7 @@ public class LOCmedian extends SystemMetric {
      * @param graph
      * @return
      */
-    public static AC getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static AC getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new AC("Median Lines of Code",
                 "This metric calculates the median lines of code for classes in the system.", "LOC_median",
@@ -46,7 +42,7 @@ public class LOCmedian extends SystemMetric {
      * @param graph
      */
     private LOCmedian(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
         // TODO Auto-generated constructor stub
@@ -60,24 +56,24 @@ public class LOCmedian extends SystemMetric {
     public double measure()
     {
         double medianLOC = 0;
-        final List<ProgramNode> entities = tree.getClasses();
-
-        final List<Double> locValues = new LinkedList<>();
-        for (final ProgramNode entity : entities)
-        {
-            locValues.add(entity.getMetric("LOC"));
-        }
-
-        Collections.sort(locValues);
-
-        if ((locValues.size() % 2) == 0)
-        {
-            medianLOC = (locValues.get((locValues.size() / 2) - 1) + locValues.get(locValues.size() / 2)) / 2;
-        }
-        else
-        {
-            medianLOC = (locValues.get((locValues.size() / 2) - 1));
-        }
+        /*
+         * final List<ProgramNode> entities = tree.getClasses();
+         * final List<Double> locValues = new LinkedList<>();
+         * for (final ProgramNode entity : entities)
+         * {
+         * locValues.add(entity.getMetric("LOC"));
+         * }
+         * Collections.sort(locValues);
+         * if ((locValues.size() % 2) == 0)
+         * {
+         * medianLOC = (locValues.get((locValues.size() / 2) - 1) +
+         * locValues.get(locValues.size() / 2)) / 2;
+         * }
+         * else
+         * {
+         * medianLOC = (locValues.get((locValues.size() / 2) - 1));
+         * }
+         */
 
         return medianLOC;
     }

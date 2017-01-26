@@ -7,10 +7,10 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.MetricScope;
 import com.sparqline.metrics.SystemMetric;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * CBO_median - Median Coupling Between Objects. This metric calculates the
@@ -30,7 +30,7 @@ public class CBOmedian extends SystemMetric {
      * @param graph
      * @return
      */
-    public static CBOmedian getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static CBOmedian getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new CBOmedian("Median Coupling Between Objects",
                 "This metric calculates the median value of the CBO metric for a system.", "CBO_median",
@@ -46,7 +46,7 @@ public class CBOmedian extends SystemMetric {
      * @param graph
      */
     private CBOmedian(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -59,24 +59,25 @@ public class CBOmedian extends SystemMetric {
     public double measure()
     {
         double medianCBO = 0;
-        final List<ProgramNode> entities = tree.getClasses();
-
-        final List<Double> cboValues = new LinkedList<>();
-        for (final ProgramNode entity : entities)
-        {
-            cboValues.add(entity.getMetric("CBO"));
-        }
-
-        Collections.sort(cboValues);
-
-        if ((cboValues.size() % 2) == 0)
-        {
-            medianCBO = (cboValues.get((cboValues.size() / 2) - 1) + cboValues.get(cboValues.size() / 2)) / 2;
-        }
-        else
-        {
-            medianCBO = (cboValues.get((cboValues.size() / 2) - 1));
-        }
+        // final List<CodeNode> entities = tree.getClasses();
+        //
+        // final List<Double> cboValues = new LinkedList<>();
+        // for (final CodeNode entity : entities)
+        // {
+        // cboValues.add(entity.getMetric("CBO"));
+        // }
+        //
+        // Collections.sort(cboValues);
+        //
+        // if ((cboValues.size() % 2) == 0)
+        // {
+        // medianCBO = (cboValues.get((cboValues.size() / 2) - 1) +
+        // cboValues.get(cboValues.size() / 2)) / 2;
+        // }
+        // else
+        // {
+        // medianCBO = (cboValues.get((cboValues.size() / 2) - 1));
+        // }
 
         return medianCBO;
     }

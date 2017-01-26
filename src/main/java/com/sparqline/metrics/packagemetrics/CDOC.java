@@ -1,9 +1,9 @@
 package com.sparqline.metrics.packagemetrics;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.MetricScope;
 import com.sparqline.metrics.PackageMetric;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * CDOC - Change Dependnecy of Classes. Measures class level coupling. It is a
@@ -28,10 +28,9 @@ public class CDOC extends PackageMetric {
      * @param graph
      * @return
      */
-    public static CDOC getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static CDOC getInstance(final CodeNode entity, final CodeTree graph)
     {
-        return new CDOC(
-                "Change Dependency of Classes",
+        return new CDOC("Change Dependency of Classes",
                 "Measures class level coupling. It is a measure assigned to classes describing how dependent other classes are on this class. This allows conclusions on the follow-up work to be done in all client class, when the sender class is changed in the course of re-engineering. It is the accumulation of CDBC metric., for a serverclass (SC) and its clientclass (CC). CDOC(c) = Sum(CDBC(s, c), for all s \\in class^CDOC)",
                 "CDOC", MetricScope.PackageLevel, entity, graph);
     }
@@ -45,7 +44,7 @@ public class CDOC extends PackageMetric {
      * @param graph
      */
     private CDOC(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }

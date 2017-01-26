@@ -1,13 +1,9 @@
 package com.sparqline.metrics.classmetrics;
 
-import java.util.List;
-
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.body.FieldNode;
-import com.sparqline.graph.nodes.type.ClassOrInterfaceNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * CTA - Coupling Through Abstract data types. This metric counts the total
@@ -28,10 +24,9 @@ public class CTA extends ClassMetric {
      * @param graph
      * @return
      */
-    public static CTA getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static CTA getInstance(final CodeNode entity, final CodeTree graph)
     {
-        return new CTA(
-                "Coupling Through Abstract data types",
+        return new CTA("Coupling Through Abstract data types",
                 "This metric counts the total number of classes that are used as abstract data types in the data attribute declaration of a class.",
                 "CTA", MetricScope.ClassLevel, entity, graph);
     }
@@ -45,7 +40,7 @@ public class CTA extends ClassMetric {
      * @param graph
      */
     private CTA(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -59,23 +54,24 @@ public class CTA extends ClassMetric {
     {
         double cta = 0;
 
-        if (entity instanceof ClassOrInterfaceNode)
-        {
-            final ClassOrInterfaceNode cls = (ClassOrInterfaceNode) entity;
-
-            final List<ProgramNode> fields = tree.getFields(cls);
-            for (final ProgramNode pe : fields)
-            {
-                if (pe instanceof FieldNode)
-                {
-                    final FieldNode field = (FieldNode) pe;
-                    if (!field.isPrimitive())
-                    {
-                        cta++;
-                    }
-                }
-            }
-        }
+        /*
+         * if (entity instanceof TypeNode)
+         * {
+         * final TypeNode cls = (TypeNode) entity;
+         * final List<CodeNode> fields = tree.getFields(cls);
+         * for (final CodeNode pe : fields)
+         * {
+         * if (pe instanceof FieldNode)
+         * {
+         * final FieldNode field = (FieldNode) pe;
+         * if (!field.isPrimitive())
+         * {
+         * cta++;
+         * }
+         * }
+         * }
+         * }
+         */
 
         return cta;
     }

@@ -1,13 +1,10 @@
 package com.sparqline.metrics.field;
 
-import java.util.List;
-
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.body.FieldNode;
-import com.sparqline.graph.relations.DirectedRelationshipType;
 import com.sparqline.metrics.FieldMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
+import com.sparqline.quamoco.codetree.FieldNode;
 
 public class IVMC extends FieldMetric {
 
@@ -21,7 +18,7 @@ public class IVMC extends FieldMetric {
      * @param graph
      * @return
      */
-    public static IVMC getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static IVMC getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new IVMC("Instance Variables per Method in a Class",
                 "The number of methods that reference each instance variable defined in a class.", "IVMC",
@@ -37,7 +34,7 @@ public class IVMC extends FieldMetric {
      * @param graph
      */
     private IVMC(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -53,16 +50,18 @@ public class IVMC extends FieldMetric {
 
         if (entity instanceof FieldNode)
         {
-            final ProgramNode owner = tree.getFieldOwner((FieldNode) entity);
-            final List<ProgramNode> methods = tree.getMethods(owner);
-
-            for (final ProgramNode method : methods)
-            {
-                if (tree.isEdge(method, entity, DirectedRelationshipType.FieldUse))
-                {
-                    count++;
-                }
-            }
+            /*
+             * final ProgramNode owner = tree.getFieldOwner((FieldNode) entity);
+             * final List<ProgramNode> methods = tree.getMethods(owner);
+             * for (final ProgramNode method : methods)
+             * {
+             * if (tree.isEdge(method, entity,
+             * DirectedRelationshipType.FieldUse))
+             * {
+             * count++;
+             * }
+             * }
+             */
         }
         return count;
     }

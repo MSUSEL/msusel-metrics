@@ -1,9 +1,9 @@
 package com.sparqline.metrics.classmetrics;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * SDC - Size of Duplication Chain. To improve the code we need to see more than
@@ -28,10 +28,9 @@ public class SDC extends ClassMetric {
      * @param graph
      * @return
      */
-    public static SDC getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static SDC getInstance(final CodeNode entity, final CodeTree graph)
     {
-        return new SDC(
-                "Size of Duplication Chain",
+        return new SDC("Size of Duplication Chain",
                 "To improve the code we need to see more than just a pile of small duplication chunks. We want to see the big picture, i.e., to cluster the chunks of duplication into a more meaningful block of duplication. This is what we call a duplication chain. Thus, a duplication chain is composed of smaller islands of exact clones that are close enough pairwise to be considered as belonging together, i.e., there LB value is less than a given threshold.",
                 "SDC", MetricScope.ClassLevel, entity, graph);
     }
@@ -45,7 +44,7 @@ public class SDC extends ClassMetric {
      * @param graph
      */
     private SDC(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }

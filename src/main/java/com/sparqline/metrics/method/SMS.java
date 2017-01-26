@@ -3,10 +3,10 @@
  */
 package com.sparqline.metrics.method;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.MethodMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 public class SMS extends MethodMetric {
 
@@ -15,13 +15,13 @@ public class SMS extends MethodMetric {
      */
     private static final long serialVersionUID = 4369871219207624065L;
 
-    public static SMS getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static SMS getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new SMS("Strings of Message Sends", "", "SMS", MetricScope.MethodLevel, entity, graph);
     }
 
     private SMS(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
         // TODO Auto-generated constructor stub

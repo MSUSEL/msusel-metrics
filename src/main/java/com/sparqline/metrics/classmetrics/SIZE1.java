@@ -3,9 +3,9 @@
  */
 package com.sparqline.metrics.classmetrics;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * SIZE1 - Class Size. Equivalent to LOC. It is a count of the number of
@@ -30,7 +30,7 @@ public class SIZE1 extends com.sparqline.metrics.ClassMetric {
      * @param graph
      * @return
      */
-    public static SIZE1 getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static SIZE1 getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new SIZE1("Class Size", "Equivalent to LOC. It is a count of the number of semicolons in a class.",
                 "SIZE1", MetricScope.ClassLevel, entity, graph);
@@ -45,7 +45,7 @@ public class SIZE1 extends com.sparqline.metrics.ClassMetric {
      * @param graph
      */
     private SIZE1(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -67,6 +67,7 @@ public class SIZE1 extends com.sparqline.metrics.ClassMetric {
     @Override
     public void setPrerequisites()
     {
-        loc = taskMap.containsKey("loc") ? taskMap.get("loc").join().getValue() : entity.getMetric("loc");
+        // loc = taskMap.containsKey("loc") ?
+        // taskMap.get("loc").join().getValue() : entity.getMetric("loc");
     }
 }

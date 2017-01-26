@@ -3,14 +3,10 @@
  */
 package com.sparqline.metrics.classmetrics;
 
-import java.util.Set;
-
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.body.MethodNode;
-import com.sparqline.graph.nodes.type.ClassOrInterfaceNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * NOP - Number of Polymorphic Methods. This is a count of the number of methods
@@ -25,7 +21,7 @@ public class NOP extends ClassMetric {
      * @param graph
      * @return
      */
-    public static NOP getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static NOP getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new NOP("Number of Polymorphic Methods",
                 "This is a count of the number of methods that can be overridden in a class.", "NOP",
@@ -41,7 +37,7 @@ public class NOP extends ClassMetric {
      * @param graph
      */
     private NOP(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -53,15 +49,15 @@ public class NOP extends ClassMetric {
     @Override
     public double measure()
     {
-        ClassOrInterfaceNode cie = (ClassOrInterfaceNode) entity;
-        Set<MethodNode> methods = cie.getMethods();
+        // ClassOrInterfaceNode cie = (ClassOrInterfaceNode) entity;
+        // Set<MethodNode> methods = cie.getMethods();
 
         int count = 0;
-        for (MethodNode method : methods)
-        {
-            if (method.isVirtual())
-                count++;
-        }
+        // for (MethodNode method : methods)
+        // {
+        // if (method.isVirtual())
+        // count++;
+        // }
 
         return count;
     }

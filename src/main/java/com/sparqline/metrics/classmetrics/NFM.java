@@ -1,12 +1,9 @@
 package com.sparqline.metrics.classmetrics;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.body.MethodNode;
-import com.sparqline.graph.nodes.expression.MethodCallExpression;
-import com.sparqline.graph.nodes.type.ClassOrInterfaceNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * NFM - Number of Forwarding Methods. Count of the number of methods which
@@ -26,7 +23,7 @@ public class NFM extends ClassMetric {
      * @param graph
      * @return
      */
-    public static NFM getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static NFM getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new NFM("Number of Forwarding Methods",
                 "Count of the number of methods which simply delegate their action onto another method.", "NFM",
@@ -42,7 +39,7 @@ public class NFM extends ClassMetric {
      * @param graph
      */
     private NFM(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -56,23 +53,24 @@ public class NFM extends ClassMetric {
     {
         double nfm = 0;
 
-        if (entity instanceof ClassOrInterfaceNode)
-        {
-            for (final ProgramNode pe : tree.getMethods(entity))
-            {
-                if (pe instanceof MethodNode)
-                {
-                    final MethodNode method = (MethodNode) pe;
-                    if (method.getContainedStatements().size() < 3)
-                    {
-                        if (!method.findExpressionByType(MethodCallExpression.class).isEmpty())
-                        {
-                            nfm++;
-                        }
-                    }
-                }
-            }
-        }
+        // if (entity instanceof ClassOrInterfaceNode)
+        // {
+        // for (final ProgramNode pe : tree.getMethods(entity))
+        // {
+        // if (pe instanceof MethodNode)
+        // {
+        // final MethodNode method = (MethodNode) pe;
+        // if (method.getContainedStatements().size() < 3)
+        // {
+        // if
+        // (!method.findExpressionByType(MethodCallExpression.class).isEmpty())
+        // {
+        // nfm++;
+        // }
+        // }
+        // }
+        // }
+        // }
 
         return nfm;
     }

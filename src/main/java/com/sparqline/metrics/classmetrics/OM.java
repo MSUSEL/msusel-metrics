@@ -3,15 +3,10 @@
  */
 package com.sparqline.metrics.classmetrics;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.body.MethodNode;
-import com.sparqline.graph.nodes.type.ClassOrInterfaceNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * OM - Overridden Methods. Count of the number of methods overridden by this
@@ -31,7 +26,7 @@ public class OM extends ClassMetric {
      * @param graph
      * @return
      */
-    public static OM getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static OM getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new OM("Overridden Methods", "Count of the number of methods overridden by this class.", "OM",
                 MetricScope.ClassLevel, entity, graph);
@@ -46,7 +41,7 @@ public class OM extends ClassMetric {
      * @param graph
      */
     private OM(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
         // TODO Auto-generated constructor stub
@@ -60,27 +55,28 @@ public class OM extends ClassMetric {
     public double measure()
     {
         double retVal = 0;
-        final List<ProgramNode> methods = tree.getMethods(entity);
-        final List<ProgramNode> superMethods = new LinkedList<>();
+//        final List<ProgramNode> methods = tree.getMethods(entity);
+//        final List<ProgramNode> superMethods = new LinkedList<>();
 
-        for (final ProgramNode pe : tree.getSuperClasses((ClassOrInterfaceNode) entity))
-        {
-            superMethods.addAll(tree.getMethods(pe));
-        }
-
-        for (final ProgramNode method : methods)
-        {
-            for (final ProgramNode superMethod : superMethods)
-            {
-                if (method instanceof MethodNode)
-                {
-                    if (((MethodNode) method).overrides(superMethod, tree))
-                    {
-                        retVal++;
-                    }
-                }
-            }
-        }
+        // for (final ProgramNode pe :
+        // tree.getSuperClasses((ClassOrInterfaceNode) entity))
+        // {
+        // superMethods.addAll(tree.getMethods(pe));
+        // }
+        //
+        // for (final ProgramNode method : methods)
+        // {
+        // for (final ProgramNode superMethod : superMethods)
+        // {
+        // if (method instanceof MethodNode)
+        // {
+        // if (((MethodNode) method).overrides(superMethod, tree))
+        // {
+        // retVal++;
+        // }
+        // }
+        // }
+        // }
 
         return retVal;
     }

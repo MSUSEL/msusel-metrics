@@ -1,13 +1,9 @@
 package com.sparqline.metrics.classmetrics;
 
-import java.util.List;
-
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.Accessibility;
-import com.sparqline.graph.nodes.body.FieldNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * ER - Encapsulation Ratio. The number of private variables, divided by the
@@ -27,7 +23,7 @@ public class ER extends ClassMetric {
      * @param graph
      * @return
      */
-    public static ER getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static ER getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new ER("Encapsulation Ratio",
                 "The number of private variables, divided by the total number of variables.", "ER",
@@ -43,7 +39,7 @@ public class ER extends ClassMetric {
      * @param graph
      */
     private ER(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -55,28 +51,28 @@ public class ER extends ClassMetric {
     @Override
     public double measure()
     {
-        final List<ProgramNode> fields = tree.getFields(entity);
+        // final List<ProgramNode> fields = tree.getFields(entity);
         double retVal = 0;
         int countPriv = 0;
         int numFields = 0;
 
-        for (final ProgramNode pe : fields)
-        {
-            if (pe instanceof FieldNode)
-            {
-                final FieldNode field = (FieldNode) pe;
-                numFields++;
-                if (field.getAccessibility().equals(Accessibility.Private))
-                {
-                    countPriv++;
-                }
-            }
-        }
-
-        if (numFields > 0)
-        {
-            retVal = (double) countPriv / (double) numFields;
-        }
+        // for (final ProgramNode pe : fields)
+        // {
+        // if (pe instanceof FieldNode)
+        // {
+        // final FieldNode field = (FieldNode) pe;
+        // numFields++;
+        // if (field.getAccessibility().equals(Accessibility.Private))
+        // {
+        // countPriv++;
+        // }
+        // }
+        // }
+        //
+        // if (numFields > 0)
+        // {
+        // retVal = (double) countPriv / (double) numFields;
+        // }
 
         return retVal;
     }

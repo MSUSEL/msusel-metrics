@@ -1,11 +1,9 @@
 package com.sparqline.metrics.classmetrics;
 
-import java.util.List;
-
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * AMW - Average Method Weight. The average static complexity of all methods in
@@ -26,10 +24,9 @@ public class AMW extends ClassMetric {
      * @param graph
      * @return
      */
-    public static AMW getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static AMW getInstance(final CodeNode entity, final CodeTree graph)
     {
-        return new AMW(
-                "Average Method Weight",
+        return new AMW("Average Method Weight",
                 "The average static complexity of all methods in a class. McCabe's cyclomatic number is used to quantify the method's complexity.",
                 "AMW", MetricScope.ClassLevel, entity, graph);
     }
@@ -43,7 +40,7 @@ public class AMW extends ClassMetric {
      * @param graph
      */
     private AMW(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -55,14 +52,15 @@ public class AMW extends ClassMetric {
     @Override
     public double measure()
     {
-        final List<ProgramNode> methods = tree.getMethods(entity);
+        // final List<CodeNode> methods = tree.getMethods(entity);
 
         double totalCyclo = 0.0d;
-        for (final ProgramNode method : methods)
-        {
-            totalCyclo += method.getMetric("CYCLO");
-        }
+        // for (final CodeNode method : methods)
+        // {
+        // totalCyclo += method.getMetric("CYCLO");
+        // }
 
-        return (totalCyclo / methods.size());
+        // return (totalCyclo / methods.size());
+        return totalCyclo;
     }
 }

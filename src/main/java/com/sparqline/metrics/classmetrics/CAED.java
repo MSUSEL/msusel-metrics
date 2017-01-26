@@ -3,9 +3,9 @@
  */
 package com.sparqline.metrics.classmetrics;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * CAED - Client Access to Encapsulated Data. Number of methods that return a
@@ -25,7 +25,7 @@ public class CAED extends com.sparqline.metrics.ClassMetric {
      * @param graph
      * @return
      */
-    public static CAED getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static CAED getInstance(final CodeNode entity, final CodeTree graph)
     {
         // TODO add implementation and return statement
         return new CAED("Client Access to Encapsulated Data",
@@ -42,7 +42,7 @@ public class CAED extends com.sparqline.metrics.ClassMetric {
      * @param graph
      */
     private CAED(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }

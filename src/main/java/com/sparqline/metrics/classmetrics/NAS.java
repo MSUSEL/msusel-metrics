@@ -3,10 +3,10 @@
  */
 package com.sparqline.metrics.classmetrics;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * NAS - Number of Added Services. The number of public methods of a class that
@@ -26,10 +26,9 @@ public class NAS extends ClassMetric {
      * @param graph
      * @return
      */
-    public static NAS getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static NAS getInstance(final CodeNode entity, final CodeTree graph)
     {
-        return new NAS(
-                "Number of Added Services",
+        return new NAS("Number of Added Services",
                 "The number of public methods of a class that are not overridden or specialized from an ancestor class.",
                 "NAS", MetricScope.ClassLevel, entity, graph);
     }
@@ -52,7 +51,7 @@ public class NAS extends ClassMetric {
      * @param graph
      */
     private NAS(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -74,7 +73,9 @@ public class NAS extends ClassMetric {
     @Override
     public void setPrerequisites()
     {
-        nmo = taskMap.containsKey("NMO") ? taskMap.get("NMO").join().getValue() : entity.getMetric("NMO");
-        nom = taskMap.containsKey("NOM") ? taskMap.get("NOM").join().getValue() : entity.getMetric("NOM");
+        // nmo = taskMap.containsKey("NMO") ?
+        // taskMap.get("NMO").join().getValue() : entity.getMetric("NMO");
+        // nom = taskMap.containsKey("NOM") ?
+        // taskMap.get("NOM").join().getValue() : entity.getMetric("NOM");
     }
 }

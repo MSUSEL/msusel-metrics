@@ -1,26 +1,10 @@
 package com.sparqline.metrics.method;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.ExpressionEntity;
-import com.sparqline.graph.nodes.TypeNode;
-import com.sparqline.graph.nodes.VariableNode;
-import com.sparqline.graph.nodes.body.FieldNode;
-import com.sparqline.graph.nodes.body.MethodNode;
-import com.sparqline.graph.nodes.body.Parameter;
-import com.sparqline.graph.nodes.expression.ClassExpression;
-import com.sparqline.graph.nodes.expression.MethodCallExpression;
-import com.sparqline.graph.nodes.expression.NameExpression;
-import com.sparqline.graph.nodes.expression.SuperExpression;
-import com.sparqline.graph.nodes.expression.SuperMemberAccessExpression;
-import com.sparqline.graph.nodes.expression.VariableDeclarationExpression;
-import com.sparqline.graph.nodes.type.ClassOrInterfaceNode;
 import com.sparqline.metrics.MethodMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
+import com.sparqline.quamoco.codetree.MethodNode;
 
 /**
  * CDISP - Coupling Dispersion. The number of classes in which the operations
@@ -42,7 +26,7 @@ public class CDISP extends MethodMetric {
      * @param graph
      * @return
      */
-    public static CDISP getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static CDISP getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new CDISP(
                 "Coupling Dispersion",
@@ -51,7 +35,7 @@ public class CDISP extends MethodMetric {
     }
 
     private CDISP(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -67,9 +51,9 @@ public class CDISP extends MethodMetric {
 
         if (entity instanceof MethodNode)
         {
-            final MethodNode method = (MethodNode) entity;
-            Set<ClassOrInterfaceNode> callOwners = new HashSet<>();
-            Set<MethodNode> mces = method.getMethodCalls();
+//            final MethodNode method = (MethodNode) entity;
+//            Set<ClassOrInterfaceNode> callOwners = new HashSet<>();
+//            Set<MethodNode> mces = method.getMethodCalls();
             /*for (MethodEntity mce : mces)
             {
                 ExpressionEntity scope = mce.getScope();
@@ -191,6 +175,6 @@ public class CDISP extends MethodMetric {
     @Override
     public void setPrerequisites()
     {
-        CINT = taskMap.containsKey("CINT") ? taskMap.get("CINT").join().getValue() : entity.getMetric("CINT");
+//        CINT = taskMap.containsKey("CINT") ? taskMap.get("CINT").join().getValue() : entity.getMetric("CINT");
     }
 }

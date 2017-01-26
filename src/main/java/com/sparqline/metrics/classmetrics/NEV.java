@@ -3,14 +3,10 @@
  */
 package com.sparqline.metrics.classmetrics;
 
-import java.util.List;
-
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.Accessibility;
-import com.sparqline.graph.nodes.body.FieldNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * NEV - Number of Non-Encapsulated Variables. Count of the number of public
@@ -30,7 +26,7 @@ public class NEV extends ClassMetric {
      * @param graph
      * @return
      */
-    public static NEV getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static NEV getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new NEV("Number of Non-Encapsulated Variables",
                 "Count of the number of public attributes in the target class.", "NEV", MetricScope.ClassLevel, entity,
@@ -46,7 +42,7 @@ public class NEV extends ClassMetric {
      * @param graph
      */
     private NEV(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -58,16 +54,17 @@ public class NEV extends ClassMetric {
     @Override
     public double measure()
     {
-        final List<ProgramNode> fields = tree.getFields(entity);
+        // final List<ProgramNode> fields = tree.getFields(entity);
 
         int count = 0;
-        for (final ProgramNode field : fields)
-        {
-            if (((FieldNode) field).getAccessibility().equals(Accessibility.Public))
-            {
-                count++;
-            }
-        }
+        // for (final ProgramNode field : fields)
+        // {
+        // if (((FieldNode)
+        // field).getAccessibility().equals(Accessibility.Public))
+        // {
+        // count++;
+        // }
+        // }
 
         return count;
     }

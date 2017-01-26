@@ -3,10 +3,9 @@
  */
 package com.sparqline.metrics.classmetrics;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.type.ClassOrInterfaceNode;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * NOC - Number of Children. The number of immediate subclasses subordinate to a
@@ -14,7 +13,7 @@ import com.sparqline.metrics.MetricScope;
  * 
  * @author Isaac Griffith
  */
-public class NOC extends com.sparqline.metrics.ClassMetric/* Metric */{
+public class NOC extends com.sparqline.metrics.ClassMetric/* Metric */ {
 
     /**
      * 
@@ -26,7 +25,7 @@ public class NOC extends com.sparqline.metrics.ClassMetric/* Metric */{
      * @param graph
      * @return
      */
-    public static NOC getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static NOC getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new NOC("Number of Children",
                 "The number of immediate subclasses subordinate to a class in the hierarchy.", "NOC",
@@ -42,7 +41,7 @@ public class NOC extends com.sparqline.metrics.ClassMetric/* Metric */{
      * @param graph
      */
     private NOC(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -54,7 +53,8 @@ public class NOC extends com.sparqline.metrics.ClassMetric/* Metric */{
     @Override
     public double measure()
     {
-        return tree.getSubClasses((ClassOrInterfaceNode) entity).size();
+        // return tree.getSubClasses((ClassOrInterfaceNode) entity).size();
+        return 0;
     }
 
 }

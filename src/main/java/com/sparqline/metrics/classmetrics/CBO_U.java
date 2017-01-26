@@ -4,15 +4,12 @@
 package com.sparqline.metrics.classmetrics;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.Connection;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.relations.DirectedRelationshipType;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * CBO_U - Coupling Between Objects: Using. The part of CBO that consists of the
@@ -32,7 +29,7 @@ public class CBO_U extends ClassMetric {
      * @param graph
      * @return
      */
-    public static CBO_U getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static CBO_U getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new CBO_U("Coupling Between Objects: Using",
                 "The part of CBO that consists of the classes used by the target class.", "CBO_NA",
@@ -48,7 +45,7 @@ public class CBO_U extends ClassMetric {
      * @param graph
      */
     private CBO_U(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
         // TODO Auto-generated constructor stub
@@ -61,14 +58,15 @@ public class CBO_U extends ClassMetric {
     @Override
     public double measure()
     {
-        final List<Connection> connections = tree.getEdgesContainingRelationType(entity,
-                DirectedRelationshipType.Usage);
+        // final List<Connection> connections =
+        // tree.getEdgesContainingRelationType(entity,
+        // DirectedRelationshipType.Usage);
 
-        final Set<ProgramNode> set = new HashSet<ProgramNode>();
-        for (final Connection con : connections)
-        {
-            set.add(tree.getState().getOpposite(entity, con));
-        }
+        final Set<CodeNode> set = new HashSet<>();
+        // for (final Connection con : connections)
+        // {
+        // set.add(tree.getState().getOpposite(entity, con));
+        // }
 
         return set.size();
     }

@@ -3,10 +3,10 @@
  */
 package com.sparqline.metrics.classmetrics;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * SIX - Specialization Index. SIX = (NMO * HNL) / (NMI + NMA).
@@ -25,7 +25,7 @@ public class SIX extends ClassMetric {
      * @param graph
      * @return
      */
-    public static SIX getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static SIX getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new SIX("Specialization Index", "SIX = (NMO * HNL) / (NMI + NMA).", "SIX", MetricScope.ClassLevel,
                 entity, graph);
@@ -58,7 +58,7 @@ public class SIX extends ClassMetric {
      * @param graph
      */
     private SIX(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -80,9 +80,13 @@ public class SIX extends ClassMetric {
     @Override
     public void setPrerequisites()
     {
-        nmo = taskMap.containsKey("NMO") ? taskMap.get("NMO").join().getValue() : entity.getMetric("NMO");
-        hnl = taskMap.containsKey("HNL") ? taskMap.get("HNL").join().getValue() : entity.getMetric("HNL");
-        nmi = taskMap.containsKey("NMI") ? taskMap.get("NMI").join().getValue() : entity.getMetric("NMI");
-        nma = taskMap.containsKey("NMA") ? taskMap.get("NMA").join().getValue() : entity.getMetric("NMA");
+        // nmo = taskMap.containsKey("NMO") ?
+        // taskMap.get("NMO").join().getValue() : entity.getMetric("NMO");
+        // hnl = taskMap.containsKey("HNL") ?
+        // taskMap.get("HNL").join().getValue() : entity.getMetric("HNL");
+        // nmi = taskMap.containsKey("NMI") ?
+        // taskMap.get("NMI").join().getValue() : entity.getMetric("NMI");
+        // nma = taskMap.containsKey("NMA") ?
+        // taskMap.get("NMA").join().getValue() : entity.getMetric("NMA");
     }
 }

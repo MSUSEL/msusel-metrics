@@ -1,9 +1,9 @@
 package com.sparqline.metrics.packagemetrics;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.MetricScope;
 import com.sparqline.metrics.PackageMetric;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * CDBC - Change Dependency Between Classes. Measures class level coupling. It
@@ -25,7 +25,7 @@ public class CDBC extends PackageMetric {
      * @param graph
      * @return
      */
-    public static CDBC getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static CDBC getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new CDBC(
                 "Change Dependency Between Classes",
@@ -42,7 +42,7 @@ public class CDBC extends PackageMetric {
      * @param graph
      */
     private CDBC(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }

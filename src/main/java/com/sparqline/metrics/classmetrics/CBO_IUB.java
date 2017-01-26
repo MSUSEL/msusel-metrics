@@ -1,10 +1,10 @@
 package com.sparqline.metrics.classmetrics;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.type.ClassOrInterfaceNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
+import com.sparqline.quamoco.codetree.TypeNode;
 
 /**
  * CBO_IUB - Coupling Between Objects: Is Used By. This definition of CBO merges
@@ -25,10 +25,9 @@ public class CBO_IUB extends ClassMetric {
      * @param graph
      * @return
      */
-    public static CBO_IUB getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static CBO_IUB getInstance(final CodeNode entity, final CodeTree graph)
     {
-        return new CBO_IUB(
-                "Coupling Between Objects: Is Used By",
+        return new CBO_IUB("Coupling Between Objects: Is Used By",
                 "This definition of CBO merges two coupling directsions: classes using the target class and classes used by the target class.",
                 "CBO_IUB", MetricScope.ClassLevel, entity, graph);
     }
@@ -42,7 +41,7 @@ public class CBO_IUB extends ClassMetric {
      * @param graph
      */
     private CBO_IUB(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -56,7 +55,7 @@ public class CBO_IUB extends ClassMetric {
     {
         final double cbo_iub = 0;
 
-        if (entity instanceof ClassOrInterfaceNode)
+        if (entity instanceof TypeNode)
         {
 
         }

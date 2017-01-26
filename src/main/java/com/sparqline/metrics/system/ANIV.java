@@ -3,11 +3,10 @@
  */
 package com.sparqline.metrics.system;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.PackageNode;
 import com.sparqline.metrics.MetricScope;
 import com.sparqline.metrics.SystemMetric;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * ANIV - Average Number of Instance Variables per Class. ANIV = Total NIV /
@@ -27,7 +26,7 @@ public class ANIV extends SystemMetric {
      * @param graph
      * @return
      */
-    public static ANIV getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static ANIV getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new ANIV("Average Number of Instance Variables per Class", "ANIV = Total NIV / Total NC", "ANIV",
                 MetricScope.SystemLevel, entity, graph);
@@ -47,7 +46,7 @@ public class ANIV extends SystemMetric {
      * @param graph
      */
     private ANIV(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
         // TODO Auto-generated constructor stub
@@ -62,17 +61,17 @@ public class ANIV extends SystemMetric {
     {
         double aniv = 0;
 
-        if (entity instanceof PackageNode)
-        {
-            double totalNIV = 0;
-
-            for (final ProgramNode pe : tree.getClasses((PackageNode) entity))
-            {
-                totalNIV += pe.getMetric("NIV");
-            }
-
-            aniv = totalNIV / totalClasses;
-        }
+        /*
+         * if (entity instanceof PackageNode)
+         * {
+         * double totalNIV = 0;
+         * for (final CodeNode pe : tree.getClasses((PackageNode) entity))
+         * {
+         * totalNIV += pe.getMetric("NIV");
+         * }
+         * aniv = totalNIV / totalClasses;
+         * }
+         */
 
         return aniv;
     }
@@ -84,6 +83,7 @@ public class ANIV extends SystemMetric {
     @Override
     public void setPrerequisites()
     {
-        totalClasses = taskMap.containsKey("NC") ? taskMap.get("NC").join().getValue() : entity.getMetric("NC");
+        // totalClasses = taskMap.containsKey("NC") ?
+        // taskMap.get("NC").join().getValue() : entity.getMetric("NC");
     }
 }

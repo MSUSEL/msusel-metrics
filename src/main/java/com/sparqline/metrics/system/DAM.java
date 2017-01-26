@@ -3,17 +3,11 @@
  */
 package com.sparqline.metrics.system;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
-import com.sparqline.graph.nodes.Accessibility;
-import com.sparqline.graph.nodes.SystemNode;
-import com.sparqline.graph.nodes.body.FieldNode;
-import com.sparqline.graph.nodes.type.ClassOrInterfaceNode;
 import com.sparqline.metrics.MetricScope;
 import com.sparqline.metrics.SystemMetric;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
+import com.sparqline.quamoco.codetree.ProjectNode;
 
 /**
  * DAM - Average Data Access Metric
@@ -27,13 +21,13 @@ public class DAM extends SystemMetric {
      */
     private static final long serialVersionUID = -8159583311389301289L;
 
-    public static DAM getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static DAM getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new DAM("Average Data Access Metric", "", "DAM", MetricScope.SystemLevel, entity, graph);
     }
 
     private DAM(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }
@@ -47,27 +41,28 @@ public class DAM extends SystemMetric {
     {
         double value = 0.0d;
 
-        if (entity instanceof SystemNode)
+        if (entity instanceof ProjectNode)
         {
-            final SystemNode sys = (SystemNode) entity;
-            final Set<ProgramNode> systemClasses = new HashSet<>();
-            systemClasses.addAll(sys.getClasses());
-
-            double totalDAM = 0.0d;
-            for (ProgramNode ce : systemClasses)
-            {
-                int nonPubAttr = 0;
-                for (FieldNode field : ((ClassOrInterfaceNode) ce).getFields())
-                {
-                    if (field.getAccessibility() != Accessibility.Public)
-                        nonPubAttr++;
-                }
-                totalDAM = ((double) nonPubAttr) / ((double) ((ClassOrInterfaceNode) ce).getFields().size());
-            }
-            if (Double.isNaN(totalDAM))
-                totalDAM = 0;
-
-            value = totalDAM / systemClasses.size();
+            /*
+             * final ProjectNode sys = (ProjectNode) entity;
+             * final Set<CodeNode> systemClasses = new HashSet<>();
+             * systemClasses.addAll(sys.getClasses());
+             * double totalDAM = 0.0d;
+             * for (CodeNode ce : systemClasses)
+             * {
+             * int nonPubAttr = 0;
+             * for (FieldNode field : ((TypeNode) ce).getFields())
+             * {
+             * if (field.getAccessibility() != Accessibility.Public)
+             * nonPubAttr++;
+             * }
+             * totalDAM = ((double) nonPubAttr) / ((double) ((TypeNode)
+             * ce).getFields().size());
+             * }
+             * if (Double.isNaN(totalDAM))
+             * totalDAM = 0;
+             * value = totalDAM / systemClasses.size();
+             */
         }
 
         if (Double.isNaN(value))

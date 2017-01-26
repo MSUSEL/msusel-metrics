@@ -3,10 +3,10 @@
  */
 package com.sparqline.metrics.system;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.MetricScope;
 import com.sparqline.metrics.SystemMetric;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 public class MIL extends SystemMetric {
 
@@ -15,13 +15,13 @@ public class MIL extends SystemMetric {
      */
     private static final long serialVersionUID = -7085516699762884385L;
 
-    public static MIL getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static MIL getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new MIL("", "", "MIL", MetricScope.ClassLevel, entity, graph);
     }
 
     private MIL(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
     }

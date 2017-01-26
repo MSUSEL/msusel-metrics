@@ -3,10 +3,10 @@
  */
 package com.sparqline.metrics.classmetrics;
 
-import com.sparqline.graph.CodeGraph;
-import com.sparqline.graph.ProgramNode;
 import com.sparqline.metrics.ClassMetric;
 import com.sparqline.metrics.MetricScope;
+import com.sparqline.quamoco.codetree.CodeNode;
+import com.sparqline.quamoco.codetree.CodeTree;
 
 /**
  * PPM - Parameters Per Method. PPM = Total NOP / Total NOM.
@@ -25,7 +25,7 @@ public class PPM extends ClassMetric {
      * @param graph
      * @return
      */
-    public static PPM getInstance(final ProgramNode entity, final CodeGraph graph)
+    public static PPM getInstance(final CodeNode entity, final CodeTree graph)
     {
         return new PPM("Parameters Per Method", "PPM = Total NOP / Total NOM", "PPM", MetricScope.ClassLevel, entity,
                 graph);
@@ -40,7 +40,7 @@ public class PPM extends ClassMetric {
      * @param graph
      */
     private PPM(final String name, final String desc, final String acronym, final MetricScope scope,
-            final ProgramNode entity, final CodeGraph graph)
+            final CodeNode entity, final CodeTree graph)
     {
         super(name, desc, acronym, scope, entity, graph);
         // TODO Auto-generated constructor stub

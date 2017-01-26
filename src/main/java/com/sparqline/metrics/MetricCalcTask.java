@@ -7,12 +7,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.RecursiveTask;
 
-import org.apache.commons.lang3.tuple.Pair;
-
-import com.sparqline.graph.nodes.PackageNode;
+import com.sparqline.metrics.utility.Pair;
 import com.sparqline.quamoco.codetree.CodeNode;
 import com.sparqline.quamoco.codetree.CodeTree;
 import com.sparqline.quamoco.codetree.MethodNode;
+import com.sparqline.quamoco.codetree.PackageNode;
 import com.sparqline.quamoco.codetree.ProjectNode;
 import com.sparqline.quamoco.codetree.TypeNode;
 
