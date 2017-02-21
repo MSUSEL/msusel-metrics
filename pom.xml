@@ -3,6 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>sparqline-metrics</artifactId>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jdk.min.version>1.8</jdk.min.version>
+		<sparqline.version>1.1.0</sparqline.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -80,7 +86,7 @@
 			<dependency>
 				<groupId>com.sparqline.quamoco</groupId>
 				<artifactId>sparqline-codetree</artifactId>
-				<version>1.0.5</version>
+				<version>${sparqline.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -92,8 +98,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.5.1</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>${jdk.min.version}</source>
+					<target>${jdk.min.version}</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -101,14 +107,14 @@
 				<artifactId>cobertura-maven-plugin</artifactId>
 				<version>2.7</version>
 			</plugin>
-			<extensions>
-				<extension>
-					<groupId>ar.com.synergian</groupId>
-					<artifactId>wagon-git</artifactId>
-					<version>0.2.5</version>
-				</extension>
-			</extensions>
 		</plugins>
+		<extensions>
+			<extension>
+				<groupId>ar.com.synergian</groupId>
+				<artifactId>wagon-git</artifactId>
+				<version>0.2.5</version>
+			</extension>
+		</extensions>
 	</build>
 	<reporting>
 		<plugins>
@@ -147,5 +153,5 @@
 		</repository>
 	</distributionManagement>
 	<groupId>com.sparqline.quamoco</groupId>
-	<version>1.0</version>
+	<version>${sparqline.version}</version>
 </project>

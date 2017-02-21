@@ -1,104 +1,81 @@
+/**
+ * The MIT License (MIT)
+ *
+ * SparQLine Metrics
+ * Copyright (c) 2015-2017 Isaac Griffith, SparQLine Analytics, LLC
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.sparqline.metrics.method;
 
+import com.sparqline.codetree.CodeTree;
+import com.sparqline.codetree.INode;
+import com.sparqline.codetree.node.MethodNode;
 import com.sparqline.metrics.MethodMetric;
-import com.sparqline.metrics.MetricScope;
-import com.sparqline.quamoco.codetree.CodeNode;
-import com.sparqline.quamoco.codetree.CodeTree;
-import com.sparqline.quamoco.codetree.MethodNode;
+import com.sparqline.metrics.utility.MetricTreeUtils;
 
 /**
- * LAA - Locality of Attribute Accesses. The number of attributes from the
- * method's definition class, divided by the total number of variables accessed
+ * Locality of Attribute Accesses. The number of attributes from the method's
+ * definition class, divided by the total number of variables accessed
  * (including attributes used via accessor methods, see ATFD), whereby the
  * number of local attributes accessed is computed in conformity with the LAA
  * specification.
  * 
- * @author Isaac
+ * @author Isaac Griffith
+ * @version 1.1.0
  */
 public class LAA extends MethodMetric {
 
     /**
+     * Factory method for this metric
      * 
+     * @return An instance of this metric
      */
-    private static final long serialVersionUID = 904796005807106603L;
-
-    /**
-     * @param entity
-     * @param graph
-     * @return
-     */
-    public static LAA getInstance(final CodeNode entity, final CodeTree graph)
+    public static LAA getInstance()
     {
-        return new LAA("Locality of Attribute Accesses",
+        return new LAA(
+                "Locality of Attribute Accesses",
                 "The number of attributes from the method's definition class, divided by the total number of variables accessed (including attributes used via accessor methods, see ATFD), whereby the number of local attributes accessed is computed in conformity with the LAA specification.",
-                "LAA", MetricScope.MethodLevel, entity, graph);
+                "LAA");
     }
 
     /**
+     * Constructs a new instance of this metric with the given name, description
+     * and acronym.
+     * 
      * @param name
+     *            Name of this metric
      * @param desc
+     *            Description of this metric
      * @param acronym
-     * @param scope
-     * @param entity
-     * @param graph
+     *            Acronym of this metric
      */
-    private LAA(final String name, final String desc, final String acronym, final MetricScope scope,
-            final CodeNode entity, final CodeTree graph)
+    private LAA(final String name, final String desc, final String acronym)
     {
-        super(name, desc, acronym, scope, entity, graph);
+        super(name, desc, acronym);
     }
 
     /**
-     * @param method
-     * @return
-     */
-    private double foreignAttributeAccesses(final MethodNode method)
-    {
-        double count = 0;
-
-        /*
-         * final List<Connection> calls = tree.getConnectionsByType(method,
-         * DirectedRelationshipType.MethodCall);
-         * for (final Connection call : calls)
-         * {
-         * final CodeNode callee = tree.getState().getDest(call);
-         * if (callee instanceof MethodNode)
-         * {
-         * final MethodNode me = (MethodNode) callee;
-         * if (me.isAccessorMethod(tree) || me.isMutatorMethod(tree))
-         * {
-         * if (!tree.getMethodOwner(me).equals(entity))
-         * {
-         * count++;
-         * }
-         * }
-         * }
-         * }
-         * final List<Connection> uses = tree.getConnectionsByType(method,
-         * DirectedRelationshipType.FieldUse);
-         * for (final Connection use : uses)
-         * {
-         * final CodeNode used = tree.getState().getDest(use);
-         * if (used instanceof FieldNode)
-         * {
-         * final CodeNode otherClass = tree.getFieldOwner((FieldNode) used);
-         * if (!otherClass.equals(entity))
-         * {
-         * count++;
-         * }
-         * }
-         * }
-         */
-
-        return count;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see net.siliconcode.truerefactor.metrics.Metric#measure()
+     * {@inheritDoc}
      */
     @Override
-    public double measure()
+    public double measure(final INode entity, final CodeTree tree)
     {
         double laa = 0;
 
@@ -107,7 +84,8 @@ public class LAA extends MethodMetric {
             final MethodNode method = (MethodNode) entity;
             final double localAttributesAccessed = 1; // tree.getFields(tree.getMethodOwner(method)).size();
 
-            laa = localAttributesAccessed / (localAttributesAccessed + foreignAttributeAccesses(method));
+            laa = localAttributesAccessed
+                    / (localAttributesAccessed + MetricTreeUtils.foreignAttributeAccesses(method, tree));
         }
 
         if (Double.isNaN(laa))

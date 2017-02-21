@@ -1,57 +1,77 @@
+/**
+ * The MIT License (MIT)
+ *
+ * SparQLine Metrics
+ * Copyright (c) 2015-2017 Isaac Griffith, SparQLine Analytics, LLC
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.sparqline.metrics.method;
 
+import com.sparqline.codetree.CodeTree;
+import com.sparqline.codetree.INode;
+import com.sparqline.codetree.node.MethodNode;
+import com.sparqline.codetree.node.StatementNode;
 import com.sparqline.metrics.MethodMetric;
-import com.sparqline.metrics.MetricScope;
-import com.sparqline.quamoco.codetree.CodeNode;
-import com.sparqline.quamoco.codetree.CodeTree;
-import com.sparqline.quamoco.codetree.MethodNode;
-import com.sparqline.quamoco.codetree.StatementNode;
 
 /**
- * MAXNESTING - Maximum Nesting Level. The maximum nesting level of control
- * structures within an operation.
+ * Maximum Nesting Level. The maximum nesting level of control structures within
+ * an operation.
  * 
  * @author Isaac Griffith
+ * @version 1.1.0
  */
 public class MAXNESTING extends MethodMetric {
 
     /**
+     * Factory method for this metric
      * 
+     * @return An instance of this metric
      */
-    private static final long serialVersionUID = 1214958509220635700L;
-
-    /**
-     * @param entity
-     * @param graph
-     * @return
-     */
-    public static MAXNESTING getInstance(final CodeNode entity, final CodeTree graph)
+    public static MAXNESTING getInstance()
     {
-        return new MAXNESTING("Maximum Nesting Level",
-                "The maximum nesting level of control structures within an operation.", "MAXNESTING",
-                MetricScope.MethodLevel, entity, graph);
+        return new MAXNESTING(
+                "Maximum Nesting Level", "The maximum nesting level of control structures within an operation.",
+                "MAXNESTING");
     }
 
     /**
+     * Constructs a new instance of this metric with the given name, description
+     * and acronym.
+     * 
      * @param name
+     *            Name of this metric
      * @param desc
+     *            Description of this metric
      * @param acronym
-     * @param scope
-     * @param entity
-     * @param graph
+     *            Acronym of this metric
      */
-    private MAXNESTING(final String name, final String desc, final String acronym, final MetricScope scope,
-            final CodeNode entity, final CodeTree graph)
+    private MAXNESTING(final String name, final String desc, final String acronym)
     {
-        super(name, desc, acronym, scope, entity, graph);
+        super(name, desc, acronym);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see net.siliconcode.truerefactor.metrics.Metric#measure()
+    /**
+     * {@inheritDoc}
      */
     @Override
-    public double measure()
+    public double measure(final INode entity, final CodeTree tree)
     {
         double maxnesting = 0;
 
@@ -67,6 +87,10 @@ public class MAXNESTING extends MethodMetric {
         return maxnesting;
     }
 
+    /**
+     * @param stmt
+     * @return
+     */
     private int processStatement(final StatementNode stmt)
     {
         int retVal = 0;

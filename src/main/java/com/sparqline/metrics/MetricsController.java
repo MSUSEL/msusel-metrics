@@ -1,3 +1,27 @@
+/**
+ * The MIT License (MIT)
+ *
+ * SparQLine Metrics
+ * Copyright (c) 2015-2017 Isaac Griffith, SparQLine Analytics, LLC
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.sparqline.metrics;
 
 import java.util.ArrayList;
@@ -5,7 +29,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ForkJoinPool;
 
-import com.sparqline.metrics.classmetrics.*;
+import com.sparqline.codetree.CodeTree;
+import com.sparqline.codetree.node.ProjectNode;
+import com.sparqline.codetree.node.TypeNode;
 import com.sparqline.metrics.field.IVMC;
 import com.sparqline.metrics.method.CDISP;
 import com.sparqline.metrics.method.CINT;
@@ -24,73 +50,76 @@ import com.sparqline.metrics.method.NOS;
 import com.sparqline.metrics.method.NUP;
 import com.sparqline.metrics.method.SLOC;
 import com.sparqline.metrics.method.SMS;
-import com.sparqline.metrics.packagemetrics.CDBC;
-import com.sparqline.metrics.packagemetrics.CDOC;
-import com.sparqline.metrics.packagemetrics.Ca;
-import com.sparqline.metrics.packagemetrics.Ce;
-import com.sparqline.metrics.packagemetrics.I;
-import com.sparqline.metrics.packagemetrics.PDAC;
-import com.sparqline.metrics.system.AC;
-import com.sparqline.metrics.system.ACX;
-import com.sparqline.metrics.system.ADI;
-import com.sparqline.metrics.system.AHF;
-import com.sparqline.metrics.system.AIF;
-import com.sparqline.metrics.system.ANIM;
-import com.sparqline.metrics.system.ANIV;
-import com.sparqline.metrics.system.APG;
-import com.sparqline.metrics.system.AR;
-import com.sparqline.metrics.system.ARS;
-import com.sparqline.metrics.system.ASC;
-import com.sparqline.metrics.system.BC;
-import com.sparqline.metrics.system.CAN;
-import com.sparqline.metrics.system.CBC;
-import com.sparqline.metrics.system.CF;
-import com.sparqline.metrics.system.CRE;
-import com.sparqline.metrics.system.CTF;
-import com.sparqline.metrics.system.FD;
-import com.sparqline.metrics.system.FDE;
-import com.sparqline.metrics.system.HM;
-import com.sparqline.metrics.system.KE;
-import com.sparqline.metrics.system.KE_KNCSL;
-import com.sparqline.metrics.system.MHF;
-import com.sparqline.metrics.system.MIF;
-import com.sparqline.metrics.system.MIL;
-import com.sparqline.metrics.system.MSC;
-import com.sparqline.metrics.system.NC;
-import com.sparqline.metrics.system.NCSL;
-import com.sparqline.metrics.system.NCT;
-import com.sparqline.metrics.system.NMCl;
-import com.sparqline.metrics.system.NOH;
-import com.sparqline.metrics.system.NOSLOC;
-import com.sparqline.metrics.system.OLE;
-import com.sparqline.metrics.system.PF;
-import com.sparqline.metrics.system.PRC;
-import com.sparqline.metrics.system.PRO;
-import com.sparqline.metrics.system.RAD;
-import com.sparqline.metrics.system.REM;
-import com.sparqline.metrics.system.SRE;
-import com.sparqline.metrics.system.SU;
-import com.sparqline.quamoco.codetree.CodeNode;
-import com.sparqline.quamoco.codetree.CodeTree;
-import com.sparqline.quamoco.codetree.ProjectNode;
-import com.sparqline.quamoco.codetree.TypeNode;
+import com.sparqline.metrics.namespace.CDBC;
+import com.sparqline.metrics.namespace.CDOC;
+import com.sparqline.metrics.namespace.Ca;
+import com.sparqline.metrics.namespace.Ce;
+import com.sparqline.metrics.namespace.I;
+import com.sparqline.metrics.namespace.PDAC;
+import com.sparqline.metrics.project.AC;
+import com.sparqline.metrics.project.ACX;
+import com.sparqline.metrics.project.ADI;
+import com.sparqline.metrics.project.AHF;
+import com.sparqline.metrics.project.AIF;
+import com.sparqline.metrics.project.ANIM;
+import com.sparqline.metrics.project.ANIV;
+import com.sparqline.metrics.project.APG;
+import com.sparqline.metrics.project.AR;
+import com.sparqline.metrics.project.ARS;
+import com.sparqline.metrics.project.ASC;
+import com.sparqline.metrics.project.BC;
+import com.sparqline.metrics.project.CAN;
+import com.sparqline.metrics.project.CBC;
+import com.sparqline.metrics.project.CF;
+import com.sparqline.metrics.project.CRE;
+import com.sparqline.metrics.project.CTF;
+import com.sparqline.metrics.project.FD;
+import com.sparqline.metrics.project.FDE;
+import com.sparqline.metrics.project.HM;
+import com.sparqline.metrics.project.KE;
+import com.sparqline.metrics.project.KE_KNCSL;
+import com.sparqline.metrics.project.MHF;
+import com.sparqline.metrics.project.MIF;
+import com.sparqline.metrics.project.MIL;
+import com.sparqline.metrics.project.MSC;
+import com.sparqline.metrics.project.NC;
+import com.sparqline.metrics.project.NCSL;
+import com.sparqline.metrics.project.NCT;
+import com.sparqline.metrics.project.NMCl;
+import com.sparqline.metrics.project.NOH;
+import com.sparqline.metrics.project.NOSLOC;
+import com.sparqline.metrics.project.OLE;
+import com.sparqline.metrics.project.PF;
+import com.sparqline.metrics.project.PRC;
+import com.sparqline.metrics.project.PRO;
+import com.sparqline.metrics.project.RAD;
+import com.sparqline.metrics.project.REM;
+import com.sparqline.metrics.project.SRE;
+import com.sparqline.metrics.project.SU;
+import com.sparqline.metrics.type.*;
 
 /**
+ * Class used to control which metrics are loaded and how they are executed.
+ * 
  * @author Isaac Griffith
+ * @version 1.1.0
  */
 public class MetricsController {
 
     /**
-     * 
+     * CodeTree to which the metrics will be applied
      */
     private final CodeTree     tree;
     /**
-     * 
+     * ForkJoinPool used to execute the metrics in a concurrent recursion.
      */
     private final ForkJoinPool forkJoinPool;
 
     /**
+     * Constructs a new MetricsController for the given tree
+     * 
      * @param tree
+     *            CodeTree to execute metrics on
      */
     public MetricsController(final CodeTree tree)
     {
@@ -99,134 +128,132 @@ public class MetricsController {
     }
 
     /**
-     * @param entity
-     * @return
+     * @return Returns a set of all available type scoped metrics
      */
-    public synchronized List<Metric> getClassMetrics(final CodeNode entity)
+    public synchronized List<Metric> getClassMetrics()
     {
         final List<Metric> metrics = new ArrayList<>();
 
-        metrics.add(AMS.getInstance(entity, tree));
-        metrics.add(AMW.getInstance(entity, tree));
-        metrics.add(APP.getInstance(entity, tree));
-        metrics.add(ATFD.getInstance(entity, tree));
-        metrics.add(BOvR.getInstance(entity, tree));
-        metrics.add(BUR.getInstance(entity, tree));
-        metrics.add(CAED.getInstance(entity, tree));
-        metrics.add(CBO_IUB.getInstance(entity, tree));
-        metrics.add(CBO_NA.getInstance(entity, tree));
-        metrics.add(CBO_U.getInstance(entity, tree));
-        metrics.add(CBO.getInstance(entity, tree));
-        metrics.add(CC.getInstance(entity, tree));
-        metrics.add(CCO.getInstance(entity, tree));
-        metrics.add(CEC.getInstance(entity, tree));
-        metrics.add(CLD.getInstance(entity, tree));
-        metrics.add(CLM.getInstance(entity, tree));
-        metrics.add(CLTD.getInstance(entity, tree));
-        metrics.add(CMC.getInstance(entity, tree));
-        metrics.add(Co.getInstance(entity, tree));
-        metrics.add(Coh.getInstance(entity, tree));
-        metrics.add(ComR.getInstance(entity, tree));
-        metrics.add(CP.getInstance(entity, tree));
-        metrics.add(CR.getInstance(entity, tree));
-        metrics.add(CS.getInstance(entity, tree));
-        metrics.add(CTA.getInstance(entity, tree));
-        metrics.add(DAC.getInstance(entity, tree));
-        metrics.add(DAM.getInstance(entity, tree));
-        metrics.add(DAR.getInstance(entity, tree));
-        metrics.add(DiAC.getInstance(entity, tree));
-        metrics.add(DIT.getInstance(entity, tree));
-        metrics.add(DS.getInstance(entity, tree));
-        metrics.add(ENM.getInstance(entity, tree));
-        metrics.add(ER.getInstance(entity, tree));
-        metrics.add(EV.getInstance(entity, tree));
-        metrics.add(FOC.getInstance(entity, tree));
-        metrics.add(FTF.getInstance(entity, tree));
-        metrics.add(HIT.getInstance(entity, tree));
-        metrics.add(HNL.getInstance(entity, tree));
-        metrics.add(ICH.getInstance(entity, tree));
-        metrics.add(IDM.getInstance(entity, tree));
-        metrics.add(IM.getInstance(entity, tree));
-        metrics.add(INP.getInstance(entity, tree));
-        metrics.add(IVMC.getInstance(entity, tree));
-        metrics.add(LB.getInstance(entity, tree));
-        metrics.add(LCC.getInstance(entity, tree));
-        metrics.add(LCOM.getInstance(entity, tree));
-        metrics.add(LCOM1.getInstance(entity, tree));
-        metrics.add(LCOM2.getInstance(entity, tree));
-        metrics.add(LCOM3.getInstance(entity, tree));
-        metrics.add(LCOM4.getInstance(entity, tree));
-        metrics.add(LCOM5.getInstance(entity, tree));
-        metrics.add(LD.getInstance(entity, tree));
-        metrics.add(LOC.getInstance(entity, tree));
-        metrics.add(LOCC.getInstance(entity, tree));
-        metrics.add(MAA.getInstance(entity, tree));
-        metrics.add(MFA.getInstance(entity, tree));
-        metrics.add(MM.getInstance(entity, tree));
-        metrics.add(MPC.getInstance(entity, tree));
-        metrics.add(NAC.getInstance(entity, tree));
-        metrics.add(NAD.getInstance(entity, tree));
-        metrics.add(NAS.getInstance(entity, tree));
-        metrics.add(NCC.getInstance(entity, tree));
-        metrics.add(NCM.getInstance(entity, tree));
-        metrics.add(NCV.getInstance(entity, tree));
-        metrics.add(NDC.getInstance(entity, tree));
-        metrics.add(NEV.getInstance(entity, tree));
-        metrics.add(NFM.getInstance(entity, tree));
-        metrics.add(NIV.getInstance(entity, tree));
-        metrics.add(NLM.getInstance(entity, tree));
-        metrics.add(NMA.getInstance(entity, tree));
-        metrics.add(NMI.getInstance(entity, tree));
-        metrics.add(NMO.getInstance(entity, tree));
-        metrics.add(NOAM.getInstance(entity, tree));
-        metrics.add(NOC.getInstance(entity, tree));
-        metrics.add(NOF.getInstance(entity, tree));
-        metrics.add(NOM.getInstance(entity, tree));
-        metrics.add(NOPA.getInstance(entity, tree));
-        metrics.add(NOPM.getInstance(entity, tree));
-        metrics.add(NOpV.getInstance(entity, tree));
-        metrics.add(NOV.getInstance(entity, tree));
-        metrics.add(NPA.getInstance(entity, tree));
-        metrics.add(NPM.getInstance(entity, tree));
-        metrics.add(NPrivProtM.getInstance(entity, tree));
-        metrics.add(NProtM.getInstance(entity, tree));
-        metrics.add(NPV.getInstance(entity, tree));
-        metrics.add(NRA.getInstance(entity, tree));
-        metrics.add(NUIV.getInstance(entity, tree));
-        metrics.add(OM.getInstance(entity, tree));
-        metrics.add(OPFS.getInstance(entity, tree));
-        metrics.add(OQFS.getInstance(entity, tree));
-        metrics.add(PCM.getInstance(entity, tree));
-        metrics.add(PDA.getInstance(entity, tree));
-        metrics.add(PIM.getInstance(entity, tree));
-        metrics.add(PM.getInstance(entity, tree));
-        metrics.add(PMR.getInstance(entity, tree));
-        metrics.add(PNAS.getInstance(entity, tree));
-        metrics.add(PPD.getInstance(entity, tree));
-        metrics.add(PPM.getInstance(entity, tree));
-        metrics.add(PR.getInstance(entity, tree));
-        metrics.add(RFC_INF.getInstance(entity, tree));
-        metrics.add(RFC.getInstance(entity, tree));
-        metrics.add(SC.getInstance(entity, tree));
-        metrics.add(SDC.getInstance(entity, tree));
-        metrics.add(SEC.getInstance(entity, tree));
-        metrics.add(SIX.getInstance(entity, tree));
-        metrics.add(SIZE1.getInstance(entity, tree));
-        metrics.add(SIZE2.getInstance(entity, tree));
-        metrics.add(TCC.getInstance(entity, tree));
-        metrics.add(WCS.getInstance(entity, tree));
-        metrics.add(WMC.getInstance(entity, tree));
-        metrics.add(WMSO.getInstance(entity, tree));
-        metrics.add(WOC.getInstance(entity, tree));
+        metrics.add(AMS.getInstance());
+        metrics.add(AMW.getInstance());
+        metrics.add(APP.getInstance());
+        metrics.add(ATFD.getInstance());
+        metrics.add(BOvR.getInstance());
+        metrics.add(BUR.getInstance());
+        metrics.add(CAED.getInstance());
+        metrics.add(CBO_IUB.getInstance());
+        metrics.add(CBO_NA.getInstance());
+        metrics.add(CBO_U.getInstance());
+        metrics.add(CBO.getInstance());
+        metrics.add(CC.getInstance());
+        metrics.add(CCO.getInstance());
+        metrics.add(CEC.getInstance());
+        metrics.add(CLD.getInstance());
+        metrics.add(CLM.getInstance());
+        metrics.add(CLTD.getInstance());
+        metrics.add(CMC.getInstance());
+        metrics.add(Co.getInstance());
+        metrics.add(Coh.getInstance());
+        metrics.add(ComR.getInstance());
+        metrics.add(CP.getInstance());
+        metrics.add(CR.getInstance());
+        metrics.add(CS.getInstance());
+        metrics.add(CTA.getInstance());
+        metrics.add(DAC.getInstance());
+        metrics.add(DAM.getInstance());
+        metrics.add(DAR.getInstance());
+        metrics.add(DiAC.getInstance());
+        metrics.add(DIT.getInstance());
+        metrics.add(DS.getInstance());
+        metrics.add(ENM.getInstance());
+        metrics.add(ER.getInstance());
+        metrics.add(EV.getInstance());
+        metrics.add(FOC.getInstance());
+        metrics.add(FTF.getInstance());
+        metrics.add(HIT.getInstance());
+        metrics.add(HNL.getInstance());
+        metrics.add(ICH.getInstance());
+        metrics.add(IDM.getInstance());
+        metrics.add(IM.getInstance());
+        metrics.add(INP.getInstance());
+        metrics.add(IVMC.getInstance());
+        metrics.add(LB.getInstance());
+        metrics.add(LCC.getInstance());
+        metrics.add(LCOM.getInstance());
+        metrics.add(LCOM1.getInstance());
+        metrics.add(LCOM2.getInstance());
+        metrics.add(LCOM3.getInstance());
+        metrics.add(LCOM4.getInstance());
+        metrics.add(LCOM5.getInstance());
+        metrics.add(LD.getInstance());
+        metrics.add(LOC.getInstance());
+        metrics.add(LOCC.getInstance());
+        metrics.add(MAA.getInstance());
+        metrics.add(MFA.getInstance());
+        metrics.add(MM.getInstance());
+        metrics.add(MPC.getInstance());
+        metrics.add(NAC.getInstance());
+        metrics.add(NAD.getInstance());
+        metrics.add(NAS.getInstance());
+        metrics.add(NCC.getInstance());
+        metrics.add(NCM.getInstance());
+        metrics.add(NCV.getInstance());
+        metrics.add(NDC.getInstance());
+        metrics.add(NEV.getInstance());
+        metrics.add(NFM.getInstance());
+        metrics.add(NIV.getInstance());
+        metrics.add(NLM.getInstance());
+        metrics.add(NMA.getInstance());
+        metrics.add(NMI.getInstance());
+        metrics.add(NMO.getInstance());
+        metrics.add(NOAM.getInstance());
+        metrics.add(NOC.getInstance());
+        metrics.add(NOF.getInstance());
+        metrics.add(NOM.getInstance());
+        metrics.add(NOPA.getInstance());
+        metrics.add(NOPM.getInstance());
+        metrics.add(NOpV.getInstance());
+        metrics.add(NOV.getInstance());
+        metrics.add(NPA.getInstance());
+        metrics.add(NPM.getInstance());
+        metrics.add(NPrivProtM.getInstance());
+        metrics.add(NProtM.getInstance());
+        metrics.add(NPV.getInstance());
+        metrics.add(NRA.getInstance());
+        metrics.add(NUIV.getInstance());
+        metrics.add(OM.getInstance());
+        metrics.add(OPFS.getInstance());
+        metrics.add(OQFS.getInstance());
+        metrics.add(PCM.getInstance());
+        metrics.add(PDA.getInstance());
+        metrics.add(PIM.getInstance());
+        metrics.add(PM.getInstance());
+        metrics.add(PMR.getInstance());
+        metrics.add(PNAS.getInstance());
+        metrics.add(PPD.getInstance());
+        metrics.add(PPM.getInstance());
+        metrics.add(PR.getInstance());
+        metrics.add(RFC_INF.getInstance());
+        metrics.add(RFC.getInstance());
+        metrics.add(SC.getInstance());
+        metrics.add(SDC.getInstance());
+        metrics.add(SEC.getInstance());
+        metrics.add(SIX.getInstance());
+        metrics.add(SIZE1.getInstance());
+        metrics.add(SIZE2.getInstance());
+        metrics.add(TCC.getInstance());
+        metrics.add(WCS.getInstance());
+        metrics.add(WMC.getInstance());
+        metrics.add(WMSO.getInstance());
+        metrics.add(WOC.getInstance());
 
         return metrics;
     }
 
     /**
-     * @param entity
-     * @return
+     * @return A list of all module scoped metrics
      */
-    public synchronized List<Metric> getComponentMetrics(final CodeNode entity)
+    public synchronized List<Metric> getComponentMetrics()
     {
         final List<Metric> metrics = new ArrayList<>();
 
@@ -234,115 +261,112 @@ public class MetricsController {
     }
 
     /**
-     * @param entity
-     * @return
+     * @return A list of all method scoped metrics
      */
-    public synchronized List<Metric> getMethodMetrics(final CodeNode entity)
+    public synchronized List<Metric> getMethodMetrics()
     {
         final List<Metric> metrics = new ArrayList<>();
 
-        metrics.add(CDISP.getInstance(entity, tree));
-        metrics.add(ChC.getInstance(entity, tree));
-        metrics.add(ChM.getInstance(entity, tree));
-        metrics.add(CINT.getInstance(entity, tree));
-        metrics.add(ComR.getInstance(entity, tree));
-        metrics.add(CYCLO.getInstance(entity, tree));
-        metrics.add(FDP.getInstance(entity, tree));
-        metrics.add(LAA.getInstance(entity, tree));
-        metrics.add(MAXNESTING.getInstance(entity, tree));
-        metrics.add(MCX.getInstance(entity, tree));
-        metrics.add(NMC.getInstance(entity, tree));
-        metrics.add(NMP.getInstance(entity, tree));
-        metrics.add(NMS.getInstance(entity, tree));
-        metrics.add(NOAV.getInstance(entity, tree));
-        metrics.add(NOS.getInstance(entity, tree));
-        metrics.add(NUP.getInstance(entity, tree));
-        metrics.add(SLOC.getInstance(entity, tree));
-        metrics.add(SMS.getInstance(entity, tree));
+        metrics.add(CDISP.getInstance());
+        metrics.add(ChC.getInstance());
+        metrics.add(ChM.getInstance());
+        metrics.add(CINT.getInstance());
+        metrics.add(ComR.getInstance());
+        metrics.add(CYCLO.getInstance());
+        metrics.add(FDP.getInstance());
+        metrics.add(LAA.getInstance());
+        metrics.add(MAXNESTING.getInstance());
+        metrics.add(MCX.getInstance());
+        metrics.add(NMC.getInstance());
+        metrics.add(NMP.getInstance());
+        metrics.add(NMS.getInstance());
+        metrics.add(NOAV.getInstance());
+        metrics.add(NOS.getInstance());
+        metrics.add(NUP.getInstance());
+        metrics.add(SLOC.getInstance());
+        metrics.add(SMS.getInstance());
 
         return metrics;
     }
 
     /**
-     * @param entity
-     * @return
+     * @return A list of all namespace scoped metrics
      */
-    public synchronized List<Metric> getPackageMetrics(final CodeNode entity)
+    public synchronized List<Metric> getPackageMetrics()
     {
         final List<Metric> metrics = new ArrayList<>();
 
-        metrics.add(Ca.getInstance(entity, tree));
-        metrics.add(CDBC.getInstance(entity, tree));
-        metrics.add(CDOC.getInstance(entity, tree));
-        metrics.add(Ce.getInstance(entity, tree));
-        metrics.add(com.sparqline.metrics.packagemetrics.CF.getInstance(entity, tree));
-        metrics.add(I.getInstance(entity, tree));
-        metrics.add(PDAC.getInstance(entity, tree));
+        metrics.add(Ca.getInstance());
+        metrics.add(CDBC.getInstance());
+        metrics.add(CDOC.getInstance());
+        metrics.add(Ce.getInstance());
+        metrics.add(com.sparqline.metrics.namespace.CF.getInstance());
+        metrics.add(I.getInstance());
+        metrics.add(PDAC.getInstance());
 
         return metrics;
     }
 
     /**
-     * @param entity
-     * @return
+     * @return A list of all project scoped metrics
      */
-    public synchronized List<Metric> getSystemMetrics(final CodeNode entity)
+    public synchronized List<Metric> getSystemMetrics()
     {
         final List<Metric> metrics = new ArrayList<>();
 
-        metrics.add(AC.getInstance(entity, tree));
-        metrics.add(ACX.getInstance(entity, tree));
-        metrics.add(ADI.getInstance(entity, tree));
-        metrics.add(AHF.getInstance(entity, tree));
-        metrics.add(AIF.getInstance(entity, tree));
-        metrics.add(ANIM.getInstance(entity, tree));
-        metrics.add(ANIV.getInstance(entity, tree));
-        metrics.add(APG.getInstance(entity, tree));
-        metrics.add(AR.getInstance(entity, tree));
-        metrics.add(ARS.getInstance(entity, tree));
-        metrics.add(ASC.getInstance(entity, tree));
-        metrics.add(BC.getInstance(entity, tree));
-        metrics.add(CAN.getInstance(entity, tree));
-        metrics.add(CBC.getInstance(entity, tree));
-        metrics.add(com.sparqline.metrics.system.CC.getInstance(entity, tree));
-        metrics.add(CF.getInstance(entity, tree));
-        metrics.add(CRE.getInstance(entity, tree));
-        metrics.add(CTF.getInstance(entity, tree));
-        metrics.add(FD.getInstance(entity, tree));
-        metrics.add(FDE.getInstance(entity, tree));
-        metrics.add(com.sparqline.metrics.system.FTF.getInstance(entity, tree));
-        metrics.add(HM.getInstance(entity, tree));
-        metrics.add(KE_KNCSL.getInstance(entity, tree));
-        metrics.add(KE.getInstance(entity, tree));
-        metrics.add(com.sparqline.metrics.system.LOC.getInstance(entity, tree));
-        metrics.add(MHF.getInstance(entity, tree));
-        metrics.add(MIF.getInstance(entity, tree));
-        metrics.add(MIL.getInstance(entity, tree));
-        metrics.add(MSC.getInstance(entity, tree));
-        metrics.add(NC.getInstance(entity, tree));
-        metrics.add(NCSL.getInstance(entity, tree));
-        metrics.add(NCT.getInstance(entity, tree));
-        metrics.add(NMCl.getInstance(entity, tree));
-        metrics.add(NOH.getInstance(entity, tree));
-        metrics.add(NOSLOC.getInstance(entity, tree));
-        metrics.add(OLE.getInstance(entity, tree));
-        metrics.add(PF.getInstance(entity, tree));
-        metrics.add(PRC.getInstance(entity, tree));
-        metrics.add(PRO.getInstance(entity, tree));
-        metrics.add(RAD.getInstance(entity, tree));
-        metrics.add(REM.getInstance(entity, tree));
-        metrics.add(SRE.getInstance(entity, tree));
-        metrics.add(SU.getInstance(entity, tree));
+        metrics.add(AC.getInstance());
+        metrics.add(ACX.getInstance());
+        metrics.add(ADI.getInstance());
+        metrics.add(AHF.getInstance());
+        metrics.add(AIF.getInstance());
+        metrics.add(ANIM.getInstance());
+        metrics.add(ANIV.getInstance());
+        metrics.add(APG.getInstance());
+        metrics.add(AR.getInstance());
+        metrics.add(ARS.getInstance());
+        metrics.add(ASC.getInstance());
+        metrics.add(BC.getInstance());
+        metrics.add(CAN.getInstance());
+        metrics.add(CBC.getInstance());
+        metrics.add(com.sparqline.metrics.project.CC.getInstance());
+        metrics.add(CF.getInstance());
+        metrics.add(CRE.getInstance());
+        metrics.add(CTF.getInstance());
+        metrics.add(FD.getInstance());
+        metrics.add(FDE.getInstance());
+        metrics.add(com.sparqline.metrics.project.FTF.getInstance());
+        metrics.add(HM.getInstance());
+        metrics.add(KE_KNCSL.getInstance());
+        metrics.add(KE.getInstance());
+        metrics.add(com.sparqline.metrics.project.LOC.getInstance());
+        metrics.add(MHF.getInstance());
+        metrics.add(MIF.getInstance());
+        metrics.add(MIL.getInstance());
+        metrics.add(MSC.getInstance());
+        metrics.add(NC.getInstance());
+        metrics.add(NCSL.getInstance());
+        metrics.add(NCT.getInstance());
+        metrics.add(NMCl.getInstance());
+        metrics.add(NOH.getInstance());
+        metrics.add(NOSLOC.getInstance());
+        metrics.add(OLE.getInstance());
+        metrics.add(PF.getInstance());
+        metrics.add(PRC.getInstance());
+        metrics.add(PRO.getInstance());
+        metrics.add(RAD.getInstance());
+        metrics.add(REM.getInstance());
+        metrics.add(SRE.getInstance());
+        metrics.add(SU.getInstance());
 
         return metrics;
     }
 
     /**
-     * 
+     * Concurrently measures all metrics across each project node in the tree.
      */
     public void measureAllMetrics()
     {
-        final Set<ProjectNode> systems = tree.getProjects();
+        final Set<ProjectNode> systems = tree.getUtils().getProjects();
 
         for (final ProjectNode sys : systems)
         {
@@ -350,21 +374,38 @@ public class MetricsController {
         }
     }
 
+    /**
+     * Concurrently measures all type metrics across each type in the tree
+     */
     public void measureClasses()
     {
         // TODO add implementation
     }
 
+    /**
+     * Concurrently measures all method metric for all methods in the given
+     * type.
+     * 
+     * @param entity
+     *            Type whose methods are to be measured
+     */
     public void measureMethods(final TypeNode entity)
     {
         // TODO add implementation
     }
 
+    /**
+     * Concurrently measures all namespace metrics for each namespace defined in
+     * the system.
+     */
     public void measurePackages()
     {
         // TODO add implementation
     }
 
+    /**
+     * Concurrently measures the entire system
+     */
     public void measureSystem()
     {
         // TODO add implementation

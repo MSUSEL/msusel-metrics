@@ -2,7 +2,7 @@
  * The MIT License (MIT)
  *
  * SparQLine Metrics
- * Copyright c) 2017 Isaac Griffith, SparQLine Analytics, LLC
+ * Copyright (c) 2015-2017 Isaac Griffith, SparQLine Analytics, LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,28 +27,28 @@ package com.sparqline.metrics.aggregators;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-import com.sparqline.metrics.Metric;
+import com.sparqline.codetree.CodeTree;
+import com.sparqline.codetree.node.FileNode;
+import com.sparqline.codetree.node.ModuleNode;
+import com.sparqline.codetree.node.ProjectNode;
 import com.sparqline.metrics.MetricsAggregator;
-import com.sparqline.quamoco.codetree.CodeTree;
-import com.sparqline.quamoco.codetree.FileNode;
-import com.sparqline.quamoco.codetree.ModuleNode;
-import com.sparqline.quamoco.codetree.ProjectNode;
 
 /**
+ * Aggregates the metrics at the file level up to the files containing Module or
+ * Project.
+ * 
  * @author Isaac Griffith
+ * @version 1.1.0
  */
 public class FileMetricsAggregator extends MetricsAggregator {
 
-    /*
-     * (non-Javadoc)
-     * @see
-     * com.sparqline.metrics.MetricsAggregator#aggregate(com.sparqline.metrics.
-     * Metric, com.sparqline.quamoco.codetree.CodeTree)
+    /**
+     * {@inheritDoc}
      */
     @Override
-    public void aggregate(Metric metric, CodeTree tree)
+    public void aggregate(CodeTree tree)
     {
-        for (ProjectNode pn : tree.getProjects())
+        for (ProjectNode pn : tree.getUtils().getProjects())
         {
             if (pn.equals(tree.getProject()))
                 continue;

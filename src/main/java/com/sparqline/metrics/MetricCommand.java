@@ -2,7 +2,7 @@
  * The MIT License (MIT)
  *
  * SparQLine Metrics
- * Copyright c) 2017 Isaac Griffith, SparQLine Analytics, LLC
+ * Copyright (c) 2015-2017 Isaac Griffith, SparQLine Analytics, LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +25,16 @@
 package com.sparqline.metrics;
 
 /**
+ * Interface defining the command pattern for use with Metrics
+ * 
  * @author Isaac Griffith
+ * @version 1.1.0
  */
 public interface MetricCommand {
 
     /**
-     * 
+     * Command method which will invoke a given metric contained with an
+     * implementing class' definition
      */
     void measure();
 }

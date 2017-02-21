@@ -2,7 +2,7 @@
  * The MIT License (MIT)
  *
  * SparQLine Metrics
- * Copyright c) 2017 Isaac Griffith, SparQLine Analytics, LLC
+ * Copyright (c) 2015-2017 Isaac Griffith, SparQLine Analytics, LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,36 +24,71 @@
  */
 package com.sparqline.metrics;
 
+import java.util.List;
 import java.util.Map;
 
-import com.sparqline.quamoco.codetree.CodeNode;
-import com.sparqline.quamoco.codetree.CodeTree;
+import com.google.common.collect.Lists;
+import com.sparqline.codetree.CodeTree;
+import com.sparqline.codetree.INode;
 
 /**
+ * Base class for metrics aggregators.
+ * 
  * @author Isaac Griffith
+ * @version 1.1.0
  */
 public abstract class MetricsAggregator {
 
     /**
-     * @param metric
-     * @param tree
+     * List of excluded metrics
      */
-    public abstract void aggregate(Metric metric, CodeTree tree);
+    protected final List<String> excludedMetrics = Lists.newCopyOnWriteArrayList();
 
     /**
-     * @param totals
-     * @param pn
+     * Aggregates metrics for all nodes in the given tree.
+     * 
+     * @param tree
+     *            CodeTree
      */
-    protected void metricSum(Map<String, Double> totals, CodeNode pn)
+    public abstract void aggregate(CodeTree tree);
+
+    /**
+     * Calculates the total value of metrics for the given node, by simply
+     * summing the values found in the provided map.
+     * 
+     * @param totals
+     *            Totals for all children of the given node for each metric.
+     * @param node
+     *            node to append summed values to
+     */
+    protected void metricSum(Map<String, Double> totals, INode node)
     {
-        for (String m : pn.getMetricNames())
+        for (String m : node.getMetricNames())
         {
+            if (excludedMetrics.contains(m))
+                continue;
+
             double total = 0.0;
             if (totals.containsKey(m))
                 total = totals.get(m);
 
-            total += pn.getMetric(m);
+            total += node.getMetric(m);
             totals.put(m, total);
         }
+    }
+
+    /**
+     * Adds the named metric to the list of metrics excluded from this
+     * aggregation
+     * 
+     * @param name
+     *            Metric name
+     */
+    public void addExcludedMetric(String name)
+    {
+        if (name == null || name.isEmpty() || excludedMetrics.contains(name))
+            return;
+
+        excludedMetrics.add(name);
     }
 }

@@ -2,7 +2,7 @@
  * The MIT License (MIT)
  *
  * SparQLine Metrics
- * Copyright c) 2017 Isaac Griffith, SparQLine Analytics, LLC
+ * Copyright (c) 2015-2017 Isaac Griffith, SparQLine Analytics, LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,27 +27,26 @@ package com.sparqline.metrics.aggregators;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-import com.sparqline.metrics.Metric;
+import com.sparqline.codetree.CodeTree;
+import com.sparqline.codetree.node.MethodNode;
+import com.sparqline.codetree.node.TypeNode;
 import com.sparqline.metrics.MetricsAggregator;
-import com.sparqline.quamoco.codetree.CodeTree;
-import com.sparqline.quamoco.codetree.MethodNode;
-import com.sparqline.quamoco.codetree.TypeNode;
 
 /**
+ * Aggregates metrics from the method level into their containing type.
+ * 
  * @author Isaac Griffith
+ * @version 1.1.0
  */
 public class MethodMetricsAggregator extends MetricsAggregator {
 
-    /*
-     * (non-Javadoc)
-     * @see
-     * com.sparqline.metrics.MetricsAggregator#aggregate(com.sparqline.metrics.
-     * Metric, com.sparqline.quamoco.codetree.CodeTree)
+    /**
+     * {@inheritDoc}
      */
     @Override
-    public void aggregate(Metric metric, CodeTree tree)
+    public void aggregate(CodeTree tree)
     {
-        for (TypeNode tn : tree.getTypes())
+        for (TypeNode tn : tree.getUtils().getTypes())
         {
             Map<String, Double> totals = Maps.newHashMap();
             for (MethodNode mn : tn.getMethods())

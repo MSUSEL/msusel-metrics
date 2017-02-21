@@ -2,7 +2,7 @@
  * The MIT License (MIT)
  *
  * SparQLine Metrics
- * Copyright c) 2017 Isaac Griffith, SparQLine Analytics, LLC
+ * Copyright (c) 2015-2017 Isaac Griffith, SparQLine Analytics, LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,42 +24,50 @@
  */
 package com.sparqline.metrics.method;
 
+import com.sparqline.codetree.CodeTree;
+import com.sparqline.codetree.INode;
+import com.sparqline.codetree.node.MethodNode;
 import com.sparqline.metrics.MethodMetric;
-import com.sparqline.metrics.MetricScope;
-import com.sparqline.quamoco.codetree.CodeNode;
-import com.sparqline.quamoco.codetree.CodeTree;
-import com.sparqline.quamoco.codetree.MethodNode;
 
 /**
- * SLOC - Source Lines of Code. Count of the number of lines of code in this
- * method.
+ * Source Lines of Code. Count of the number of lines of code in this method.
  * 
  * @author Isaac Griffith
+ * @version 1.1.0
  */
 public class SLOC extends MethodMetric {
 
     /**
+     * Factory method for this metric
      * 
+     * @return An instance of this metric
      */
-    private static final long serialVersionUID = 7637661699530861707L;
-
-    public static SLOC getInstance(final CodeNode entity, final CodeTree graph)
+    public static SLOC getInstance()
     {
-        return new SLOC("Source Lines of Code", "Count of the number of lines of code in this method", "SLOC",
-                MetricScope.MethodLevel, entity, graph);
+        return new SLOC("Source Lines of Code", "Count of the number of lines of code in this method", "SLOC");
     }
 
-    private SLOC(final String name, final String desc, final String acronym, final MetricScope scope,
-            final CodeNode entity, final CodeTree graph)
+    /**
+     * Constructs a new instance of this metric with the given name, description
+     * and acronym.
+     * 
+     * @param name
+     *            Name of this metric
+     * @param desc
+     *            Description of this metric
+     * @param acronym
+     *            Acronym of this metric
+     */
+    private SLOC(final String name, final String desc, final String acronym)
     {
-        super(name, desc, acronym, scope, entity, graph);
+        super(name, desc, acronym);
     }
 
     /**
      * @param me
      * @return
      */
-    private int calculateLOC(final CodeNode me)
+    private int calculateLOC(final INode me)
     {
         return 1 + getAllStatementsButEmpty(me);
     }
@@ -68,7 +76,7 @@ public class SLOC extends MethodMetric {
      * @param me
      * @return
      */
-    private int getAllStatementsButEmpty(final CodeNode me)
+    private int getAllStatementsButEmpty(final INode me)
     {
         /*
          * final List<StatementNode> stmts = new
@@ -90,7 +98,7 @@ public class SLOC extends MethodMetric {
      * @param expr
      * @return
      */
-    private int getExpressionLOC(final CodeNode me)
+    private int getExpressionLOC(final INode me)
     {
         int retVal = 0;
 
@@ -111,12 +119,11 @@ public class SLOC extends MethodMetric {
         return retVal;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see net.siliconcode.truerefactor.metrics.Metric#measure()
+    /**
+     * {@inheritDoc}
      */
     @Override
-    public double measure()
+    public double measure(final INode entity, final CodeTree tree)
     {
         double sloc = 0;
 

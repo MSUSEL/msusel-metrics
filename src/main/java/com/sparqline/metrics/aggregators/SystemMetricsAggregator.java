@@ -2,7 +2,7 @@
  * The MIT License (MIT)
  *
  * SparQLine Metrics
- * Copyright c) 2017 Isaac Griffith, SparQLine Analytics, LLC
+ * Copyright (c) 2015-2017 Isaac Griffith, SparQLine Analytics, LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,51 +25,66 @@
 package com.sparqline.metrics.aggregators;
 
 import java.util.Map;
+import java.util.Queue;
+import java.util.Stack;
 
 import com.google.common.collect.Maps;
-import com.sparqline.metrics.Metric;
+import com.google.common.collect.Queues;
+import com.sparqline.codetree.CodeTree;
+import com.sparqline.codetree.node.FileNode;
+import com.sparqline.codetree.node.ModuleNode;
+import com.sparqline.codetree.node.ProjectNode;
 import com.sparqline.metrics.MetricsAggregator;
-import com.sparqline.quamoco.codetree.CodeTree;
-import com.sparqline.quamoco.codetree.FileNode;
-import com.sparqline.quamoco.codetree.ModuleNode;
-import com.sparqline.quamoco.codetree.ProjectNode;
 
 /**
+ * Class for aggregating metrics up to the System level.
+ * 
  * @author Isaac Griffith
+ * @version 1.1.0
  */
 public class SystemMetricsAggregator extends MetricsAggregator {
 
-    /*
-     * (non-Javadoc)
-     * @see
-     * com.sparqline.metrics.MetricsAggregator#aggregate(com.sparqline.metrics.
-     * Metric, com.sparqline.quamoco.codetree.CodeTree)
+    /**
+     * {@inheritDoc}
      */
     @Override
-    public void aggregate(Metric metric, CodeTree tree)
+    public void aggregate(CodeTree tree)
     {
-        ProjectNode proj = tree.getProject();
+        Stack<ProjectNode> stack = new Stack<>();
+        Queue<ProjectNode> queue = Queues.newArrayDeque();
+
+        queue.offer(tree.getProject());
+        while (!queue.isEmpty())
+        {
+            ProjectNode pn = queue.poll();
+            stack.push(pn);
+            queue.addAll(pn.getSubProjects());
+        }
 
         Map<String, Double> totals = Maps.newHashMap();
 
-        for (ProjectNode pn : proj.getSubProjects())
+        while (!stack.isEmpty())
         {
-            metricSum(totals, pn);
-        }
+            ProjectNode parent = stack.pop();
+            for (ProjectNode pn : parent.getSubProjects())
+            {
+                metricSum(totals, pn);
+            }
 
-        for (ModuleNode mn : proj.getModules())
-        {
-            metricSum(totals, mn);
-        }
+            for (ModuleNode mn : parent.getModules())
+            {
+                metricSum(totals, mn);
+            }
 
-        for (FileNode fn : proj.getFiles())
-        {
-            metricSum(totals, fn);
-        }
+            for (FileNode fn : parent.getFiles())
+            {
+                metricSum(totals, fn);
+            }
 
-        for (String m : totals.keySet())
-        {
-            proj.addMetric(m, totals.get(m));
+            for (String m : totals.keySet())
+            {
+                parent.addMetric(m, totals.get(m));
+            }
         }
     }
 }

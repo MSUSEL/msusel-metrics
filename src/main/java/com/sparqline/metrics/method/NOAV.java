@@ -2,7 +2,7 @@
  * The MIT License (MIT)
  *
  * SparQLine Metrics
- * Copyright c) 2017 Isaac Griffith, SparQLine Analytics, LLC
+ * Copyright (c) 2015-2017 Isaac Griffith, SparQLine Analytics, LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,127 +24,55 @@
  */
 package com.sparqline.metrics.method;
 
+import com.sparqline.codetree.CodeTree;
+import com.sparqline.codetree.INode;
+import com.sparqline.codetree.node.MethodNode;
 import com.sparqline.metrics.MethodMetric;
-import com.sparqline.metrics.MetricScope;
-import com.sparqline.quamoco.codetree.CodeNode;
-import com.sparqline.quamoco.codetree.CodeTree;
-import com.sparqline.quamoco.codetree.MethodNode;
 
 /**
- * NOAV - Number of Accessed Variables. The total number of variables accessed
- * directly from the measured operation. Variables include parameters, local
- * variables, but also instance variables and global variables.
+ * Number of Accessed Variables. The total number of variables accessed directly
+ * from the measured operation. Variables include parameters, local variables,
+ * but also instance variables and global variables.
  * 
  * @author Isaac Griffith
+ * @version 1.1.0
  */
 public class NOAV extends MethodMetric {
 
     /**
+     * Factory method for this metric
      * 
+     * @return An instance of this metric
      */
-    private static final long serialVersionUID = -3929872169331381396L;
-
-    public static NOAV getInstance(final CodeNode entity, final CodeTree graph)
+    public static NOAV getInstance()
     {
-        return new NOAV("Number of Accessed Variables",
+        return new NOAV(
+                "Number of Accessed Variables",
                 "The total number of variables accessed directly from the measured operation. Variables include parameters, local variables, but also instance variables and global variables.",
-                "NOAV", MetricScope.MethodLevel, entity, graph);
-    }
-
-    private NOAV(final String name, final String desc, final String acronym, final MetricScope scope,
-            final CodeNode entity, final CodeTree graph)
-    {
-        super(name, desc, acronym, scope, entity, graph);
+                "NOAV");
     }
 
     /**
-     * @param method
-     * @return
+     * Constructs a new instance of this metric with the given name, description
+     * and acronym.
+     * 
+     * @param name
+     *            Name of this metric
+     * @param desc
+     *            Description of this metric
+     * @param acronym
+     *            Acronym of this metric
      */
-    private int getNumberOfAccessedFields(final MethodNode method)
+    private NOAV(final String name, final String desc, final String acronym)
     {
-        int count = 0;
-
-        // count = tree.getEdgesContainingRelationType(method,
-        // DirectedRelationshipType.FieldUse).size();
-
-        return count;
+        super(name, desc, acronym);
     }
 
     /**
-     * @param method
-     * @return
-     */
-    private int getNumberOfAccessedLocalVariables(final MethodNode method)
-    {
-        int count = 0;
-
-        /*
-         * final List<VariableDeclarationExpression> varDecs = method
-         * .findExpressionByType(VariableDeclarationExpression.class);
-         * final List<String> varNames = new ArrayList<>();
-         * for (final VariableDeclarationExpression varDec : varDecs)
-         * {
-         * for (final VariableNode var : varDec.getVars())
-         * {
-         * varNames.add(var.getName());
-         * }
-         * }
-         * final List<NameExpression> nameExprs =
-         * method.findExpressionByType(NameExpression.class);
-         * for (final NameExpression nameExpr : nameExprs)
-         * {
-         * if (nameExpr instanceof QualifiedNameExpression)
-         * {
-         * continue;
-         * }
-         * else if (varNames.contains(nameExpr.getContent()))
-         * {
-         * count++;
-         * }
-         * }
-         */
-
-        return count;
-    }
-
-    /**
-     * @param method
-     * @return
-     */
-    private int getNumberOfAccessedParameters(final MethodNode method)
-    {
-        int count = 0;
-
-        /*
-         * for (final Parameter param : method.getParameters())
-         * {
-         * final String name = param.getName();
-         * final List<NameExpression> nameExprs =
-         * method.findExpressionByType(NameExpression.class);
-         * for (final NameExpression nameExpr : nameExprs)
-         * {
-         * if (nameExpr instanceof QualifiedNameExpression)
-         * {
-         * continue;
-         * }
-         * else if (nameExpr.getContent().equals(name))
-         * {
-         * count++;
-         * }
-         * }
-         * }
-         */
-
-        return count;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see net.siliconcode.truerefactor.metrics.Metric#measure()
+     * {@inheritDoc}
      */
     @Override
-    public double measure()
+    public double measure(final INode entity, final CodeTree tree)
     {
         double noav = 0;
 
@@ -152,9 +80,11 @@ public class NOAV extends MethodMetric {
         {
             final MethodNode method = (MethodNode) entity;
 
-            // noav += getNumberOfAccessedFields(method);
-            // noav += getNumberOfAccessedLocalVariables(method);
-            // noav += getNumberOfAccessedParameters(method);
+            // noav += MetricTreeUtils.getNumberOfAccessedFields(method, tree);
+            // noav += MetricTreeUtils.getNumberOfAccessedLocalVariables(method,
+            // tree);
+            // noav += MetricTreeUtils.getNumberOfAccessedParameters(method,
+            // tree);
             if (!method.isAbstract())
             {
                 /*

@@ -1,8 +1,8 @@
 /**
  * The MIT License (MIT)
  *
- * SparQLine Design Pattern Generator
- * Copyright c) 2017 Isaac Griffith, SparQLine Analytics, LLC
+ * SparQLine Metrics
+ * Copyright (c) 2015-2017 Isaac Griffith, SparQLine Analytics, LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,9 @@
  * SOFTWARE.
  */
 /**
+ * This package contains a collection of aggregation methods for metrics.
+ * 
  * @author Isaac Griffith
- *
+ * @version 1.1.0
  */
 package com.sparqline.metrics.aggregators;
