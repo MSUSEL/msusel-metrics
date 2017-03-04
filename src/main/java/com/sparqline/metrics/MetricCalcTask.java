@@ -24,13 +24,13 @@
  */
 package com.sparqline.metrics;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.RecursiveTask;
 
+import com.google.common.collect.Lists;
 import com.sparqline.codetree.CodeTree;
 import com.sparqline.codetree.INode;
 import com.sparqline.codetree.node.MethodNode;
@@ -127,7 +127,7 @@ public class MetricCalcTask extends RecursiveTask<List<Pair<String, Double>>> {
         {
             return controller.getSystemMetrics();
         }
-        return new ArrayList<Metric>();
+        return Lists.newArrayList();
     }
 
 }

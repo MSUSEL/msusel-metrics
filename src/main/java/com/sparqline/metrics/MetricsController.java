@@ -24,11 +24,11 @@
  */
 package com.sparqline.metrics;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ForkJoinPool;
 
+import com.google.common.collect.Lists;
 import com.sparqline.codetree.CodeTree;
 import com.sparqline.codetree.node.ProjectNode;
 import com.sparqline.codetree.node.TypeNode;
@@ -132,7 +132,7 @@ public class MetricsController {
      */
     public synchronized List<Metric> getClassMetrics()
     {
-        final List<Metric> metrics = new ArrayList<>();
+        final List<Metric> metrics = Lists.newArrayList();
 
         metrics.add(AMS.getInstance());
         metrics.add(AMW.getInstance());
@@ -255,7 +255,7 @@ public class MetricsController {
      */
     public synchronized List<Metric> getComponentMetrics()
     {
-        final List<Metric> metrics = new ArrayList<>();
+        final List<Metric> metrics = Lists.newArrayList();
 
         return metrics;
     }
@@ -265,7 +265,7 @@ public class MetricsController {
      */
     public synchronized List<Metric> getMethodMetrics()
     {
-        final List<Metric> metrics = new ArrayList<>();
+        final List<Metric> metrics = Lists.newArrayList();
 
         metrics.add(CDISP.getInstance());
         metrics.add(ChC.getInstance());
@@ -294,7 +294,7 @@ public class MetricsController {
      */
     public synchronized List<Metric> getPackageMetrics()
     {
-        final List<Metric> metrics = new ArrayList<>();
+        final List<Metric> metrics = Lists.newArrayList();
 
         metrics.add(Ca.getInstance());
         metrics.add(CDBC.getInstance());
@@ -312,7 +312,7 @@ public class MetricsController {
      */
     public synchronized List<Metric> getSystemMetrics()
     {
-        final List<Metric> metrics = new ArrayList<>();
+        final List<Metric> metrics = Lists.newArrayList();
 
         metrics.add(AC.getInstance());
         metrics.add(ACX.getInstance());

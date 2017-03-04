@@ -188,7 +188,7 @@ public class MetricTreeUtils {
         /*
          * final List<VariableDeclarationExpression> varDecs = method
          * .findExpressionByType(VariableDeclarationExpression.class);
-         * final List<String> varNames = new ArrayList<>();
+         * final List<String> varNames = Lists.newArrayList();
          * for (final VariableDeclarationExpression varDec : varDecs)
          * {
          * for (final VariableNode var : varDec.getVars())
@@ -356,7 +356,7 @@ public class MetricTreeUtils {
 
     public static Set<MethodNode> getInheritedMethods(final TypeNode cls, final CodeTree tree)
     {
-        // final List<ClassOrInterfaceNode> superClasses = new ArrayList<>();
+        // final List<ClassOrInterfaceNode> superClasses = Lists.newArrayList();
         // superClasses.addAll(cls.getExtendsSet());
         // superClasses.addAll(cls.getImplementsSet());
         //

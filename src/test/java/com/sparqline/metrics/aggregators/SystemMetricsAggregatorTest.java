@@ -66,15 +66,18 @@ public class SystemMetricsAggregatorTest {
     {
         Register.register();
         CodeTree tree = new CodeTree();
-        ProjectNode pn = new ProjectNode.Builder("project").file(
-                new FileNode.Builder("file1").metric("LOC", 100d)
-                        .metric("NC", 2.0)
-                        .metric("NOS", 20d)
-                        .metric("NOF", 5.0)
-                        .metric("NOM", 10.0)
-                        .create())
+        ProjectNode pn = ProjectNode.builder("project")
                 .file(
-                        new FileNode.Builder("file2").metric("NOS", 20d)
+                        FileNode.builder("file1")
+                                .metric("LOC", 100d)
+                                .metric("NC", 2.0)
+                                .metric("NOS", 20d)
+                                .metric("NOF", 5.0)
+                                .metric("NOM", 10.0)
+                                .create())
+                .file(
+                        FileNode.builder("file2")
+                                .metric("NOS", 20d)
                                 .metric("NC", 2.0)
                                 .metric("LOC", 100d)
                                 .metric("NOF", 5.0)

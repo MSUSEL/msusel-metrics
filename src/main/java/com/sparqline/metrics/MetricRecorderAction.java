@@ -124,7 +124,7 @@ public class MetricRecorderAction extends RecursiveAction {
      */
     private void addMetricsToEntity(List<Pair<String, Double>> join)
     {
-        join.parallelStream().forEach((pair) -> {
+        join.forEach((pair) -> {
             entity.addMetric(pair.key(), pair.value());
         });
     }

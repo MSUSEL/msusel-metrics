@@ -99,7 +99,7 @@ public class MAXNESTING extends MethodMetric {
          * if (stmt instanceof BlockStatement)
          * {
          * final BlockStatement bs = (BlockStatement) stmt;
-         * final List<Integer> counts = new ArrayList<>();
+         * final List<Integer> counts = Lists.newArrayList();
          * for (final StatementNode se : bs.getStatements())
          * {
          * counts.add(processStatement(se));
@@ -135,7 +135,7 @@ public class MAXNESTING extends MethodMetric {
          * else if (stmt instanceof SwitchEntryStatement)
          * {
          * final SwitchEntryStatement ses = (SwitchEntryStatement) stmt;
-         * final List<Integer> counts = new ArrayList<>();
+         * final List<Integer> counts = Lists.newArrayList();
          * for (final StatementNode se : ses.getStatements())
          * {
          * counts.add(processStatement(se));
@@ -145,7 +145,7 @@ public class MAXNESTING extends MethodMetric {
          * else if (stmt instanceof SwitchStatement)
          * {
          * final SwitchStatement ss = (SwitchStatement) stmt;
-         * final List<Integer> counts = new ArrayList<>();
+         * final List<Integer> counts = Lists.newArrayList();
          * for (final SwitchEntryStatement ses : ss.getEntries())
          * {
          * counts.add(processStatement(ses));
@@ -160,7 +160,7 @@ public class MAXNESTING extends MethodMetric {
          * else if (stmt instanceof TryStatement)
          * {
          * final TryStatement ts = (TryStatement) stmt;
-         * final List<Integer> counts = new ArrayList<>();
+         * final List<Integer> counts = Lists.newArrayList();
          * counts.add(processStatement(ts.getTryBlock()));
          * counts.add(processStatement(ts.getFinallyBlock()));
          * for (final CatchClause cc : ts.getCatches())

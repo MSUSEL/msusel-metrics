@@ -42,7 +42,7 @@ public abstract class MetricsAggregator {
     /**
      * List of excluded metrics
      */
-    protected final List<String> excludedMetrics = Lists.newCopyOnWriteArrayList();
+    protected final List<String> excludedMetrics = Lists.newArrayList();
 
     /**
      * Aggregates metrics for all nodes in the given tree.
