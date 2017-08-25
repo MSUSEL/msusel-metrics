@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>sparqline-metrics</artifactId>
+	<artifactId>msusel-metrics</artifactId>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.min.version>1.8</jdk.min.version>
-		<sparqline.version>1.1.1</sparqline.version>
+		<msusel.version>1.1.1</msusel.version>
 	</properties>
 
 	<dependencies>
@@ -48,9 +48,9 @@
 			<version>19.0</version>
 		</dependency>
 		<dependency>
-			<groupId>com.sparqline.quamoco</groupId>
-			<artifactId>sparqline-codetree</artifactId>
-			<version>${sparqline.version}</version>
+			<groupId>edu.montana.gsoc.msusel</groupId>
+			<artifactId>msusel-codetree</artifactId>
+			<version>${msusel.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -102,6 +102,24 @@
 			</plugin>
 		</plugins>
 	</reporting>
+	<organization>
+		<name>Montana State University - Software Engineering Laboratory</name>
+		<url>https://msusel.github.io</url>
+	</organization>
+	<repositories>
+		<repository>
+			<id>msusel-maven-repo</id>
+			<name>msusel-maven-repo</name>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+
+			<url>https://raw.github.com/MSUSEL/msusel-maven-repo.git/master</url>
+		</repository>
+	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
 			<id>synergian-repo</id>
@@ -110,11 +128,11 @@
 	</pluginRepositories>
 	<distributionManagement>
 		<repository>
-			<id>sparqline-maven-repo</id>
-			<name>sparqline-maven-repo</name>
-			<url>git:releases://git@bitbucket.org:isaacgriffith/sparqline-maven-repo.git</url>
+			<id>msusel-maven-repo</id>
+			<name>msusel-maven-repo</name>
+			<url>git:releases://git@github.com:MSUSEL/msusel-maven-repo.git</url>
 		</repository>
 	</distributionManagement>
-	<groupId>com.sparqline.quamoco</groupId>
-	<version>${sparqline.version}</version>
+	<groupId>edu.montana.gsoc.msusel</groupId>
+	<version>${msusel.version}</version>
 </project>
