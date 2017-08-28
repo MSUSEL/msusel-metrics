@@ -34,12 +34,13 @@ import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.RecursiveTask;
 
 import com.google.common.collect.Sets;
-import com.sparqline.codetree.CodeTree;
-import com.sparqline.codetree.INode;
-import com.sparqline.codetree.node.NamespaceNode;
-import com.sparqline.codetree.node.ProjectNode;
-import com.sparqline.codetree.node.TypeNode;
-import com.sparqline.metrics.utility.Pair;
+
+import edu.montana.gsoc.msusel.CodeTree;
+import edu.montana.gsoc.msusel.INode;
+import edu.montana.gsoc.msusel.metrics.utility.Pair;
+import edu.montana.gsoc.msusel.node.NamespaceNode;
+import edu.montana.gsoc.msusel.node.ProjectNode;
+import edu.montana.gsoc.msusel.node.TypeNode;
 
 /**
  * @author Isaac Griffith
