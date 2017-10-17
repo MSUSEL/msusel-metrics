@@ -6,14 +6,31 @@ This is a collection of software metrics for use in the evaluation of software q
 ## Goals
 
 
-## Building the module
-This module's build management is handled by Maven. Thus to currently build and package the JAR files associated
-with this project one need only enter the following command:
+## Installing Maven
 
-`mvn clean package`
+This project uses the Maven wrapper so that you do not need to install maven manually.
+The first time you go to build this project, simply execute the following command:
 
-## Deploying to the Maven Repository on BitBucket
-As this module evolves it will need to be placed in the SparQLine Analytics, LLC bitbucket maven repository.
-This can be accomplished by simply executing the following command (for the main brach of the git only):
+```
+./mvnw clean install -Dmaven.test.skip=true
+```
+or for windows:
+```
+.\mvnw.cmd clean package -Dmaven.test.skip=true
+```
 
-`mvn deploy`
+## Building
+
+This project can be built using the following command:
+
+```
+./mvnw clean package -Dmaven.test.skip=true
+```
+
+This project can be compile, tested, or packaged with the following commands:
+
+```
+./mvnw clean compile
+./mvnw clean test
+./mvnw clean package
+```
