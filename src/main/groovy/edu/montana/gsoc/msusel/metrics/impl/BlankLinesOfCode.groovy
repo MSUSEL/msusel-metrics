@@ -33,29 +33,22 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
  * @version 1.2.0
  */
 @MetricDefinition(
-        name = "",
-        primaryHandle = "",
-        description = "",
+        name = "Blank Lines of Code",
+        primaryHandle = "BLOC",
+        description = "Count of the number of blank source lines of code",
         properties = @MetricProperties(
-                range = "",
+                range = "Positve Integers",
                 aggregation = [],
-                scope = MetricScope.METHOD,
-                type = MetricType.Derived,
+                scope = MetricScope.FILE,
+                type = MetricType.SourceCode,
                 scale = MetricScale.Interval,
-                category = MetricCategory.Coupling
+                category = MetricCategory.Size
         ),
         references = [
                 ''
         ]
 )
 class BlankLinesOfCode extends AbstractLOCMetric {
-
-    /**
-     *
-     */
-    BlankLinesOfCode() {
-        // TODO Auto-generated constructor stub
-    }
 
     /**
      * {@inheritDoc}

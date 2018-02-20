@@ -36,28 +36,27 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
  * @version 1.2.0
  */
 @MetricDefinition(
-    name = "Abstraction Ratio",
-    primaryHandle = "AR",
-    description = "",
-    properties = @MetricProperties(
-        range = "0..1",
-        aggregation = [],
-        scope = MetricScope.METHOD,
-        type = MetricType.Derived,
-        scale = MetricScale.Interval,
-        category = MetricCategory.Coupling
-    ),
-    references = [
-        ''
-    ]
+        name = "Abstraction Ratio",
+        primaryHandle = "AR",
+        description = "",
+        properties = @MetricProperties(
+                range = "0..1",
+                aggregation = [],
+                scope = MetricScope.METHOD,
+                type = MetricType.Derived,
+                scale = MetricScale.Interval,
+                category = MetricCategory.Coupling
+        ),
+        references = [
+                ''
+        ]
 )
 class AbstractionRatio extends AbstractMetric {
 
     /**
-     * 
+     *
      */
-    AbstractionRatio()
-    {
+    AbstractionRatio() {
         // TODO Auto-generated constructor stub
     }
 
@@ -65,15 +64,14 @@ class AbstractionRatio extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node)
-    {
+    def measure(AbstractNode node) {
         double total = 0.0
-        
+
         if (node instanceof StructuralNode) {
             total = node.classes().findAll { it.specifiers.contains(Modifiers.ABSTRACT) }.size()
             total /= node.classes().size()
         }
-        
+
         total
     }
 

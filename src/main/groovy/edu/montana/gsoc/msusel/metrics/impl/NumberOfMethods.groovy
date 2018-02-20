@@ -26,8 +26,11 @@
 package edu.montana.gsoc.msusel.metrics.impl
 
 import edu.montana.gsoc.msusel.codetree.node.AbstractNode
+import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
 import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.montana.gsoc.msusel.metrics.Measurement
+import edu.montana.gsoc.msusel.metrics.MeasuresTable
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
@@ -69,8 +72,13 @@ class NumberOfMethods extends AbstractMetric {
 
         if (node instanceof TypeNode) {
             total = node.methods().size()
+        } else if (node instanceof StructuralNode) {
+            node.types().each { TypeNode type ->
+                total += type.methods().size()
+            }
         }
 
+        MeasuresTable.instance.store(Measurement.of(this).on(node).withValue(total))
         total
     }
 

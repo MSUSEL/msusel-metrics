@@ -51,19 +51,12 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
 class SourceLinesOfCode extends AbstractLOCMetric {
 
     /**
-     *
-     */
-    SourceLinesOfCode() {
-        // TODO Auto-generated constructor stub
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
     def count(List<String> lines) {
         int total = 0
-        boolean blockComment = false;
+        boolean blockComment = false
 
         for (String line : lines) {
             String scrubbed = line.trim()
@@ -73,7 +66,7 @@ class SourceLinesOfCode extends AbstractLOCMetric {
                 if (blockCommentStart != null && scrubbed.startsWith(blockCommentStart)) {
                     blockComment = true
                 }
-                if (blockCommentStart != null && scrubbed.contains(blockCommentStart) && !blockComment) {
+                else if (blockCommentStart != null && scrubbed.contains(blockCommentStart) && !blockComment) {
                     blockComment = detectSequence(bcsQuotes, scrubbed, blockCommentStart)
                     boolean bcEnd = detectSequence(bceQuotes, scrubbed, blockCommentEnd)
 
@@ -81,10 +74,10 @@ class SourceLinesOfCode extends AbstractLOCMetric {
                         total += 1
                     }
                 }
-                if (!blockComment) {
+                else if (!blockComment) {
                     if (scrubbed.startsWith(lineCommentStart) && checkCommentExceptions(scrubbed)) {
-                        total += 1
-                    } else {
+                        // total += 1
+                    } else if (!scrubbed.contains(lineCommentStart) && !checkCommentExceptions(scrubbed)){
                         total += 1
                     }
                 }

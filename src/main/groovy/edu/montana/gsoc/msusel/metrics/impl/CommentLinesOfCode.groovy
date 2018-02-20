@@ -27,35 +27,27 @@ package edu.montana.gsoc.msusel.metrics.impl
 
 import edu.montana.gsoc.msusel.metrics.AbstractLOCMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
-
 /**
  * @author Isaac Griffith
  * @version 1.2.0
  */
 @MetricDefinition(
-        name = "",
-        primaryHandle = "",
-        description = "",
+        name = "Comment Lines of Code",
+        primaryHandle = "CLOC",
+        description = "Count of the number of commented lines of code",
         properties = @MetricProperties(
-                range = "",
+                range = "Positive Integers",
                 aggregation = [],
-                scope = MetricScope.METHOD,
-                type = MetricType.Derived,
+                scope = MetricScope.FILE,
+                type = MetricType.SourceCode,
                 scale = MetricScale.Interval,
-                category = MetricCategory.Coupling
+                category = MetricCategory.Size
         ),
         references = [
                 ''
         ]
 )
 class CommentLinesOfCode extends AbstractLOCMetric {
-
-    /**
-     *
-     */
-    CommentLinesOfCode() {
-        // TODO Auto-generated constructor stub
-    }
 
     /**
      * {@inheritDoc}
@@ -80,7 +72,7 @@ class CommentLinesOfCode extends AbstractLOCMetric {
                             total += 1
                         }
                     }
-                    if (scrubbed.contains(lineCommentStart)) {
+                    else if (scrubbed.contains(lineCommentStart)) {
                         boolean lineComment = detectSequence(lcQuotes, scrubbed, lineCommentStart)
 
                         if (lineComment || !checkCommentExceptions(scrubbed)) {

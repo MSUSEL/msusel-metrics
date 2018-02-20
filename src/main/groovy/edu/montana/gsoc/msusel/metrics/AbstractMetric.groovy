@@ -36,14 +36,6 @@ abstract class AbstractMetric {
 
     CodeTree tree
     
-    /**
-     * 
-     */
-    AbstractMetric()
-    {
-        // TODO Auto-generated constructor stub
-    }
-
     abstract def measure(AbstractNode node)
 
     def getMetric(handle, node) {

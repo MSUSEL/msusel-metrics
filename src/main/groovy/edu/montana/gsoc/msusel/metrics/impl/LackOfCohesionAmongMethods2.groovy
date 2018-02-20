@@ -37,7 +37,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
  */
 @MetricDefinition(
         name = "Lack of Cohesion among Object Methods",
-        primaryHandle = "LCOM1",
+        primaryHandle = "LCOM2",
         description = "A count of the number of mehtod pairs whose similarity is 0 minus the count of methods whose similarity is not 0.",
         properties = @MetricProperties(
                 range = "Positive Integer",

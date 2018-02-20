@@ -34,9 +34,9 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
  * @version 1.2.0
  */
 @MetricDefinition(
-        name = "Other Class Attribute Interaction Efferent Coupling",
-        primaryHandle = "OCAEC",
-        description = "Count of all class attribute interactions from non-descendent and non-friend classes to the measured class.",
+        name = "Descendent Method Method Interaction Coupling",
+        primaryHandle = "DMMIC",
+        description = "",
         properties = @MetricProperties(
                 range = "Positive Integer",
                 aggregation = [],

@@ -28,6 +28,8 @@ package edu.montana.gsoc.msusel.metrics.impl
 import edu.montana.gsoc.msusel.codetree.node.AbstractNode
 import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.montana.gsoc.msusel.metrics.Measurement
+import edu.montana.gsoc.msusel.metrics.MeasuresTable
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
@@ -35,16 +37,16 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
  * @version 1.2.0
  */
 @MetricDefinition(
-        name = "",
-        primaryHandle = "",
-        description = "",
+        name = "Number of Types",
+        primaryHandle = "NOT",
+        description = "A Count of the types defined within the scope of the item measured.",
         properties = @MetricProperties(
-                range = "",
+                range = "Positive Integers",
                 aggregation = [],
-                scope = MetricScope.METHOD,
-                type = MetricType.Derived,
+                scope = MetricScope.STRUCTURAL,
+                type = MetricType.Model,
                 scale = MetricScale.Interval,
-                category = MetricCategory.Coupling
+                category = MetricCategory.BasicProperty
         ),
         references = [
                 ''
@@ -70,6 +72,7 @@ class NumberOfTypes extends AbstractMetric {
             total = node.types().size()
         }
 
+        MeasuresTable.store(Measurement.of(this).on(node).withValue(total))
         total
     }
 

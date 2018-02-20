@@ -50,13 +50,6 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
 )
 class ExecutableLinesOfCode extends AbstractLOCMetric {
 
-    /**
-     *
-     */
-    ExecutableLinesOfCode() {
-        // TODO Auto-generated constructor stub
-    }
-
     @Override
     def count(List<String> lines) {
         return null

@@ -36,28 +36,27 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
  * @version 1.2.0
  */
 @MetricDefinition(
-    name = "",
-    primaryHandle = "",
-    description = "",
-    properties = @MetricProperties(
-        range = "",
-        aggregation = [],
-        scope = MetricScope.METHOD,
-        type = MetricType.Derived,
-        scale = MetricScale.Interval,
-        category = MetricCategory.Coupling
-    ),
-    references = [
-        ''
-    ]
+        name = "",
+        primaryHandle = "",
+        description = "",
+        properties = @MetricProperties(
+                range = "",
+                aggregation = [],
+                scope = MetricScope.METHOD,
+                type = MetricType.Derived,
+                scale = MetricScale.Interval,
+                category = MetricCategory.Coupling
+        ),
+        references = [
+                ''
+        ]
 )
 class AfferentCoupling extends AbstractMetric {
 
     /**
-     * 
+     *
      */
-    AfferentCoupling()
-    {
+    AfferentCoupling() {
         // TODO Auto-generated constructor stub
     }
 
@@ -65,13 +64,12 @@ class AfferentCoupling extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node)
-    {
+    def measure(AbstractNode node) {
         int total = 0
-        
+
         if (node instanceof StructuralNode) {
             def classes = node.types()
-            
+
             Set<TypeNode> couplings = new HashSet<>()
             classes.each {
                 couplings.addAll(tree.getRealizedTo(it))
@@ -82,11 +80,11 @@ class AfferentCoupling extends AbstractMetric {
                 couplings.addAll(tree.getDependencyTo(it))
                 couplings.addAll(tree.getUseTo(it))
             }
-            
+
             couplings.removeAll(classes)
             total = couplings.size()
         }
-        
+
         total
     }
 

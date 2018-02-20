@@ -54,14 +54,6 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
 class LinesOfCode extends AbstractLOCMetric {
 
     /**
-     * 
-     */
-    public LinesOfCode()
-    {
-        // TODO Auto-generated constructor stub
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override

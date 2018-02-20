@@ -25,6 +25,12 @@
  */
 package edu.montana.gsoc.msusel.metrics
 
+import edu.montana.gsoc.msusel.codetree.node.AbstractNode
+import edu.montana.gsoc.msusel.codetree.node.CodeNode
+import edu.montana.gsoc.msusel.codetree.node.structural.FileNode
+import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
+import edu.montana.gsoc.msusel.metrics.annotations.MetricDefinition
+
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -60,21 +66,39 @@ abstract class AbstractLOCMetric extends AbstractSourceMetric {
     Pattern lcQuotes = Pattern.compile("[\"\'].*(\\Q" + lineCommentStart + "\\E)")
 
     /**
-     * 
-     */
-    AbstractLOCMetric() {
-        // TODO Auto-generated constructor stub
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
-    def measure(String code) {
-        String[] initLines = code.split(newLineSeparator)
-        List<String> lines = Arrays.asList(initLines)
+    def measure(AbstractNode node) {
+        if (node instanceof CodeNode) {
+            List<String> lines = getLines(node)
+            String ext = tree.getUtils().findParent(node).getKey().find(/\.\w{2,4}$/)
+            ext = ext.substring(1)
 
-        count(lines)
+            loadProfile(LoCProfileManager.instance.getProfileByExtension(ext))
+
+            MeasuresTable.instance.store(Measurement.of(this).on(node).withValue(count(lines)))
+        } else if (node instanceof FileNode) {
+            List<String> lines = getLines(node)
+            String ext = node.getKey().find(/\.\w{2,4}$/)
+            ext = ext.substring(1)
+
+            loadProfile(LoCProfileManager.instance.getProfileByExtension(ext))
+
+            MeasuresTable.instance.store(Measurement.of(this).on(node).withValue(count(lines)))
+        }
+        else if (node instanceof StructuralNode) {
+            int total = 0
+
+            node.files().each { file ->
+                MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
+                total += MeasuresTable.instance.retrieve(file, mdef.primaryHandle())
+            }
+            MeasuresTable.instance.store(Measurement.of(this).on(node).withValue(total))
+        } else {
+            0
+        }
+
     }
 
     /**
@@ -92,11 +116,10 @@ abstract class AbstractLOCMetric extends AbstractSourceMetric {
      * @param profile
      *            new LoCProfile to use.
      */
-    void setProfile(LoCProfile profile) {
+    void loadProfile(LoCProfile profile) {
         if (profile == null)
             return
 
-        this.profile = profile
         this.blockCommentEnd = profile.getBlockCommentEnd()
         this.blockCommentStart = profile.getBlockCommentStart()
         this.commentStartExceptions = profile.getCommentStartExceptions()

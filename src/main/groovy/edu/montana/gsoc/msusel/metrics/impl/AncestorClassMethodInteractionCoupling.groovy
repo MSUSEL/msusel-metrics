@@ -36,29 +36,28 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
  * @version 1.2.0
  */
 @MetricDefinition(
-    name = "Ancestor Class Method Interaction Coupling",
-    primaryHandle = "ACMIC",
-    description = "Count of all class method interactions to methods of ancestor classes of the measured class.",
-    properties = @MetricProperties(
-        range = "Positive Integer",
-        aggregation = [],
-        scope = MetricScope.TYPE,
-        type = MetricType.Model,
-        scale = MetricScale.Interval,
-        category = MetricCategory.Coupling
-    ),
-    references = [
-        'Briand, Lionel, Prem Devanbu, and Walcelio Melo. "An investigation into coupling measures for C++." Proceedings of the 19th international conference on Software engineering. ACM, 1997.',
-        'Briand, Lionel C., John W. Daly, and Jurgen K. Wust. "A unified framework for coupling measurement in object-oriented systems." IEEE Transactions on software Engineering 25.1 (1999): 91-121.'
-    ]
+        name = "Ancestor Class Method Interaction Coupling",
+        primaryHandle = "ACMIC",
+        description = "Count of all class method interactions to methods of ancestor classes of the measured class.",
+        properties = @MetricProperties(
+                range = "Positive Integer",
+                aggregation = [],
+                scope = MetricScope.TYPE,
+                type = MetricType.Model,
+                scale = MetricScale.Interval,
+                category = MetricCategory.Coupling
+        ),
+        references = [
+                'Briand, Lionel, Prem Devanbu, and Walcelio Melo. "An investigation into coupling measures for C++." Proceedings of the 19th international conference on Software engineering. ACM, 1997.',
+                'Briand, Lionel C., John W. Daly, and Jurgen K. Wust. "A unified framework for coupling measurement in object-oriented systems." IEEE Transactions on software Engineering 25.1 (1999): 91-121.'
+        ]
 )
 class AncestorClassMethodInteractionCoupling extends AbstractMetric {
 
     /**
-     * 
+     *
      */
-    AncestorClassMethodInteractionCoupling()
-    {
+    AncestorClassMethodInteractionCoupling() {
         // TODO Auto-generated constructor stub
     }
 

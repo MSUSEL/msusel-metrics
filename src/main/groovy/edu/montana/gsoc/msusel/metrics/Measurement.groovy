@@ -26,32 +26,33 @@
 package edu.montana.gsoc.msusel.metrics
 
 import edu.montana.gsoc.msusel.codetree.node.AbstractNode
+import edu.montana.gsoc.msusel.metrics.annotations.MetricDefinition
 
 class Measurement {
 
-    String metricKey;
-    String itemKey;
+    String metricKey
+    String itemKey
+    Object value
 
     private Measurement() {
 
     }
 
-    static Measurement of (AbstractMetric metric) {
+    static Measurement of(AbstractMetric metric) {
         Measurement m = new Measurement()
-        metric.class.getDeclaredAnnotation()
+        MetricDefinition mdef = metric.getClass().getAnnotation(MetricDefinition.class)
+        m.setMetricKey(mdef.primaryHandle())
 
         m
     }
 
-    Measurement on (AbstractNode node) {
-
-
+    Measurement on(AbstractNode node) {
+        itemKey = node.getKey()
         this
     }
 
-    Measurement withValue () {
-
-
+    Measurement withValue(Object o) {
+        value = o
         this
     }
 }

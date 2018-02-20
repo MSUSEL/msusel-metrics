@@ -35,29 +35,28 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
  * @version 1.2.0
  */
 @MetricDefinition(
-    name = "Ancestor Class Attribute Interaction Coupling",
-    primaryHandle = "ACAIC",
-    description = "Count of all class attribute interactions from the measured class to its ancestor classes",
-    properties = @MetricProperties(
-        range = "Positive Integer",
-        aggregation = [],
-        scope = MetricScope.TYPE,
-        type = MetricType.Model,
-        scale = MetricScale.Interval,
-        category = MetricCategory.Coupling
-    ),
-    references = [
-        'Briand, Lionel, Prem Devanbu, and Walcelio Melo. "An investigation into coupling measures for C++." Proceedings of the 19th international conference on Software engineering. ACM, 1997.',
-        'Briand, Lionel C., John W. Daly, and Jurgen K. Wust. "A unified framework for coupling measurement in object-oriented systems." IEEE Transactions on software Engineering 25.1 (1999): 91-121.'
-    ]
+        name = "Ancestor Class Attribute Interaction Coupling",
+        primaryHandle = "ACAIC",
+        description = "Count of all class attribute interactions from the measured class to its ancestor classes",
+        properties = @MetricProperties(
+                range = "Positive Integer",
+                aggregation = [],
+                scope = MetricScope.TYPE,
+                type = MetricType.Model,
+                scale = MetricScale.Interval,
+                category = MetricCategory.Coupling
+        ),
+        references = [
+                'Briand, Lionel, Prem Devanbu, and Walcelio Melo. "An investigation into coupling measures for C++." Proceedings of the 19th international conference on Software engineering. ACM, 1997.',
+                'Briand, Lionel C., John W. Daly, and Jurgen K. Wust. "A unified framework for coupling measurement in object-oriented systems." IEEE Transactions on software Engineering 25.1 (1999): 91-121.'
+        ]
 )
 class AncestorClassAttributeInteractionCoupling extends AbstractMetric {
 
     /**
-     * 
+     *
      */
-    AncestorClassAttributeInteractionCoupling()
-    {
+    AncestorClassAttributeInteractionCoupling() {
         // TODO Auto-generated constructor stub
     }
 
@@ -65,10 +64,9 @@ class AncestorClassAttributeInteractionCoupling extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node)
-    {
+    def measure(AbstractNode node) {
         int total = 0
-        
+
         if (node instanceof TypeNode) {
             Set fieldTypes = []
             fieldTypes += node.fields().collect {
@@ -76,7 +74,7 @@ class AncestorClassAttributeInteractionCoupling extends AbstractMetric {
             }
             total = tree.getAllParentClasses(node).findAll { fieldTypes.contains(it) }.size()
         }
-        
+
         total
     }
 

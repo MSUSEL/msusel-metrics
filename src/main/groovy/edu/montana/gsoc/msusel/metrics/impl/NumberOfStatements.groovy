@@ -29,7 +29,11 @@ import edu.montana.gsoc.msusel.codetree.cfg.ControlFlowNode
 import edu.montana.gsoc.msusel.codetree.cfg.StatementType
 import edu.montana.gsoc.msusel.codetree.node.AbstractNode
 import edu.montana.gsoc.msusel.codetree.node.member.MethodNode
+import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
+import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.montana.gsoc.msusel.metrics.Measurement
+import edu.montana.gsoc.msusel.metrics.MeasuresTable
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
@@ -55,13 +59,6 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
 class NumberOfStatements extends AbstractMetric {
 
     /**
-     *
-     */
-    NumberOfStatements() {
-        // TODO Auto-generated constructor stub
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -69,13 +66,33 @@ class NumberOfStatements extends AbstractMetric {
         int total = 0
 
         if (node instanceof MethodNode) {
-            Set<ControlFlowNode> nodes = ((MethodNode) node).getCfg().getGraph().nodes()
-            Set<ControlFlowNode> ends = nodes.findAll { it.type == StatementType.END }
-
-            total = nodes.size() - ends.size() - 2
+            total = measureMethod(node)
+        } else if (node instanceof TypeNode) {
+            total = measureType(node)
+        } else if (node instanceof StructuralNode) {
+            node.types().each { TypeNode type ->
+                total += measureType(type)
+            }
         }
 
+        MeasuresTable.instance.store(Measurement.of(this).on(node).withValue(total))
         total
     }
 
+    static measureMethod(MethodNode method) {
+        if (method.getCfg() == null)
+            return 0
+        Set<ControlFlowNode> nodes = method.getCfg().getGraph().nodes()
+        Set<ControlFlowNode> ends = nodes.findAll { it.type == StatementType.END }
+
+        nodes.size() - ends.size() - 2
+    }
+
+    static measureType(TypeNode type) {
+        int total = 0
+        type.methods().each { MethodNode method ->
+            total += measureMethod(method)
+        }
+        total
+    }
 }

@@ -25,22 +25,21 @@
  */
 package edu.montana.gsoc.msusel.metrics
 
+import com.google.common.collect.HashBasedTable
 import com.google.common.collect.Table
+import edu.montana.gsoc.msusel.codetree.node.AbstractNode
 
+@Singleton
 class MeasuresTable {
 
     // Table containing the values of metrics stored. Rows are keys for nodes in the codetree, columns are metric handles, and cells are measures
-    Table<String, String, Object> measures
-
-    MeasuresTable() {
-        measures = Table.new
-    }
+    Table<String, String, Object> measures = HashBasedTable.create()
 
     def store(Measurement m) {
-
+        measures.put(m.getItemKey(), m.getMetricKey(), m.getValue())
     }
 
-    def retrieve(String key) {
-
+    def retrieve(AbstractNode node, String metric) {
+        measures.get(node.getKey(), metric)
     }
 }

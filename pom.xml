@@ -52,6 +52,26 @@
             <artifactId>commons-math3</artifactId>
             <version>3.6.1</version>
         </dependency>
+
+        <!-- Spock Framework -->
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+            <version>1.1-groovy-2.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>edu.montana.gsoc.msusel.parsers</groupId>
+            <artifactId>msusel-java-parser</artifactId>
+            <version>1.2.0-idg</version>
+        </dependency>
+
+        <!-- Reflections Library -->
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.11</version>
+        </dependency>
     </dependencies>
 
     <developers>

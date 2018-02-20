@@ -38,7 +38,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
  */
 @MetricDefinition(
         name = "Information Flow Based Coupling",
-        primaryHandle = "IH-ICP",
+        primaryHandle = "IFBC",
         description = "",
         properties = @MetricProperties(
                 range = "Positive Integers",

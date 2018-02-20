@@ -25,6 +25,7 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
+import edu.montana.gsoc.msusel.codetree.node.AbstractNode
 import edu.montana.gsoc.msusel.metrics.AbstractSourceMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -50,15 +51,8 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
 )
 class NumberOfSemicolons extends AbstractSourceMetric {
 
-    /**
-     *
-     */
-    NumberOfSemicolons() {
-        // TODO Auto-generated constructor stub
-    }
-
     @Override
-    def measure(String code) {
+    def measure(AbstractNode node) {
         return null
     }
 }

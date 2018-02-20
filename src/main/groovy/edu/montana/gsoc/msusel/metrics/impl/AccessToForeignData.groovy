@@ -35,28 +35,27 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
  * @version 1.2.0
  */
 @MetricDefinition(
-    name = "Access To Foreign Data",
-    primaryHandle = "ATFD",
-    description = "",
-    properties = @MetricProperties(
-        range = "",
-        aggregation = [],
-        scope = MetricScope.METHOD,
-        type = MetricType.Derived,
-        scale = MetricScale.Interval,
-        category = MetricCategory.Coupling
-    ),
-    references = [
-        ''
-    ]
+        name = "Access To Foreign Data",
+        primaryHandle = "ATFD",
+        description = "",
+        properties = @MetricProperties(
+                range = "",
+                aggregation = [],
+                scope = MetricScope.METHOD,
+                type = MetricType.Derived,
+                scale = MetricScale.Interval,
+                category = MetricCategory.Coupling
+        ),
+        references = [
+                ''
+        ]
 )
 class AccessToForeignData extends AbstractMetric {
 
     /**
-     * 
+     *
      */
-    AccessToForeignData()
-    {
+    AccessToForeignData() {
         // TODO Auto-generated constructor stub
     }
 
@@ -64,25 +63,26 @@ class AccessToForeignData extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node)
-    {
+    def measure(AbstractNode node) {
         int total = 0
-        
+
         if (node instanceof TypeNode) {
             def classes = []
             classes << node
             classes += tree.getAllParentClasses(node)
-            
+
             def uses = []
-            
+
             node.methods().each {
                 uses += tree.getFieldsUsedBy(it).findAll { !classes.contains(tree.getType(it.parentKey)) }
-                uses += tree.getMethodsCalledFrom(it).findAll { !classes.contains(tree.getType(it.parentKey)) && (it.isAccessor() || it.isMutator()) }
+                uses += tree.getMethodsCalledFrom(it).findAll {
+                    !classes.contains(tree.getType(it.parentKey)) && (it.isAccessor() || it.isMutator())
+                }
             }
-            
+
             total = uses.size()
         }
-        
+
         total
     }
 }

@@ -34,29 +34,28 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
  * @version 1.2.0
  */
 @MetricDefinition(
-    name = "Other Class Attribute Interaction Efferent Coupling",
-    primaryHandle = "OCAEC",
-    description = "Count of all class attribute interactions from non-descendent and non-friend classes to the measured class.",
-    properties = @MetricProperties(
-        range = "Positive Integer",
-        aggregation = [],
-        scope = MetricScope.TYPE,
-        type = MetricType.Model,
-        scale = MetricScale.Interval,
-        category = MetricCategory.Coupling
-    ),
-    references = [
-        'Briand, Lionel, Prem Devanbu, and Walcelio Melo. "An investigation into coupling measures for C++." Proceedings of the 19th international conference on Software engineering. ACM, 1997.',
-        'Briand, Lionel C., John W. Daly, and Jurgen K. Wust. "A unified framework for coupling measurement in object-oriented systems." IEEE Transactions on software Engineering 25.1 (1999): 91-121.'
-    ]
+        name = "Ancestor Method Method Interaction Coupling",
+        primaryHandle = "AMMIC",
+        description = "",
+        properties = @MetricProperties(
+                range = "Positive Integer",
+                aggregation = [],
+                scope = MetricScope.TYPE,
+                type = MetricType.Model,
+                scale = MetricScale.Interval,
+                category = MetricCategory.Coupling
+        ),
+        references = [
+                'Briand, Lionel, Prem Devanbu, and Walcelio Melo. "An investigation into coupling measures for C++." Proceedings of the 19th international conference on Software engineering. ACM, 1997.',
+                'Briand, Lionel C., John W. Daly, and Jurgen K. Wust. "A unified framework for coupling measurement in object-oriented systems." IEEE Transactions on software Engineering 25.1 (1999): 91-121.'
+        ]
 )
 class AncestorMethodMethodInteractionCoupling extends AbstractMetric {
 
     /**
-     * 
+     *
      */
-    AncestorMethodMethodInteractionCoupling()
-    {
+    AncestorMethodMethodInteractionCoupling() {
         // TODO Auto-generated constructor stub
     }
 
@@ -64,8 +63,7 @@ class AncestorMethodMethodInteractionCoupling extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node)
-    {
+    def measure(AbstractNode node) {
         0
     }
 

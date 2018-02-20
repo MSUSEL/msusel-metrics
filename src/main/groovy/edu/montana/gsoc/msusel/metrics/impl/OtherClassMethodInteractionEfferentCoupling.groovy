@@ -37,7 +37,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
  */
 @MetricDefinition(
         name = "Other Class Method Interaction Efferent Coupling",
-        primaryHandle = "OCMEC",
+        primaryHandle = "OCMIEC",
         description = "Count of all class method interactions from non-descendent and non-friend classes to the measured class.",
         properties = @MetricProperties(
                 range = "Positive Integer",

@@ -25,18 +25,31 @@
  */
 package edu.montana.gsoc.msusel.metrics
 
+import edu.montana.gsoc.msusel.codetree.node.AbstractNode
+import edu.montana.gsoc.msusel.codetree.node.CodeNode
+import edu.montana.gsoc.msusel.codetree.node.structural.FileNode
+
+import java.nio.file.Files
+import java.nio.file.Paths
 /**
  * @author Isaac Griffith
  * @version 1.2.0
  */
-abstract class AbstractSourceMetric {
+abstract class AbstractSourceMetric extends AbstractMetric {
 
-    /**
-     *
-     */
-    AbstractSourceMetric() {
-        // TODO Auto-generated constructor stub
+    List<String> getLines(AbstractNode node) {
+        if (node instanceof CodeNode) {
+            FileNode f = tree.getUtils().findParentFile(node)
+
+            def x = Files.readAllLines(Paths.get(f.getKey()))
+            int start = node.start - 1
+            int end = node.end - 1
+
+            x[start..end]
+        } else if (node instanceof FileNode) {
+            Files.readAllLines(Paths.get(node.getKey()))
+        } else {
+            []
+        }
     }
-
-    abstract def measure(String code)
 }
