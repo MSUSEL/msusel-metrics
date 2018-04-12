@@ -27,7 +27,9 @@ package edu.montana.gsoc.msusel.metrics
 
 import edu.montana.gsoc.msusel.codetree.node.AbstractNode
 import edu.montana.gsoc.msusel.metrics.annotations.MetricDefinition
+import groovy.transform.ToString
 
+@ToString
 class Measurement {
 
     String metricKey
@@ -42,6 +44,13 @@ class Measurement {
         Measurement m = new Measurement()
         MetricDefinition mdef = metric.getClass().getAnnotation(MetricDefinition.class)
         m.setMetricKey(mdef.primaryHandle())
+
+        m
+    }
+
+    static Measurement of(String metric) {
+        Measurement m = new Measurement()
+        m.setMetricKey(metric)
 
         m
     }
