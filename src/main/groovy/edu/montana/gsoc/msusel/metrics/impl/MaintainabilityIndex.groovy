@@ -25,8 +25,8 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -65,13 +65,13 @@ class MaintainabilityIndex extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0.0
 
-        if (node instanceof StructuralNode) {
-            double loc = getMetric("LOC", node)
-            double cyclo = getMetric("CYCLO", node)
-            double hpv = getMetric("HPV", node)
+        if (node instanceof Structure) {
+            double loc = getMetric(node, "LOC")
+            double cyclo = getMetric(node, "CYCLO")
+            double hpv = getMetric(node, "HPV")
 
             total = 171 - 5.2 * log(hpv) - 0.23 * cyclo - 16.2 * log(loc)
         }

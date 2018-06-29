@@ -25,8 +25,8 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -56,24 +56,24 @@ class ChangeDependencyOfClasses extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof TypeNode) {
+        if (node instanceof Type) {
             Set classes = []
-            classes += tree.classes()
+            classes += mediator.getTypes()
 
             classes.remove(node)
 
-            classes.each {
-                total += changeDepsBetweenClasses(it, node)
+            classes.each { Type t ->
+                total += changeDepsBetweenClasses(t, (Type) node)
             }
         }
 
         total
     }
 
-    private int changeDepsBetweenClasses(TypeNode client, TypeNode server) {
+    private int changeDepsBetweenClasses(Type client, Type server) {
 
     }
 }

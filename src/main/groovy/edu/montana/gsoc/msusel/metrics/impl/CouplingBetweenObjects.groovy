@@ -25,8 +25,8 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -65,18 +65,18 @@ class CouplingBetweenObjects extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof TypeNode) {
+        if (node instanceof Type) {
             Set couplings = []
-            couplings += tree.getAggregatedFrom(node)
-            couplings += tree.getComposedFrom(node)
-            couplings += tree.getAssociatedFrom(node)
-            couplings += tree.getRealizedFrom(node)
-            couplings += tree.getGeneralizedFrom(node)
-            couplings += tree.getDependencyFrom(node)
-            couplings += tree.getUseFrom(node)
+            couplings += mediator.getAggregatedFrom(node)
+            couplings += mediator.getComposedFrom(node)
+            couplings += mediator.getAssociatedFrom(node)
+            couplings += mediator.getRealizedFrom(node)
+            couplings += mediator.getGeneralizedFrom(node)
+            couplings += mediator.getDependencyFrom(node)
+            couplings += mediator.getUseFrom(node)
 
             couplings.remove(node)
 

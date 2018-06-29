@@ -60,9 +60,7 @@ class SourceLinesOfCode extends AbstractLOCMetric {
 
         for (String line : lines) {
             String scrubbed = line.trim()
-            if (scrubbed.isEmpty()) {
-                continue
-            } else {
+            if (!scrubbed.isEmpty()) {
                 if (blockCommentStart != null && scrubbed.startsWith(blockCommentStart)) {
                     blockComment = true
                 }

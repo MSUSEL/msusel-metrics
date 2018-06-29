@@ -27,9 +27,10 @@ package edu.montana.gsoc.msusel.metrics.impl
 
 import com.google.common.graph.GraphBuilder
 import com.google.common.graph.MutableGraph
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.member.MethodNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.member.Field
+import edu.montana.gsoc.msusel.datamodel.member.Method
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -66,24 +67,24 @@ class LackOfCohesionAmongMethods3 extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof TypeNode) {
-            MutableGraph<MethodNode> graph = GraphBuilder.undirected().build()
+        if (node instanceof Type) {
+            MutableGraph<Method> graph = GraphBuilder.undirected().build()
 
-            Set methods = node.methods()
-            Set fields = node.fields()
+            Set<Method> methods = node.methods()
+            Set<Field> fields = node.fields()
 
             methods.each {
                 graph.addNode(it)
             }
 
-            methods.each { m1 ->
-                methods.each { m2 ->
+            methods.each { Method m1 ->
+                methods.each { Method m2 ->
                     if (m1 != m2) {
-                        Set f1 = tree.getFieldsUsedBy(m1).intersect(fields)
-                        Set f2 = tree.getFieldsUsedBy(m2).intersect(fields)
+                        Set f1 = mediator.getFieldsUsedBy(m1).intersect(fields)
+                        Set f2 = mediator.getFieldsUsedBy(m2).intersect(fields)
 
                         if (!f1.isEmpty() && !f2.isEmpty() && !f1.intersect(f2).isEmpty())
                             graph.putEdge(m1, m2)
@@ -92,17 +93,17 @@ class LackOfCohesionAmongMethods3 extends AbstractMetric {
             }
 
             Set identified = []
-            graph.nodes().each { mnode ->
+            graph.nodes().each { Method mnode ->
                 if (!identified.contains(mnode)) {
                     identified.add(mnode)
                     Set adj = []
                     adj += graph.adjacentNodes(mnode)
                     adj.removeAll(adj.intersect(identified))
 
-                    Queue<MethodNode> que = new ArrayDeque<>()
+                    Queue<Method> que = new ArrayDeque<>()
                     que.addAll(adj)
                     while (!que.isEmpty()) {
-                        MethodNode current = que.poll()
+                        Method current = que.poll()
                         identified.add(current)
                         adj = []
                         adj += graph.adjacentNodes(mnode)

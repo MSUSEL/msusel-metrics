@@ -25,9 +25,12 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
-import edu.montana.gsoc.msusel.codetree.node.type.InterfaceNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.pattern.PatternInstance
+import edu.montana.gsoc.msusel.datamodel.structural.Namespace
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
+import edu.montana.gsoc.msusel.datamodel.structural.File
+import edu.montana.gsoc.msusel.datamodel.type.Interface
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -64,11 +67,17 @@ class NumberOfInterfaces extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof StructuralNode) {
-            total = node.types().findAll { it instanceof InterfaceNode }.size()
+        if (node instanceof Structure) {
+            total = mediator.findTypes(node).findAll { it instanceof Interface }.size()
+        } else if (node instanceof File) {
+            total = mediator.findTypes(node).findAll { it instanceof Interface }.size()
+        } else if (node instanceof PatternInstance) {
+            total = mediator.findTypes(node).findAll { it instanceof Interface }.size()
+        } else if (node instanceof Namespace) {
+            total = mediator.findTypes(node).findAll { it instanceof Interface }.size()
         }
 
         total

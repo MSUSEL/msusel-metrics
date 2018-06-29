@@ -25,8 +25,8 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -64,19 +64,19 @@ class OtherClassAttributeEfferentCoupling extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof TypeNode) {
+        if (node instanceof Type) {
             Set desc = []
-            desc += tree.getAssociationsTo(node)
-            desc += tree.getAggregationsTo(node)
-            desc += tree.getCompositionsTo(node)
+            desc += mediator.getAssociatedTo(node)
+            desc += mediator.getAggregatedTo(node)
+            desc += mediator.getComposedTo(node)
 
-            desc.removeAll(tree.getAllDescendentClasses(node))
+            desc.removeAll(mediator.getAllDescendentClasses(node))
 
             desc.each { d ->
-                def fieldTypes = d.fields().collect {
+                def fieldTypes = d.fields.collect {
                     it.getType()
                 }
                 total += fieldTypes.findEach { it == node }

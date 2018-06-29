@@ -25,8 +25,8 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 import org.apache.commons.lang3.tuple.Pair
@@ -38,7 +38,7 @@ import org.apache.commons.lang3.tuple.Pair
 @MetricDefinition( // AKA NLE
         name = "Depth of Inheritance Tree",
         primaryHandle = "DIT",
-        description = "The maximum length from the measured class to any root of the inheritance tree, including the current class. Thus DIT(root) = 1.",
+        description = "The maximum length from the measured class to any root of the inheritance mediator, including the current class. Thus DIT(root) = 1.",
         properties = @MetricProperties(
                 range = "Positive Integer",
                 aggregation = [],
@@ -67,28 +67,28 @@ class DepthOfInheritanceTree extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof TypeNode) {
-            Queue<Pair<Integer, TypeNode>> q = new ArrayDeque<>()
+        if (node instanceof Type) {
+            Queue<Pair<Integer, Type>> q = new ArrayDeque<>()
             q.offer(Pair.of(1, node))
 
             int max = 0
             while (!q.isEmpty()) {
-                Pair<Integer, TypeNode> p = q.poll()
+                Pair<Integer, Type> p = q.poll()
                 int current = p.getKey()
-                TypeNode type = p.getValue()
+                Type type = p.getValue()
 
                 if (current > max) {
                     max = current
                 }
 
-                tree.getRealizedFrom(type).each {
+                mediator.getRealizedFrom(type).each {
                     q.offer(Pair.of(current + 1, it))
                 }
 
-                tree.getGeneralizedFrom(type).each {
+                mediator.getGeneralizedFrom(type).each {
                     q.offer(Pair.of(current + 1, it))
                 }
             }

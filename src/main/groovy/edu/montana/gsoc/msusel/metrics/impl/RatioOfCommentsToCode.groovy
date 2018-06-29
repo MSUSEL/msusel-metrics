@@ -25,8 +25,8 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.member.FieldNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.member.Field
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -63,12 +63,12 @@ class RatioOfCommentsToCode extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0
 
-        if (!(node instanceof FieldNode)) {
-            double sloc = getMetric("SLOC", node)
-            double cloc = getMetric("CLOC", node)
+        if (!(node instanceof Field)) {
+            double sloc = getMetric(node, "SLOC")
+            double cloc = getMetric(node, "CLOC")
 
             total = cloc / sloc
         }

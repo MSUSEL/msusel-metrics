@@ -25,8 +25,9 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -65,20 +66,21 @@ class CouplingFactor extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0.0
 
-        if (node instanceof StructuralNode) {
-            Set classes = node.classes()
+        if (node instanceof Structure) {
+            Set<Type> classes = []
+            classes += node.classes()
 
             int size = 0
             classes.each {
-                Set coupled = []
-                coupled += tree.getAssociatedFrom(it)
-                coupled += tree.getUseFrom(it)
-                coupled += tree.getDependencyFrom(it)
-                coupled += tree.getAggregatedFrom(it)
-                coupled += tree.getComposedFrom(it)
+                Set<Type> coupled = []
+                coupled += mediator.getAssociatedFrom(it)
+                coupled += mediator.getUseFrom(it)
+                coupled += mediator.getDependencyFrom(it)
+                coupled += mediator.getAggregatedFrom(it)
+                coupled += mediator.getComposedFrom(it)
 
                 size += coupled.intersect(classes).size()
             }

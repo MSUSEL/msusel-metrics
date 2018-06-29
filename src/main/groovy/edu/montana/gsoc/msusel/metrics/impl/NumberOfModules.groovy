@@ -25,12 +25,10 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.structural.ModuleNode
-import edu.montana.gsoc.msusel.codetree.node.structural.ProjectNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.structural.Project
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
-
 /**
  * @author Isaac Griffith
  * @version 1.2.0
@@ -64,13 +62,11 @@ class NumberOfModules extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof ProjectNode) {
-            total = node.modules().size()
-        } else if (node instanceof ModuleNode) {
-            total = node.modules().size()
+        if (node instanceof Project) {
+            total = node.getModules().size()
         }
 
         total

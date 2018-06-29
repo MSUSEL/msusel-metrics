@@ -25,8 +25,9 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.member.Method
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -63,26 +64,24 @@ class ForeignDataProviders extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof TypeNode) {
+        if (node instanceof Type) {
             def classes = []
             classes << node
-            classes += tree.getAllParentClasses(node)
+            classes += mediator.getAllParentClasses(node)
 
-            def uses = []
+            Set<Type> uses = []
             Set fdps = []
 
-            node.methods().each {
-                uses += tree.getFieldsUsedBy(it).findAll { !classes.contains(tree.getType(it.parentKey)) }
-                uses += tree.getMethodsCalledFrom(it).findAll {
-                    !classes.contains(tree.getType(it.parentKey)) && (it.isAccessor() || it.isMutator())
-                }
+            node.methods().each { Method m ->
+                uses += mediator.getFieldsUsedBy(m).collect { it.owner }
+                uses += mediator.getMethodsCalledFrom(m).collect { if (!classes.contains(it.owner) && (it.isAccessor() || it.isMutator())) it.owner } // TODO Fix this
             }
 
             uses.each {
-                fdps << tree.getType(it.parentKey)
+                fdps << it.owner
             }
 
             total = fdps.size()

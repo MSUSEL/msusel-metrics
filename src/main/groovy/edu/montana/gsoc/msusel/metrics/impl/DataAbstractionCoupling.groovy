@@ -25,12 +25,11 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
-import edu.montana.gsoc.msusel.codetree.typeref.PrimitiveTypeRef
+import edu.montana.gsoc.msusel.datamodel.TypeReference
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
-
 /**
  * @author Isaac Griffith
  * @version 1.2.0
@@ -64,19 +63,19 @@ class DataAbstractionCoupling extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof TypeNode) {
+        if (node instanceof Type) {
 
             Set coupled = []
-            coupled += tree.getAssociatedFrom(node)
-            coupled += tree.getUseFrom(node)
-            coupled += tree.getDependencyFrom(node)
-            coupled += tree.getAggregatedFrom(node)
-            coupled += tree.getComposedFrom(node)
+            coupled += mediator.getAssociatedFrom(node)
+            coupled += mediator.getUseFrom(node)
+            coupled += mediator.getDependencyFrom(node)
+            coupled += mediator.getAggregatedFrom(node)
+            coupled += mediator.getComposedFrom(node)
 
-            coupled.removeAll(PrimitiveTypeRef.getInstance().getTypes())
+            coupled.removeAll(TypeReference.knownTypes())
             coupled.remove(node)
 
             total = coupled.size()

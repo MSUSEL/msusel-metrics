@@ -25,8 +25,9 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -65,19 +66,19 @@ class MethodInheritanceFactor extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0.0
 
-        if (node instanceof StructuralNode) {
-            def classes = node.classes()
+        if (node instanceof Structure) {
+            List<Type> classes = mediator.findTypes(node)
 
             double totalMi = 0.0
             double totalMa = 0.0
 
             classes.each {
-                double mi = getMetric("NMI", it)
-                double mn = getMetric("NMA", it)
-                double mo = getMetric("NMO", it)
+                double mi = getMetric(it, "NMI")
+                double mn = getMetric(it, "NMA")
+                double mo = getMetric(it, "NMO")
                 double md = mn + mo
                 totalMa += md + mi
                 totalMi += mi

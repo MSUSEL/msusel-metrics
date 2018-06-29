@@ -25,10 +25,10 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.member.MethodNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.member.Method
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -66,12 +66,12 @@ class InformationFlowBasedCoupling extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof MethodNode) {
-            def others = tree.getMethodsCalledFrom(node).findAll {
-                it.parentKey != node.parentKey
+        if (node instanceof Method) {
+            def others = mediator.getMethodsCalledFrom(node).findAll { Method m ->
+                m.owner != ((Method) node).owner
             }
 
             others.each { other ->
@@ -80,13 +80,13 @@ class InformationFlowBasedCoupling extends AbstractMetric {
 
                 total += nop * npi
             }
-        } else if (node instanceof TypeNode) {
+        } else if (node instanceof Type) {
             node.methods().each {
-                total += getMetric("ICP", it)
+                total += getMetric(it, "ICP")
             }
-        } else if (node instanceof StructuralNode) {
-            node.types().each {
-                total += getMetric("ICP", it)
+        } else if (node instanceof Structure) {
+            mediator.findTypes(node).each {
+                total += getMetric(it, "ICP")
             }
         }
 

@@ -25,10 +25,10 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.Accessibility
-import edu.montana.gsoc.msusel.codetree.node.Modifiers
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.Accessibility
+import edu.montana.gsoc.msusel.datamodel.Modifier
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -65,13 +65,13 @@ class PercentPublicAndProtected extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0.0
 
-        if (node instanceof TypeNode) {
-            def instMeth = node.methods().findAll { !it.specifiers.contains(Modifiers.STATIC) }
+        if (node instanceof Type) {
+            def instMeth = node.methods().findAll { !it.modifiers.contains(Modifier.STATIC) }
             def pubProt = instMeth.findAll {
-                it.accessiblity == Accessibility.PUBLIC || it.accessibility == Accessibility.PROTECTED
+                it.access == Accessibility.PUBLIC || it.access == Accessibility.PROTECTED
             }
 
             total = (double) pubProt.size() / (double) instMeth.size()

@@ -25,8 +25,8 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -63,11 +63,11 @@ class HalsteadNumberOfBugs extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0.0
 
-        if (node instanceof StructuralNode) {
-            double vol = getMetric("HPV", node)
+        if (node instanceof Structure) {
+            double vol = getMetric(node, "HPV")
 
             total = vol / 3000
         }

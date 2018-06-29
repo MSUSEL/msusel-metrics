@@ -25,8 +25,10 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.pattern.PatternInstance
+import edu.montana.gsoc.msusel.datamodel.structural.Namespace
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -62,12 +64,24 @@ class TotalNumberOfMethods extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof StructuralNode) {
-            node.classes().each {
-                total += getMetric("NOM", it)
+        if (node instanceof Structure) {
+            mediator.findTypes(node).each {
+                total += getMetric(it, "NOM")
+            }
+        } else if (node instanceof PatternInstance) {
+            mediator.findTypes(node).each {
+                total += getMetric(it, "NOM")
+            }
+        } else if (node instanceof File) {
+            mediator.findTypes(node).each {
+                total += getMetric(it, "NOM")
+            }
+        } else if (node instanceof Namespace) {
+            mediator.findTypes(node).each {
+                total += getMetric(it, "NOM")
             }
         }
 

@@ -25,9 +25,9 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.member.MethodNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.member.Method
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -65,18 +65,18 @@ class DescendentClassMethodInteractionCoupling extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof TypeNode) {
+        if (node instanceof Type) {
             Set desc = []
-            desc += tree.getAllDescendentClasses(node)
+            desc += mediator.getAllDescendentClasses(node)
 
-            desc.each { d ->
-                d.methods().each { MethodNode m ->
-                    if (!m.isOverriding(d, tree)) {
+            desc.each { Type d ->
+                d.methods().each { Method m ->
+                    if (!m.isOverriding(d, mediator)) {
                         def p = m.getParams().collect { it.getType() }
-                        total += p.findAll { it == node }.size()
+                        total += p.findAll { it.ref.refKey == node.key() }.size()
                     }
                 }
             }

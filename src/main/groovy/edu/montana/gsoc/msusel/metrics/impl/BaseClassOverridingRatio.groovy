@@ -25,12 +25,11 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.member.MethodNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.member.Method
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
-
 /**
  * @author Isaac Griffith
  * @version 1.2.0
@@ -64,19 +63,19 @@ class BaseClassOverridingRatio extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0.0
 
-        if (node instanceof TypeNode) {
+        if (node instanceof Type) {
             def methods = node.methods()
-            Set<MethodNode> overriding = new HashSet<>()
+            Set<Method> overriding = new HashSet<>()
 
-            tree.getGeneralizedFrom(node).each {
-                overriding.addAll(findOverridingMethods(it, methods))
+            mediator.getGeneralizedFrom(node).each {
+                overriding.addAll(findOverridingMethods(it, methods)) // TODO Implement this
             }
 
-            tree.getRealizedFrom(node).each {
-                overriding.addAll(findOverridingMethods())
+            mediator.getRealizedFrom(node).each {
+                overriding.addAll(findOverridingMethods()) // TODO implement this
             }
 
             total = (double) overriding.size() / (double) methods.size()

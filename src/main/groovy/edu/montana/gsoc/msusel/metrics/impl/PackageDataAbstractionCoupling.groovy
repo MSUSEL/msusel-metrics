@@ -25,12 +25,11 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
-import edu.montana.gsoc.msusel.codetree.typeref.PrimitiveTypeRef
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
-
 /**
  * @author Isaac Griffith
  * @version 1.2.0
@@ -57,26 +56,24 @@ class PackageDataAbstractionCoupling extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof StructuralNode) {
+        if (node instanceof Structure) {
 
             Set classes = node.classes()
 
             Set coupled = []
-            classes.each {
-                coupled += tree.getAssociatedFrom(node)
-                coupled += tree.getUseFrom(node)
-                coupled += tree.getDependencyFrom(node)
-                coupled += tree.getAggregatedFrom(node)
-                coupled += tree.getComposedFrom(node)
-
-                coupled.removeAll(PrimitiveTypeRef.getInstance().getTypes())
-                coupled.remove(node)
+            classes.each { Type t ->
+                coupled += mediator.getAssociatedFrom(t)
+                coupled += mediator.getUseFrom(t)
+                coupled += mediator.getDependencyFrom(t)
+                coupled += mediator.getAggregatedFrom(t)
+                coupled += mediator.getComposedFrom(t)
+                coupled.remove(t)
             }
 
-            coupled = coupled.removeAll(classes)
+            coupled.removeAll(classes)
             total = coupled.size()
         }
 

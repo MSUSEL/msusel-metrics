@@ -25,12 +25,12 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.Accessibility
-import edu.montana.gsoc.msusel.codetree.node.Modifiers
-import edu.montana.gsoc.msusel.codetree.node.member.ConstructorNode
-import edu.montana.gsoc.msusel.codetree.node.member.DestructorNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.Accessibility
+import edu.montana.gsoc.msusel.datamodel.Modifier
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.member.Constructor
+import edu.montana.gsoc.msusel.datamodel.member.Destructor
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -67,15 +67,15 @@ class NumberOfPolymorphicMethods extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof TypeNode) {
+        if (node instanceof Type) {
             total = node.methods().findAll {
-                (!(it instanceof ConstructorNode) && !(it instanceof DestructorNode)) &&
-                        it.getAccessibility() != Accessibility.PRIVATE &&
-                        (!it.specifiers.contains(Modifiers.FINAL) &&
-                                !it.specifiers.contains(Modifiers.STATIC))
+                (!(it instanceof Constructor) && !(it instanceof Destructor)) &&
+                        it.getAccess() != Accessibility.PRIVATE &&
+                        (!it.modifiers.contains(Modifier.FINAL) &&
+                                !it.modifiers.contains(Modifier.STATIC))
             }.size()
         }
 

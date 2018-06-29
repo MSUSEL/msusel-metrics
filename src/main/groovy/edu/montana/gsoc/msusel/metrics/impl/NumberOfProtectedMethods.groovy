@@ -25,9 +25,9 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.Accessibility
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.Accessibility
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -64,11 +64,11 @@ class NumberOfProtectedMethods extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
-        int total = 0.0
+    def measure(Measurable node) {
+        double total = 0.0
 
-        if (node instanceof TypeNode) {
-            total = node.methods().findAll { it.accessibility == Accessibility.PROTECTED }.size()
+        if (node instanceof Type) {
+            total = node.methods().findAll { it.access == Accessibility.PROTECTED }.size()
         }
 
         total

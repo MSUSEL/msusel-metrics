@@ -25,12 +25,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.measures.Measure
+import edu.montana.gsoc.msusel.datamodel.measures.MeasuresTable
+import edu.montana.gsoc.msusel.datamodel.pattern.PatternInstance
+import edu.montana.gsoc.msusel.datamodel.structural.File
+import edu.montana.gsoc.msusel.datamodel.structural.Namespace
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
-import edu.montana.gsoc.msusel.metrics.Measurement
-import edu.montana.gsoc.msusel.metrics.MeasuresTable
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
@@ -67,18 +70,30 @@ class NumberOfMethods extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof TypeNode) {
+        if (node instanceof Type) {
             total = node.methods().size()
-        } else if (node instanceof StructuralNode) {
-            node.types().each { TypeNode type ->
+        } else if (node instanceof Structure) {
+            mediator.findTypes(node).each { Type type ->
+                total += type.methods().size()
+            }
+        } else if (node instanceof PatternInstance) {
+            mediator.findTypes(node).each { Type type ->
+                total += type.methods().size()
+            }
+        } else if (node instanceof File) {
+            mediator.findTypes((File) node).each { Type type ->
+                total += type.methods().size()
+            }
+        } else if (node instanceof Namespace) {
+            mediator.findTypes((Namespace) node).each { Type type ->
                 total += type.methods().size()
             }
         }
 
-        MeasuresTable.instance.store(Measurement.of(this).on(node).withValue(total))
+        MeasuresTable.instance.store(Measure.of(this).on(node).withValue(total)) // TODO Fix this
         total
     }
 

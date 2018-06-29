@@ -25,15 +25,14 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.cfg.ControlFlowNode
-import edu.montana.gsoc.msusel.codetree.cfg.StatementType
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.member.MethodNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.cfg.ControlFlowNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.measures.Measure
+import edu.montana.gsoc.msusel.datamodel.measures.MeasuresTable
+import edu.montana.gsoc.msusel.datamodel.member.Method
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
-import edu.montana.gsoc.msusel.metrics.Measurement
-import edu.montana.gsoc.msusel.metrics.MeasuresTable
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
@@ -62,24 +61,24 @@ class NumberOfStatements extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof MethodNode) {
+        if (node instanceof Method) {
             total = measureMethod(node)
-        } else if (node instanceof TypeNode) {
+        } else if (node instanceof Type) {
             total = measureType(node)
-        } else if (node instanceof StructuralNode) {
-            node.types().each { TypeNode type ->
+        } else if (node instanceof Structure) {
+            node.types().each { Type type ->
                 total += measureType(type)
             }
         }
 
-        MeasuresTable.instance.store(Measurement.of(this).on(node).withValue(total))
+        MeasuresTable.instance.store(Measure.of(this).on(node).withValue(total))
         total
     }
 
-    static measureMethod(MethodNode method) {
+    static measureMethod(Method method) {
         if (method.getCfg() == null)
             return 0
         Set<ControlFlowNode> nodes = method.getCfg().getGraph().nodes()
@@ -88,9 +87,9 @@ class NumberOfStatements extends AbstractMetric {
         nodes.size() - ends.size() - 2
     }
 
-    static measureType(TypeNode type) {
+    static measureType(Type type) {
         int total = 0
-        type.methods().each { MethodNode method ->
+        type.methods().each { Method method ->
             total += measureMethod(method)
         }
         total

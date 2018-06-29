@@ -25,8 +25,8 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -63,12 +63,12 @@ class PercentageOfNewlyAddedServices extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0
 
-        if (node instanceof TypeNode) {
-            double nas = getMetric("NAS", node)
-            double npm = getMetric("NPUBM", node)
+        if (node instanceof Type) {
+            double nas = getMetric(node, "NAS")
+            double npm = getMetric(node, "NPUBM")
 
             total = nas / npm
         }

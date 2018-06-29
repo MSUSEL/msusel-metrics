@@ -26,8 +26,8 @@
 package edu.montana.gsoc.msusel.metrics.impl
 
 import com.google.common.collect.Queues
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -64,19 +64,19 @@ class TotalProgenyCount extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof TypeNode) {
-            Queue<TypeNode> q = Queues.newArrayDeque()
+        if (node instanceof Type) {
+            Queue<Type> q = Queues.newArrayDeque()
             Set classes = []
 
             q.offer(node)
             while (!q.isEmpty()) {
-                TypeNode type = q.poll()
+                Type type = q.poll()
                 classes.add(type)
-                q.addAll(tree.getGeneralizedTo(type))
-                q.addAll(tree.getRealizedTo(type))
+                q.addAll(mediator.getGeneralizedTo(type))
+                q.addAll(mediator.getRealizedTo(type))
             }
 
             classes.remove(node)

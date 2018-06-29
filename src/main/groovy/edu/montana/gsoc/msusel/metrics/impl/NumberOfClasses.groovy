@@ -25,12 +25,11 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
-import edu.montana.gsoc.msusel.codetree.node.type.ClassNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.measures.Measure
+import edu.montana.gsoc.msusel.datamodel.measures.MeasuresTable
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
-import edu.montana.gsoc.msusel.metrics.Measurement
-import edu.montana.gsoc.msusel.metrics.MeasuresTable
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
@@ -66,14 +65,14 @@ class NumberOfClasses extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof StructuralNode) {
-            total = node.types().findAll { it instanceof ClassNode }.size()
+        if (node instanceof Structure) {
+            total = node.types().findAll { it instanceof Class }.size()
         }
 
-        MeasuresTable.instance.store(Measurement.of(this).on(node).withValue(total))
+        MeasuresTable.instance.store(Measure.of(this).on(node).withValue(total)) // TODO Fix this
         total
     }
 

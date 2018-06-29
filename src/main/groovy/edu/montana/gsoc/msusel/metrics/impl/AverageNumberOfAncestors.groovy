@@ -25,9 +25,9 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -64,14 +64,14 @@ class AverageNumberOfAncestors extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0.0
 
-        if (node instanceof StructuralNode) {
+        if (node instanceof Structure) {
             def map = [:]
-            def classes = node.classes()
-            classes.each {
-                total += recursiveSearch(it, map)
+            def classes = mediator.findTypes(node)
+            classes.each { Type t ->
+                total += recursiveSearch(t, map)
             }
             total /= classes.size()
         }
@@ -79,15 +79,15 @@ class AverageNumberOfAncestors extends AbstractMetric {
         total
     }
 
-    private def recusiveSearch(TypeNode type, map) {
+    private def recursiveSearch(Type type, map) {
         if (map[type]) {
             map[type]
-        } else if (tree.getRealizedFrom(type).isEmpty() && tree.getGeneralizedFrom(type).isEmpty()) {
+        } else if (mediator.getRealizedFrom(type).isEmpty() && mediator.getGeneralizedFrom(type).isEmpty()) {
             map[type] = 0
             map[type]
         } else {
-            int real = tree.getRealizedFrom(type).collect {}
-            int gen = tree.getGeneralizedFrom(type).collect {}
+            int real = mediator.getRealizedFrom(type).collect {}
+            int gen = mediator.getGeneralizedFrom(type).collect {}
             map[type] = 1 + real + gen
             map[type]
         }

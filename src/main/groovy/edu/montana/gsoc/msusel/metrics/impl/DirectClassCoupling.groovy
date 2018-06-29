@@ -26,8 +26,8 @@
 package edu.montana.gsoc.msusel.metrics.impl
 
 import com.google.common.collect.Sets
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -64,18 +64,18 @@ class DirectClassCoupling extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof TypeNode) {
-            Set<TypeNode> conn = Sets.newHashSet()
-            conn.addAll(tree.getGeneralizedFrom(node))
-            conn.addAll(tree.getRealizedFrom(node))
-            conn.addAll(tree.getAssociatedFrom(node))
-            conn.addAll(tree.getAggregatedFrom(node))
-            conn.addAll(tree.getComposedFrom(node))
-            conn.addAll(tree.getUseFrom(node))
-            conn.addAll(tree.getDependencyFrom(node))
+        if (node instanceof Type) {
+            Set<Type> conn = Sets.newHashSet()
+            conn.addAll(mediator.getGeneralizedFrom(node))
+            conn.addAll(mediator.getRealizedFrom(node))
+            conn.addAll(mediator.getAssociatedFrom(node))
+            conn.addAll(mediator.getAggregatedFrom(node))
+            conn.addAll(mediator.getComposedFrom(node))
+            conn.addAll(mediator.getUseFrom(node))
+            conn.addAll(mediator.getDependencyFrom(node))
 
             total = conn.size() // need to ensure none are primitive types
         }

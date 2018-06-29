@@ -25,14 +25,17 @@
  */
 package edu.montana.gsoc.msusel.metrics
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.CodeNode
-import edu.montana.gsoc.msusel.codetree.node.structural.FileNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
+import edu.montana.gsoc.msusel.datamodel.Component
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.measures.Measure
+import edu.montana.gsoc.msusel.datamodel.measures.MeasuresTable
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
 import edu.montana.gsoc.msusel.metrics.annotations.MetricDefinition
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+
+import static edu.montana.gsoc.msusel.datamodel.measures.Measure.getMediator
 
 /**
  * @author Isaac Griffith
@@ -69,32 +72,32 @@ abstract class AbstractLOCMetric extends AbstractSourceMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
-        if (node instanceof CodeNode) {
+    def measure(Measurable node) {
+        if (node instanceof Component) {
             List<String> lines = getLines(node)
-            String ext = tree.getUtils().findParent(node).getKey().find(/\.\w{2,4}$/)
+            String ext = mediator.findParent(node).getKey().find(/\.\w{2,4}$/)
             ext = ext.substring(1)
 
             loadProfile(LoCProfileManager.instance.getProfileByExtension(ext))
 
-            MeasuresTable.instance.store(Measurement.of(this).on(node).withValue(count(lines)))
-        } else if (node instanceof FileNode) {
+            MeasuresTable.instance.store(Measure.of(this).on(node).withValue(count(lines)))
+        } else if (node instanceof File) {
             List<String> lines = getLines(node)
             String ext = node.getKey().find(/\.\w{2,4}$/)
             ext = ext.substring(1)
 
             loadProfile(LoCProfileManager.instance.getProfileByExtension(ext))
 
-            MeasuresTable.instance.store(Measurement.of(this).on(node).withValue(count(lines)))
+            MeasuresTable.instance.store(Measure.of(this).on(node).withValue(count(lines)))
         }
-        else if (node instanceof StructuralNode) {
+        else if (node instanceof Structure) {
             int total = 0
 
             node.files().each { file ->
                 MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
                 total += MeasuresTable.instance.retrieve(file, mdef.primaryHandle())
             }
-            MeasuresTable.instance.store(Measurement.of(this).on(node).withValue(total))
+            MeasuresTable.instance.store(Measure.of(this).on(node).withValue(total))
         } else {
             0
         }

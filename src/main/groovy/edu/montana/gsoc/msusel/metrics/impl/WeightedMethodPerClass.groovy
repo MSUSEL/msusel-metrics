@@ -25,9 +25,9 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.Modifiers
-import edu.montana.gsoc.msusel.codetree.node.type.ClassNode
+import edu.montana.gsoc.msusel.datamodel.Modifier
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -65,11 +65,11 @@ class WeightedMethodPerClass extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0
 
-        if (node instanceof ClassNode) {
-            def methods = node.methods().findAll { it.specifiers.contains[Modifiers.ABSTRACT] }
+        if (node instanceof Type) {
+            def methods = node.methods().findAll { it.modifiers.contains(Modifier.ABSTRACT) }
 
             def cyclo = []
             methods.each {
@@ -79,7 +79,7 @@ class WeightedMethodPerClass extends AbstractMetric {
             double val = cyclo.sum()
             val /= cyclo.size()
 
-            cyclo = cyclo.multiply(val)
+            cyclo = cyclo * val
             total = cyclo.sum()
         }
 

@@ -27,7 +27,6 @@ package edu.montana.gsoc.msusel.metrics
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import edu.montana.gsoc.msusel.codetree.metrics.loc.UnknownProfileException
 
 import java.lang.reflect.Type
 
@@ -67,7 +66,7 @@ class LoCProfileManager {
      * @param ext
      *            File extension
      * @return The profile registered to the provided extension.
-     * @throws edu.montana.gsoc.msusel.codetree.metrics.loc.UnknownProfileException
+     * @throws UnknownProfileException
      *             When the provided extension has no registered profile
      * @throws IllegalArgumentException
      *             When the provided extension is null or empty

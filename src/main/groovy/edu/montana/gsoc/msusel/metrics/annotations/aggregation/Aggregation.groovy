@@ -30,7 +30,7 @@ package edu.montana.gsoc.msusel.metrics.annotations.aggregation
 
 /**
  * @author Isaac Griffith
- *
+ * @version 1.2.0
  */
 class Aggregation {
 

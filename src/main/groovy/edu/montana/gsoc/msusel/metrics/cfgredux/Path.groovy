@@ -39,7 +39,7 @@ class Path {
     /**
      * 
      */
-    public Path()
+    Path()
     {
         // TODO Auto-generated constructor stub
     }

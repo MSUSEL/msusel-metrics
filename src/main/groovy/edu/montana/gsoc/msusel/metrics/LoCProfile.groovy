@@ -25,10 +25,13 @@
  */
 package edu.montana.gsoc.msusel.metrics
 
+import groovy.transform.builder.Builder
+
 /**
  * @author Isaac Griffith
  * @version 1.2.0
  */
+@Builder(buildMethodName = "create")
 class LoCProfile {
 
     /**

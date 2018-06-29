@@ -23,13 +23,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 import edu.montana.gsoc.msusel.codetree.CodeTree
-import edu.montana.gsoc.msusel.codetree.node.structural.FileNode
-import edu.montana.gsoc.msusel.codetree.node.structural.ProjectNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.codetree.node.structural.Project
+import edu.montana.gsoc.msusel.codetree.node.type.Type
 import edu.montana.gsoc.msusel.codetree.parsers.JavaCodeTreeBuilder
+import edu.montana.gsoc.msusel.datamodel.measures.MeasuresTable
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
-import edu.montana.gsoc.msusel.metrics.MeasuresTable
 import edu.montana.gsoc.msusel.metrics.MetricsRegistrar
 import spock.lang.Shared
 import spock.lang.Specification
@@ -68,8 +68,8 @@ class MetricTests extends Specification {
             }
         }
 
-        ProjectNode project = tree.getProject()
-        project.files().each { FileNode file ->
+        Project project = tree.getProject()
+        project.files().each { File file ->
             metrics.each { handle ->
                 AbstractMetric metric = reg.getMetric(handle).newInstance()
                 metric.setTree(tree)
@@ -88,7 +88,7 @@ class MetricTests extends Specification {
 
     def "Test Class A"() {
         given:
-        TypeNode type = tree.getUtils().findType("A")
+        Type type = tree.getUtils().findType("A")
 
         when:
         // need to actual execute metrics
@@ -110,7 +110,7 @@ class MetricTests extends Specification {
 
     def "Test Class B"() {
         given:
-        TypeNode type = tree.getUtils().findType("B")
+        Type type = tree.getUtils().findType("B")
 
         when:
         // need to actual execute metrics
@@ -132,7 +132,7 @@ class MetricTests extends Specification {
 
     def "Test Class C"() {
         given:
-        TypeNode type = tree.getUtils().findType("C")
+        Type type = tree.getUtils().findType("C")
 
         when:
         // need to actual execute metrics
@@ -154,7 +154,7 @@ class MetricTests extends Specification {
 
     def "Test Class D"() {
         given:
-        TypeNode type = tree.getUtils().findType("D")
+        Type type = tree.getUtils().findType("D")
 
         when:
         // need to actual execute metrics
@@ -176,7 +176,7 @@ class MetricTests extends Specification {
 
     def "Test Class E"() {
         given:
-        TypeNode type = tree.getUtils().findType("E")
+        Type type = tree.getUtils().findType("E")
 
         when:
         // need to actual execute metrics
@@ -198,7 +198,7 @@ class MetricTests extends Specification {
 
     def "Test Class F"() {
         given:
-        TypeNode type = tree.getUtils().findType("F")
+        Type type = tree.getUtils().findType("F")
 
         when:
         // need to actual execute metrics
@@ -220,7 +220,7 @@ class MetricTests extends Specification {
 
     def "Test Project"() {
         given:
-        ProjectNode project = tree.getProject()
+        Project project = tree.getProject()
 
         when:
         // need to actual execute metrics

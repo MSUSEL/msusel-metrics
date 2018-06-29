@@ -57,7 +57,7 @@ class LinesOfCode extends AbstractLOCMetric {
      * {@inheritDoc}
      */
     @Override
-    public Object count(List<String> lines)
+    Object count(List<String> lines)
     {
         int total = 0
         

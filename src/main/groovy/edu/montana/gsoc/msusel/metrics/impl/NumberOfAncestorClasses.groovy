@@ -25,8 +25,8 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 import org.apache.commons.lang3.tuple.Pair
@@ -64,21 +64,23 @@ class NumberOfAncestorClasses extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof TypeNode) {
-            Queue<TypeNode> q = new ArrayDeque<>()
-            q.offer(node)
+        if (node instanceof Type) {
+            Queue<Pair<Integer, Type>> q = new ArrayDeque<>()
+            q.offer(Pair.of(1, node))
 
             while (!q.isEmpty()) {
-                TypeNode type = q.poll()
+                Pair<Integer, Type> pair = q.poll()
+                Type type = pair.right
+                Integer current = pair.left
 
-                tree.getRealizedFrom(type).each {
-                    q.offer(Pair.of(current + 1, it))
+                mediator.getRealizedFrom(type).each { Type t ->
+                    q.offer(Pair.of(current + 1, t))
                 }
 
-                tree.getGeneralizedFrom(type).each {
+                mediator.getGeneralizedFrom(type).each {
                     q.offer(Pair.of(current + 1, it))
                 }
 

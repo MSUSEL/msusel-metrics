@@ -25,10 +25,11 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.Accessibility
-import edu.montana.gsoc.msusel.codetree.node.member.MethodNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.Accessibility
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.member.Field
+import edu.montana.gsoc.msusel.datamodel.member.Method
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 import org.apache.commons.lang3.tuple.Pair
@@ -66,19 +67,19 @@ class LooseClassCohesion extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0
 
-        if (node instanceof TypeNode) {
+        if (node instanceof Type) {
             def methods = node.methods()
-            def pubMethods = methods.findAll { it.accessibility == Accessibility.PUBLIC }
+            def pubMethods = methods.findAll { it.access == Accessibility.PUBLIC }
 
-            Set<Pair<MethodNode>> ndc = []
-            methods.each { first ->
-                methods.each { second ->
+            Set<Pair<Method, Method>> ndc = []
+            methods.each { Method first ->
+                methods.each { Method second ->
                     if (first != second) {
-                        Set firstFldUse = tree.getFieldUseInSameClass(first, node)
-                        Set secondFldUse = tree.getFieldUseInSameClass(second, node)
+                        Set<Field> firstFldUse = mediator.getFieldUseInSameClass(first, (Type) node)
+                        Set<Field> secondFldUse = mediator.getFieldUseInSameClass(second, (Type) node)
 
                         if (!firstFldUse.intersect(secondFldUse).isEmpty())
                             ndc << Pair.of(first, second)
@@ -86,12 +87,12 @@ class LooseClassCohesion extends AbstractMetric {
                 }
             }
 
-            Set<Pair<MethodNode>> nid = []
-            methods.each { first ->
-                methods.each { second ->
+            Set<Pair<Method, Method>> nid = []
+            methods.each { Method first ->
+                methods.each { Method second ->
                     if (first != second) {
-                        Set firstMethUse = tree.getMethodUseInSameClass(first, node)
-                        Set secondMethUse = tree.getMethodUseInSameClass(second, node)
+                        Set<Method> firstMethUse = mediator.getMethodUseInSameClass(first, (Type) node)
+                        Set<Method> secondMethUse = mediator.getMethodUseInSameClass(second, (Type) node)
 
                         if (!firstMethUse.intersect(secondMethUse).isEmpty())
                             nid << Pair.of(first, second)

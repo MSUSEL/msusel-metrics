@@ -25,8 +25,8 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -65,18 +65,18 @@ class AttributeInheritanceFactor extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0.0
 
-        if (node instanceof StructuralNode) {
-            def classes = node.classes()
+        if (node instanceof Structure) {
+            def classes = mediator.findTypes(node)
 
             double totalAi = 0.0
             double totalAa = 0.0
 
             classes.each {
-                double ai = getMetric("NIA", it)
-                double ad = getMetric("NAD", it)
+                double ai = getMetric(it, "NIA")
+                double ad = getMetric(it, "NAD")
                 double aa = ai + ad
 
                 totalAa += aa

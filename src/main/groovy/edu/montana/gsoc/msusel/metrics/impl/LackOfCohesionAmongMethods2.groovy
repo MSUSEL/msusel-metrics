@@ -25,9 +25,10 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.member.MethodNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.member.Field
+import edu.montana.gsoc.msusel.datamodel.member.Method
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -66,24 +67,24 @@ class LackOfCohesionAmongMethods2 extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof TypeNode) {
-            def fields = node.fields()
-            def methods = node.methods()
+        if (node instanceof Type) {
+            List<Field> fields = node.fields()
+            List<Method> methods = node.methods()
 
-            Set I = { TypeNode t, MethodNode m ->
-                tree.getFieldsUsedBy(m).intersect(fields)
+            Set I = { Type t, Method m ->
+                mediator.getFieldsUsedBy(m).intersect(fields)
             }
 
             Set p = []
             Set q = []
 
-            methods.each { m1 ->
-                methods.each { m2 ->
+            methods.each { Method m1 ->
+                methods.each { Method m2 ->
                     if (m1 != m2) {
-                        if (I(node, m1).intersect(I(node, m2)).isEmpty()) {
+                        if (I(node, m1).intersect(I(node, m2)).isEmpty()) { // TODO Fix this
                             p += I(node, m1)
                             p += I(node, m2)
                         } else {

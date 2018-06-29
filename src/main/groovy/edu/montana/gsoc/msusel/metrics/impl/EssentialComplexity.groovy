@@ -28,9 +28,9 @@ package edu.montana.gsoc.msusel.metrics.impl
 import com.google.common.graph.Graph
 import com.google.common.graph.GraphBuilder
 import com.google.common.graph.MutableGraph
-import edu.montana.gsoc.msusel.codetree.cfg.ControlFlowNode
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.member.MethodNode
+import edu.montana.gsoc.msusel.datamodel.cfg.ControlFlowNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.member.Method
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 import edu.montana.gsoc.msusel.metrics.cfgredux.CfgReducer
@@ -68,10 +68,10 @@ class EssentialComplexity extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof MethodNode) {
+        if (node instanceof Method) {
             MutableGraph<Integer> graph = GraphBuilder.directed().build()
             def map = [:]
             def nodes = []

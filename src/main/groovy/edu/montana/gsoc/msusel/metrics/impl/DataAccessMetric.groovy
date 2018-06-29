@@ -25,14 +25,13 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.Accessibility
-import edu.montana.gsoc.msusel.codetree.node.member.ConstructorNode
-import edu.montana.gsoc.msusel.codetree.node.member.DestructorNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.Accessibility
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.member.Constructor
+import edu.montana.gsoc.msusel.datamodel.member.Destructor
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
-
 /**
  * @author Isaac Griffith
  * @version 1.2.0
@@ -66,13 +65,13 @@ class DataAccessMetric extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0.0
 
-        if (node instanceof TypeNode) {
-            def methods = node.methods().findAll { !(it instanceof ConstructorNode) && !(it instanceof DestructorNode) }
+        if (node instanceof Type) {
+            def methods = node.methods().findAll { !(it instanceof Constructor) && !(it instanceof Destructor) }
             total = methods.findAll {
-                it.accessibility == Accessibility.PUBLIC
+                it.access == Accessibility.PUBLIC
             }.size()
 
             total /= methods.size()

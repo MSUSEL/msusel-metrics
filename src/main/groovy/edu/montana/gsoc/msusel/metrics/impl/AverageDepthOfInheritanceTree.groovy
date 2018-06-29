@@ -25,8 +25,8 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 import org.apache.commons.lang3.tuple.Pair
@@ -64,28 +64,28 @@ class AverageDepthOfInheritanceTree extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0.0
 
-        if (node instanceof TypeNode) {
+        if (node instanceof Type) {
             def map = [:]
 
-            Queue<Pair<Integer, TypeNode>> q = new ArrayDeque<>()
+            Queue<Pair<Integer, Type>> q = new ArrayDeque<>()
             q.offer(Pair.of(1, node))
             while (!q.isEmpty()) {
-                Pair<Integer, TypeNode> pair = q.poll()
+                Pair<Integer, Type> pair = q.poll()
                 int val = pair.getKey()
-                TypeNode type = pair.getValue()
+                Type type = pair.getValue()
 
                 def types = []
-                types += tree.getGeneralizedFrom(type)
-                types += tree.getRealizedFrom(type)
+                types += mediator.getGeneralizedFrom(type)
+                types += mediator.getRealizedFrom(type)
 
                 if (types.isEmpty()) {
                     map[type] = val
                 } else {
-                    types.each {
-                        q.offer(Pair.of(val + 1, it))
+                    types.each { Type t ->
+                        q.offer(Pair.of(val + 1, t))
                     }
                 }
             }

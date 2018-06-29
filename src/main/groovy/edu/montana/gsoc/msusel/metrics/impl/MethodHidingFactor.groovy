@@ -25,11 +25,11 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.Accessibility
-import edu.montana.gsoc.msusel.codetree.node.member.MethodNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.Accessibility
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.member.Method
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -68,52 +68,52 @@ class MethodHidingFactor extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0.0
 
-        if (node instanceof StructuralNode) {
-            def classes = node.classes()
+        if (node instanceof Structure) {
+            List<Type> classes = mediator.findTypes(node)
 
-            def isVisible = { MethodNode m ->
-                TypeNode t = tree.getMethodOwnerType(m)
+            def isVisible = { Method m ->
+                Type t = m.owner
 
-                Set<TypeNode> dc = []
-                dc += tree.getGeneralizedTo(t)
-                dc += tree.getRealizedTo(t)
+                Set<Type> dc = []
+                dc += mediator.getGeneralizedTo(t)
+                dc += mediator.getRealizedTo(t)
 
-                Set<TypeNode> pc = []
-                pc += tree.getNamespaceClasses(t.getNamespace())
+                Set<Type> pc = []
+                pc += mediator.getNamespaceClasses(mediator.findNamespace(t))
 
-                Set<TypeNode> mc = []
-                mc += tree.getModuleClasses(tree.getModuleForType(t))
+                Set<Type> mc = []
+                mc += mediator.getModuleClasses(mediator.findModule(t))
 
-                Accessibility access = m.getAccessibility()
+                Accessibility access = m.getAccess()
 
                 switch (access) {
                     case Accessibility.PUBLIC:
-                        1
+                        return 1
                     case Accessibility.PRIVATE:
-                        0
+                        return 0
                     case Accessibility.PROTECTED:
-                        (double) dc.size() / (double) (classes.size() - 1)
+                        return (double) dc.size() / (double) (classes.size() - 1)
                     case Accessibility.PACKAGE:
-                        (double) pc.size() / (double) (classes.size() - 1)
+                        return (double) pc.size() / (double) (classes.size() - 1)
                     case Accessibility.DEFAULT:
-                        (double) pc.size() / (double) (classes.size() - 1)
+                        return (double) pc.size() / (double) (classes.size() - 1)
                     case Accessibility.INTERNAL:
-                        (double) mc.size() / (double) (classes.size() - 1)
+                        return (double) mc.size() / (double) (classes.size() - 1)
                     case Accessibility.PROTECTED_INTERNAL:
-                        (double) (dc.size() + mc.size()) / (double) (classes.size() - 1)
+                        return (double) (dc.size() + mc.size()) / (double) (classes.size() - 1)
                     default:
-                        0
+                        return 0
                 }
             }
 
-            def visibility = { MethodNode m ->
+            def visibility = { Method m ->
                 double totalVisible = 0.0
 
                 classes.each {
-                    totalVisible += isVisible(m, it)
+                    totalVisible += isVisible(m)
                 }
 
                 totalVisible / (classes.size() - 1)
@@ -123,8 +123,8 @@ class MethodHidingFactor extends AbstractMetric {
             double totalVis = 0.0
 
             classes.each {
-                double mn = getMetric("NMA", it)
-                double mo = getMetric("NMO", it)
+                double mn = getMetric(it, "NMA")
+                double mo = getMetric(it, "NMO")
                 totalMd += mn + mo
 
                 it.methods().each { method ->

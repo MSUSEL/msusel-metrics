@@ -25,9 +25,10 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.pattern.PatternInstance
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -64,25 +65,28 @@ class AfferentCoupling extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof StructuralNode) {
-            def classes = node.types()
+        if (node instanceof Structure) {
+            List<Type> classes = mediator.findTypes(node)
 
-            Set<TypeNode> couplings = new HashSet<>()
+            Set<Type> couplings = new HashSet<>()
             classes.each {
-                couplings.addAll(tree.getRealizedTo(it))
-                couplings.addAll(tree.getGeneralizedTo(it))
-                couplings.addAll(tree.getAssociatedTo(it))
-                couplings.addAll(tree.getAggregatedTo(it))
-                couplings.addAll(tree.getComposedTo(it))
-                couplings.addAll(tree.getDependencyTo(it))
-                couplings.addAll(tree.getUseTo(it))
+                couplings.addAll(mediator.getRealizedTo(it))
+                couplings.addAll(mediator.getGeneralizedTo(it))
+                couplings.addAll(mediator.getAssociatedTo(it))
+                couplings.addAll(mediator.getAggregatedTo(it))
+                couplings.addAll(mediator.getComposedTo(it))
+                couplings.addAll(mediator.getDependencyTo(it))
+                couplings.addAll(mediator.getUseTo(it))
             }
 
             couplings.removeAll(classes)
             total = couplings.size()
+        }
+        else if (node instanceof PatternInstance) {
+
         }
 
         total

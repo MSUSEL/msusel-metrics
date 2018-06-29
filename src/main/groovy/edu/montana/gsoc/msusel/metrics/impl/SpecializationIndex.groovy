@@ -25,8 +25,8 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -63,14 +63,14 @@ class SpecializationIndex extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0.0
 
-        if (node instanceof TypeNode) {
-            double nmo = getMetric("NMO", node)
-            double hnl = getMetric("HNL", node)
-            double nmi = getMetric("NMI", node)
-            double nma = getMetric("NMA", node)
+        if (node instanceof Type) {
+            double nmo = getMetric(node, "NMO")
+            double hnl = getMetric(node, "HNL")
+            double nmi = getMetric(node, "NMI")
+            double nma = getMetric(node, "NMA")
 
             total = (nmo * hnl) / (nmi + nma)
         }

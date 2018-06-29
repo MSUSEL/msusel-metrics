@@ -25,8 +25,8 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -63,12 +63,12 @@ class HalsteadEffort extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0
 
-        if (node instanceof StructuralNode) {
-            double diff = getMetric("HPD", node)
-            double vol = getMetric("HPV", node)
+        if (node instanceof Structure) {
+            double diff = getMetric(node, "HPD")
+            double vol = getMetric(node, "HPV")
 
             total = diff * vol
         }

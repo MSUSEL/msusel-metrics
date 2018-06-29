@@ -25,10 +25,10 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.member.MethodNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.member.Method
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -65,12 +65,12 @@ class CommentDensity extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0.0
 
-        if (node instanceof MethodNode || node instanceof TypeNode || node instanceof StructuralNode) {
-            double cloc = getMetric("CLOC", node)
-            double lloc = getMetric("LLOC", node)
+        if (node instanceof Method || node instanceof Type || node instanceof Structure) {
+            double cloc = getMetric(node, "CLOC")
+            double lloc = getMetric(node, "LLOC")
 
             total = cloc / (cloc + lloc)
         }

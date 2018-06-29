@@ -40,7 +40,7 @@ class CfgReducer {
     /**
      * 
      */
-    public CfgReducer() {
+    CfgReducer() {
         // TODO Auto-generated constructor stub
     }
 

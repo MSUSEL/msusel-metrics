@@ -25,9 +25,9 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -64,21 +64,21 @@ class EfferentCoupling extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof StructuralNode) {
-            def classes = node.classes()
+        if (node instanceof Structure) {
+            def classes = mediator.findTypes(node)
 
-            Set<TypeNode> couplings = new HashSet<>()
+            Set<Type> couplings = new HashSet<>()
             classes.each {
-                couplings.addAll(tree.getRealizedFrom(it))
-                couplings.addAll(tree.getGeneralizedFrom(it))
-                couplings.addAll(tree.getAssociatedFrom(it))
-                couplings.addAll(tree.getAggregatedFrom(it))
-                couplings.addAll(tree.getComposedFrom(it))
-                couplings.addAll(tree.getDependencyFrom(it))
-                couplings.addAll(tree.getUseFrom(it))
+                couplings.addAll(mediator.getRealizedFrom(it))
+                couplings.addAll(mediator.getGeneralizedFrom(it))
+                couplings.addAll(mediator.getAssociatedFrom(it))
+                couplings.addAll(mediator.getAggregatedFrom(it))
+                couplings.addAll(mediator.getComposedFrom(it))
+                couplings.addAll(mediator.getDependencyFrom(it))
+                couplings.addAll(mediator.getUseFrom(it))
             }
 
             couplings.removeAll(classes)

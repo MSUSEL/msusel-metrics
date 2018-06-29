@@ -25,10 +25,9 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
-
 /**
  * TODO Remove This
  * @author Isaac Griffith
@@ -60,7 +59,7 @@ class NumberOfTimesAClassIsReused extends AbstractMetric {
     }
 
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         return null
     }
 }

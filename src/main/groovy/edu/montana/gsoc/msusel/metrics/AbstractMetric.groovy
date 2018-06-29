@@ -25,8 +25,13 @@
  */
 package edu.montana.gsoc.msusel.metrics
 
-import edu.montana.gsoc.msusel.codetree.CodeTree
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
+import com.google.inject.Inject
+import edu.montana.gsoc.msusel.datamodel.DataModelMediator
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.measures.MeasuresTable
+import edu.montana.gsoc.msusel.datamodel.measures.Metric
+import edu.montana.gsoc.msusel.datamodel.measures.MetricRepository
+import edu.montana.gsoc.msusel.metrics.annotations.MetricDefinition
 
 /**
  * @author Isaac Griffith
@@ -34,11 +39,23 @@ import edu.montana.gsoc.msusel.codetree.node.AbstractNode
  */
 abstract class AbstractMetric {
 
-    CodeTree tree
+    @Inject
+    protected DataModelMediator mediator
+    @Inject
+    protected MeasuresTable table
     
-    abstract def measure(AbstractNode node)
+    abstract def measure(Measurable node)
 
-    def getMetric(handle, node) {
+    double getMetric(Measurable node, String handle) {
+    }
 
+    Metric toMetric(MetricRepository repo) {
+        MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
+        Metric.builder()
+                .name(mdef.name())
+                .metricKey("${repo.repoKey}:${mdef.primaryHandle()}")
+                .description(mdef.description())
+                .repository(repo)
+                .create()
     }
 }

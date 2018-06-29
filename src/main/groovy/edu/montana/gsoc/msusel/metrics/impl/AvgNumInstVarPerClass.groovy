@@ -25,8 +25,8 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -63,15 +63,16 @@ class AvgNumInstVarPerClass extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0
 
-        if (node instanceof StructuralNode) {
-            node.types().each {
-                total += getMetric("NIV", it)
+        if (node instanceof Structure) {
+            def types = mediator.findTypes(node)
+            types.each {
+                total += getMetric(it, "NIV")
             }
 
-            total /= node.types()
+            total /= types.size()
         }
 
         total

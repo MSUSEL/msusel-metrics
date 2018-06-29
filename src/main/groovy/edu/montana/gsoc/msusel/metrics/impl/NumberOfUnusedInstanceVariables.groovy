@@ -25,9 +25,11 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.Modifiers
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.Modifier
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.member.Field
+import edu.montana.gsoc.msusel.datamodel.member.Method
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -64,23 +66,23 @@ class NumberOfUnusedInstanceVariables extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof TypeNode) {
-            Set fields = []
+        if (node instanceof Type) {
+            Set<Field> fields = [] as Set
             fields += node.fields().findAll {
-                !it.specifiers.contains(Modifiers.STATIC) && !it.specifiers.contains(Modifiers.CONST)
+                !it.modifiers.contains(Modifier.STATIC) && !it.modifiers.contains(Modifier.CONST)
             }
 
             Set usedFields = []
-            node.methods().each {
+            node.methods().each { Method m ->
                 Set temp = []
-                temp += tree.getFieldsUsedBy(null)
+                temp += mediator.getFieldsUsedBy(m)
                 usedFields += fields.intersect(temp)
             }
 
-            fields = fields.removeAll(usedFields)
+            fields.removeAll(usedFields)
 
             total = fields.size()
         }

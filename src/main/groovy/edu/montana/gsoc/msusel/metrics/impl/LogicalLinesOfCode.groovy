@@ -25,11 +25,11 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.member.MethodNode
-import edu.montana.gsoc.msusel.codetree.node.structural.FileNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.member.Method
+import edu.montana.gsoc.msusel.datamodel.structural.File
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -66,26 +66,28 @@ class LogicalLinesOfCode extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof MethodNode) {
+        if (node instanceof Method) {
             total = node.getCfg().getGraph().nodes().size()
-        } else if (node instanceof TypeNode) {
+        } else if (node instanceof Type) {
             total += node.fields().size()
             node.methods().each {
                 total += measure(it)
             }
-        } else if (node instanceof FileNode) {
-            total += node.imports().size()
-            node.types().each {
+        } else if (node instanceof File) {
+            total += node.imports.size()
+            mediator.findTypes(node).each {
                 total += measure(it)
             }
-        } else if (node instanceof StructuralNode) {
-            node.types().each {
+        } else if (node instanceof Structure) {
+            mediator.findTypes((Structure) node).each {
                 total += measure(it)
             }
         }
+
+        total
     }
 
 }

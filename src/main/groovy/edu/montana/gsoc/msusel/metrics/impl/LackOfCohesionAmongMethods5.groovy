@@ -25,8 +25,8 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -63,17 +63,17 @@ class LackOfCohesionAmongMethods5 extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0
 
-        if (node instanceof TypeNode) {
+        if (node instanceof Type) {
             double nm = node.methods().size()
             double nf = node.fields().size()
 
             Set fields = node.fields()
             int count = 0
             node.methods().each { m ->
-                count += tree.getFieldsUsedBy(m).intersect(fields)
+                count += mediator.getFieldsUsedBy(m).intersect(fields)
             }
 
             total = (nm - ((1 / nf) * count)) / (nm - 1)

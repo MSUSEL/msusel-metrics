@@ -25,12 +25,10 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
-import edu.montana.gsoc.msusel.codetree.typeref.PrimitiveTypeRef
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
-
 /**
  * @author Isaac Griffith
  * @version 1.2.0
@@ -61,11 +59,11 @@ class NumberOfPrimitiveVariables extends AbstractMetric {
     }
 
     @Override
-    def measure(AbstractNode node) {
-        int total = 0
+    def measure(Measurable node) {
+        double total = 0
 
-        if (node instanceof TypeNode) {
-            total = node.fields().findAll { it.getType() instanceof PrimitiveTypeRef }
+        if (node instanceof Type) {
+            total = node.fields().findAll { it.getType().isKnownType() }
         }
 
         total

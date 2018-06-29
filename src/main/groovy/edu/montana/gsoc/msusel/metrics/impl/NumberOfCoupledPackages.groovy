@@ -25,12 +25,11 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.structural.NamespaceNode
-import edu.montana.gsoc.msusel.codetree.typeref.PrimitiveTypeRef
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.structural.Namespace
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
-
 /**
  * @author Isaac Griffith
  * @version 1.2.0
@@ -64,35 +63,34 @@ class NumberOfCoupledPackages extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof NamespaceNode) {
+        if (node instanceof Namespace) {
             Set classes = []
             Set otherNS = []
 
             node.types().each {
-                classes += tree.getAssociatedFrom(it)
-                classes += tree.getAssociatedTo(it)
-                classes += tree.getAggregatedFrom(it)
-                classes += tree.getAggregatedTo(it)
-                classes += tree.getComposedFrom(it)
-                classes += tree.getComposedTo(it)
-                classes += tree.getRealizedFrom(it)
-                classes += tree.getRealizedTo(it)
-                classes += tree.getGeneralizedFrom(it)
-                classes += tree.getGeneralizedTo(it)
-                classes += tree.getUseFrom(it)
-                classes += tree.getUseTo(it)
-                classes += tree.getDependencyFrom(it)
-                classes += tree.getDependencyTo(it)
+                classes += mediator.getAssociatedFrom(it)
+                classes += mediator.getAssociatedTo(it)
+                classes += mediator.getAggregatedFrom(it)
+                classes += mediator.getAggregatedTo(it)
+                classes += mediator.getComposedFrom(it)
+                classes += mediator.getComposedTo(it)
+                classes += mediator.getRealizedFrom(it)
+                classes += mediator.getRealizedTo(it)
+                classes += mediator.getGeneralizedFrom(it)
+                classes += mediator.getGeneralizedTo(it)
+                classes += mediator.getUseFrom(it)
+                classes += mediator.getUseTo(it)
+                classes += mediator.getDependencyFrom(it)
+                classes += mediator.getDependencyTo(it)
             }
 
-            classes.removeAll(PrimitiveTypeRef.types())
-            classes.removeAll(node.types())
+            classes.removeAll(mediator.findTypes((Namespace) node))
 
-            classes.each {
-                otherNS << it.getNamespace()
+            classes.each { Type t ->
+                otherNS << mediator.findNamespace(t)
             }
 
             total = otherNS.size()

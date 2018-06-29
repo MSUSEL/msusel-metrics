@@ -25,8 +25,9 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.member.Method
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -63,12 +64,12 @@ class FunctionTemplateFactor extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0.0
 
-        if (node instanceof StructuralNode) {
-            def methods = node.methods()
-            total = methods.findAll { !methods.templateParams.isEmpty() }.size()
+        if (node instanceof Structure) {
+            List<Method> methods = mediator.findMethods(node)
+            total = methods.findAll { !it.typeParams.isEmpty() }.size()
             total /= methods.size()
         }
 

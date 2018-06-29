@@ -25,8 +25,8 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.structural.StructuralNode
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.structural.Structure
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -63,13 +63,13 @@ class HalsteadDifficulty extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0.0
 
-        if (node instanceof StructuralNode) {
-            double n1 = getMetric("Hn1", node)
-            double n2 = getMetric("Hn2", node)
-            double N2 = getMetric("HN2", node)
+        if (node instanceof Structure) {
+            double n1 = getMetric(node, "Hn1")
+            double n2 = getMetric(node, "Hn2")
+            double N2 = getMetric(node, "HN2")
 
             total = (n1 / 2) * (N2 / n2)
         }

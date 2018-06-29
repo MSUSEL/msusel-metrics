@@ -25,10 +25,10 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.codetree.node.AbstractNode
-import edu.montana.gsoc.msusel.codetree.node.Accessibility
-import edu.montana.gsoc.msusel.codetree.node.member.FieldNode
-import edu.montana.gsoc.msusel.codetree.node.type.TypeNode
+import edu.montana.gsoc.msusel.datamodel.Accessibility
+import edu.montana.gsoc.msusel.datamodel.measures.Measurable
+import edu.montana.gsoc.msusel.datamodel.member.Field
+import edu.montana.gsoc.msusel.datamodel.type.Type
 import edu.montana.gsoc.msusel.metrics.AbstractMetric
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -67,47 +67,55 @@ class AttributeHidingFactor extends AbstractMetric {
      * {@inheritDoc}
      */
     @Override
-    def measure(AbstractNode node) {
+    def measure(Measurable node) {
         double total = 0.0
 
-        if (node instanceof TypeNode) {
-            def classes = node.classes()
+        if (node instanceof Type) {
+            def classes = node.children
 
-            def isVisible = { FieldNode m ->
-                TypeNode t = tree.getMethodOwnerType(m)
+            def isVisible = { Field m ->
+                Type t = m.owner
 
-                Set<TypeNode> dc = [] dc += tree.getGeneralizedTo(t)
-                dc += tree.getRealizedTo(t)
+                Set<Type> dc = []
+                dc += mediator.getGeneralizedTo(t)
+                dc += mediator.getRealizedTo(t)
 
-                Set<TypeNode> pc = []
-                pc += tree.getNamespaceClasses(t.getNamespace())
+                Set<Type> pc = []
+                pc += mediator.getNamespaceClasses(mediator.findNamespace(t))
 
-                Set<TypeNode> mc = []
-                mc += tree.getModuleClasses(tree.getModuleForType(t))
+                Set<Type> mc = []
+                mc += mediator.getModuleClasses(mediator.getModuleForType(t))
 
-                Accessibility access = m.getAccessibility()
+                Accessibility access = ((Field) m).getAccess()
 
                 switch (access) {
                     case Accessibility.PUBLIC:
                         1
+                        break
                     case Accessibility.PRIVATE:
                         0
+                        break
                     case Accessibility.PROTECTED:
                         (double) dc.size() / (double) (classes.size() - 1)
+                        break
                     case Accessibility.PACKAGE:
                         (double) pc.size() / (double) (classes.size() - 1)
+                        break
                     case Accessibility.DEFAULT:
                         (double) pc.size() / (double) (classes.size() - 1)
+                        break
                     case Accessibility.INTERNAL:
                         (double) mc.size() / (double) (classes.size() - 1)
+                        break
                     case Accessibility.PROTECTED_INTERNAL:
                         (double) (dc.size() + mc.size()) / (double) (classes.size() - 1)
+                        break
                     default:
                         0
                 }
             }
 
-            def visibility = { FieldNode m ->
+            def visibility = { Field m ->
                 double totalVisible = 0.0
 
                 classes.each {
@@ -121,7 +129,7 @@ class AttributeHidingFactor extends AbstractMetric {
             double totalVis = 0.0
 
             classes.each {
-                totalAd += getMetric("NAD", it)
+                totalAd += getMetric(it, "NAD")
 
                 it.fields().each { field ->
                     totalVis += (1 - visibility(field))
