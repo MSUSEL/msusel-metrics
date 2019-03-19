@@ -25,15 +25,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Method
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Descendent Class Method Interaction Efferent Coupling",
@@ -52,7 +52,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Briand, Lionel C., John W. Daly, and Jurgen K. Wust. "A unified framework for coupling measurement in object-oriented systems." IEEE Transactions on software Engineering 25.1 (1999): 91-121.'
         ]
 )
-class DescendentClassMethodInteractionCoupling extends AbstractMetric {
+class DescendentClassMethodInteractionCoupling extends MetricEvaluator {
 
     /**
      *
@@ -70,13 +70,13 @@ class DescendentClassMethodInteractionCoupling extends AbstractMetric {
 
         if (node instanceof Type) {
             Set desc = []
-            desc += mediator.getAllDescendentClasses(node)
+            desc += node.getDescendentTypes()
 
             desc.each { Type d ->
-                d.methods().each { Method m ->
-                    if (!m.isOverriding(d, mediator)) {
+                d.getMethods().each { Method m ->
+                    if (!m.isOverriding(d, mediator)) { // FIXME
                         def p = m.getParams().collect { it.getType() }
-                        total += p.findAll { it.ref.refKey == node.key() }.size()
+                        total += p.findAll { it.reference.refKey == node.getRefKey() }.size()
                     }
                 }
             }

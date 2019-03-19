@@ -25,15 +25,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Method
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -51,7 +51,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class CouplingDispersion extends AbstractMetric {
+class CouplingDispersion extends MetricEvaluator {
 
     /**
      *
@@ -69,8 +69,8 @@ class CouplingDispersion extends AbstractMetric {
 
         if (node instanceof Method) {
             Set<Type> parentClasses = new HashSet<>()
-            mediator.getMethodsCalledFrom(node).each {
-                Type parent = ((Method) node).owner
+            node.getMethodsCalled().each {
+                Type parent = (Type) ((Method) node).parent
 
                 if (parent) {
                     parentClasses.add(parent)

@@ -25,14 +25,14 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Coupling Between Objects",
@@ -52,7 +52,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Briand, Lionel C., John W. Daly, and Jurgen K. Wust. "A unified framework for coupling measurement in object-oriented systems." IEEE Transactions on software Engineering 25.1 (1999): 91-121.'
         ]
 )
-class CouplingBetweenObjects extends AbstractMetric {
+class CouplingBetweenObjects extends MetricEvaluator {
 
     /**
      *
@@ -70,13 +70,13 @@ class CouplingBetweenObjects extends AbstractMetric {
 
         if (node instanceof Type) {
             Set couplings = []
-            couplings += mediator.getAggregatedFrom(node)
-            couplings += mediator.getComposedFrom(node)
-            couplings += mediator.getAssociatedFrom(node)
-            couplings += mediator.getRealizedFrom(node)
-            couplings += mediator.getGeneralizedFrom(node)
-            couplings += mediator.getDependencyFrom(node)
-            couplings += mediator.getUseFrom(node)
+            couplings += node.getAggregatedFrom()
+            couplings += node.getComposedFrom()
+            couplings += node.getAssociatedFrom()
+            couplings += node.getRealizedBy()
+            couplings += node.getGeneralizedBy()
+            couplings += node.getDependencyFrom()
+            couplings += node.getUseFrom()
 
             couplings.remove(node)
 

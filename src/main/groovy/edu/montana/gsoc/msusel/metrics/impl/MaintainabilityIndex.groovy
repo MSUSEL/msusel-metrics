@@ -25,16 +25,16 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.structural.Structure
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Structure
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 import static org.apache.commons.math3.util.FastMath.log
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -52,7 +52,7 @@ import static org.apache.commons.math3.util.FastMath.log
                 ''
         ]
 )
-class MaintainabilityIndex extends AbstractMetric {
+class MaintainabilityIndex extends MetricEvaluator {
 
     /**
      *

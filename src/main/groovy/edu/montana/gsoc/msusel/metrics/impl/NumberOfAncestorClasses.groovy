@@ -25,15 +25,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 import org.apache.commons.lang3.tuple.Pair
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -51,7 +51,7 @@ import org.apache.commons.lang3.tuple.Pair
                 ''
         ]
 )
-class NumberOfAncestorClasses extends AbstractMetric {
+class NumberOfAncestorClasses extends MetricEvaluator {
 
     /**
      *
@@ -76,11 +76,11 @@ class NumberOfAncestorClasses extends AbstractMetric {
                 Type type = pair.right
                 Integer current = pair.left
 
-                mediator.getRealizedFrom(type).each { Type t ->
+                type.getRealizedBy().each { Type t ->
                     q.offer(Pair.of(current + 1, t))
                 }
 
-                mediator.getGeneralizedFrom(type).each {
+                type.getGeneralizedBy().each {
                     q.offer(Pair.of(current + 1, it))
                 }
 

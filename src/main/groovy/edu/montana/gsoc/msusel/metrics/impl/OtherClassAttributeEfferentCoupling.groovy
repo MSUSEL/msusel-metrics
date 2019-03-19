@@ -25,14 +25,14 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Other Class Attribute Interaction Efferent Coupling",
@@ -51,7 +51,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Briand, Lionel C., John W. Daly, and Jurgen K. Wust. "A unified framework for coupling measurement in object-oriented systems." IEEE Transactions on software Engineering 25.1 (1999): 91-121.'
         ]
 )
-class OtherClassAttributeEfferentCoupling extends AbstractMetric {
+class OtherClassAttributeEfferentCoupling extends MetricEvaluator {
 
     /**
      *
@@ -69,17 +69,17 @@ class OtherClassAttributeEfferentCoupling extends AbstractMetric {
 
         if (node instanceof Type) {
             Set desc = []
-            desc += mediator.getAssociatedTo(node)
-            desc += mediator.getAggregatedTo(node)
-            desc += mediator.getComposedTo(node)
+            desc += node.getAssociatedTo()
+            desc += node.getAggregatedTo()
+            desc += node.getComposedTo()
 
-            desc.removeAll(mediator.getAllDescendentClasses(node))
+            desc.removeAll(node.getDescendentTypes())
 
             desc.each { d ->
                 def fieldTypes = d.fields.collect {
                     it.getType()
                 }
-                total += fieldTypes.findEach { it == node }
+                total += fieldTypes.findAll { it == node }
             }
         }
 

@@ -25,16 +25,16 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.pattern.PatternInstance
-import edu.montana.gsoc.msusel.datamodel.structural.Structure
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.PatternInstance
+import edu.isu.isuese.datamodel.Structure
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -52,7 +52,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class AfferentCoupling extends AbstractMetric {
+class AfferentCoupling extends MetricEvaluator {
 
     /**
      *
@@ -68,26 +68,28 @@ class AfferentCoupling extends AbstractMetric {
     def measure(Measurable node) {
         int total = 0
 
+        List<Type> types = []
         if (node instanceof Structure) {
-            List<Type> classes = mediator.findTypes(node)
-
-            Set<Type> couplings = new HashSet<>()
-            classes.each {
-                couplings.addAll(mediator.getRealizedTo(it))
-                couplings.addAll(mediator.getGeneralizedTo(it))
-                couplings.addAll(mediator.getAssociatedTo(it))
-                couplings.addAll(mediator.getAggregatedTo(it))
-                couplings.addAll(mediator.getComposedTo(it))
-                couplings.addAll(mediator.getDependencyTo(it))
-                couplings.addAll(mediator.getUseTo(it))
-            }
-
-            couplings.removeAll(classes)
-            total = couplings.size()
+            types = node.getTypes()
         }
         else if (node instanceof PatternInstance) {
-
+            PatternInstance pi = (PatternInstance) node
+            types = pi.getTypes()
         }
+
+        Set<Type> couplings = new HashSet<>()
+        types.each {
+            couplings.addAll(it.getRealizedBy())
+            couplings.addAll(it.getGeneralizedBy())
+            couplings.addAll(it.getAssociatedTo())
+            couplings.addAll(it.getAggregatedTo())
+            couplings.addAll(it.getComposedTo())
+            couplings.addAll(it.getDependencyTo())
+            couplings.addAll(it.getUseTo())
+        }
+
+        couplings.removeAll(types)
+        total = couplings.size()
 
         total
     }

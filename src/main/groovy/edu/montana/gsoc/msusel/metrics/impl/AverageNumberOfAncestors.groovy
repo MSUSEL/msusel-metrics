@@ -25,20 +25,20 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.structural.Structure
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Structure
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Average Number of Ancestors",
         primaryHandle = "ANA",
-        description = "The average number of classes from which a class inhertisinformation.It is computed by dtermingthe number of classes along all pathsfrom the 'root' class(es) to all classes in an inheritance structure",
+        description = "The average number of classes from which a class inherits .It is computed by determining the number of classes along all paths from the 'root' class(es) to all classes in an inheritance structure",
         properties = @MetricProperties(
                 range = "Positive Integers",
                 aggregation = [],
@@ -51,7 +51,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class AverageNumberOfAncestors extends AbstractMetric {
+class AverageNumberOfAncestors extends MetricEvaluator {
 
     /**
      *
@@ -69,8 +69,8 @@ class AverageNumberOfAncestors extends AbstractMetric {
 
         if (node instanceof Structure) {
             def map = [:]
-            def classes = mediator.findTypes(node)
-            classes.each { Type t ->
+            def classes = node.getTypes()
+            classes.each { Type ->
                 total += recursiveSearch(t, map)
             }
             total /= classes.size()
@@ -82,12 +82,12 @@ class AverageNumberOfAncestors extends AbstractMetric {
     private def recursiveSearch(Type type, map) {
         if (map[type]) {
             map[type]
-        } else if (mediator.getRealizedFrom(type).isEmpty() && mediator.getGeneralizedFrom(type).isEmpty()) {
+        } else if (type.getRealizedBy().isEmpty() && type.getGeneralizedBy().isEmpty()) {
             map[type] = 0
             map[type]
         } else {
-            int real = mediator.getRealizedFrom(type).collect {}
-            int gen = mediator.getGeneralizedFrom(type).collect {}
+            int real = type.getRealizedBy().collect {}
+            int gen = type.getGeneralizedBy().collect {}
             map[type] = 1 + real + gen
             map[type]
         }

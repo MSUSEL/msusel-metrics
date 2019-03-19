@@ -25,29 +25,29 @@
  */
 package edu.montana.gsoc.msusel.metrics
 
-import edu.montana.gsoc.msusel.datamodel.Component
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.structural.File
+import edu.isu.isuese.datamodel.Component
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.File
 
 import java.nio.file.Files
 import java.nio.file.Paths
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
-abstract class AbstractSourceMetric extends AbstractMetric {
+abstract class SourceMetricEvaluator extends MetricEvaluator {
 
     List<String> getLines(Measurable node) {
         if (node instanceof Component) {
             File f = mediator.findParentFile(node)
 
-            def x = Files.readAllLines(Paths.get(f.name()))
+            def x = Files.readAllLines(Paths.get(f.getName()))
             int start = node.start - 1
             int end = node.end - 1
 
             x[start..end]
         } else if (node instanceof File) {
-            Files.readAllLines(Paths.get(node.name()))
+            Files.readAllLines(Paths.get(node.getName()))
         } else {
             []
         }

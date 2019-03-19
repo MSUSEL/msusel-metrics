@@ -25,15 +25,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Method
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Response for a Class",
@@ -52,7 +52,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Chidamber, Shyam R., and Chris F. Kemerer. "A metrics suite for object oriented design." IEEE Transactions on software engineering 20.6 (1994): 476-493.'
         ]
 )
-class ResponseForAClass extends AbstractMetric {
+class ResponseForAClass extends MetricEvaluator {
 
     /**
      *
@@ -69,10 +69,10 @@ class ResponseForAClass extends AbstractMetric {
         int total = 0
 
         if (node instanceof Type) {
-            Set methods = node.methods()
+            Set methods = node.getMethods()
             Set called = []
             methods.each { Method m ->
-                called << mediator.getMethodsCalledFrom(m)
+                called << m.getMethodsCalled(m)
             }
 
             called += methods

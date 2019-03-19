@@ -25,17 +25,17 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.pattern.PatternInstance
-import edu.montana.gsoc.msusel.datamodel.structural.File
-import edu.montana.gsoc.msusel.datamodel.structural.Namespace
-import edu.montana.gsoc.msusel.datamodel.structural.Structure
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.File
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Namespace
+import edu.isu.isuese.datamodel.PatternInstance
+import edu.isu.isuese.datamodel.Structure
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -53,7 +53,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class TotalNumberOfAttributes extends AbstractMetric {
+class TotalNumberOfAttributes extends MetricEvaluator {
 
     /**
      *
@@ -70,19 +70,19 @@ class TotalNumberOfAttributes extends AbstractMetric {
         int total = 0
 
         if (node instanceof Structure) {
-            mediator.findTypes(node).each {
+            node.getTypes().each {
                 total += getMetric(it, "NOA")
             }
         } else if (node instanceof PatternInstance) {
-            mediator.findTypes(node).each {
+            node.getTypes().each { // FIXME
                 total += getMetric(it, "NOA")
             }
         } else if (node instanceof File) {
-            mediator.findTypes(node).each {
+            node.getTypes().each {
                 total += getMetric(it, "NOA")
             }
         } else if (node instanceof Namespace) {
-            mediator.findTypes(node).each {
+            node.getTypes().each {
                 total += getMetric(it, "NOA")
             }
         }

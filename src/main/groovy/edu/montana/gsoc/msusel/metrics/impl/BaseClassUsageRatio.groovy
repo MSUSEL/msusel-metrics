@@ -25,17 +25,17 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.Accessibility
-import edu.montana.gsoc.msusel.datamodel.Modifier
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Method
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Accessibility
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.Modifier
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -53,7 +53,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class BaseClassUsageRatio extends AbstractMetric {
+class BaseClassUsageRatio extends MetricEvaluator {
 
     /**
      *
@@ -73,11 +73,11 @@ class BaseClassUsageRatio extends AbstractMetric {
             Set inheritedAttrs = findInheritedAttributes(node)
 
             Set usedAttrs = []
-            ((Type) node).methods().each { Method m ->
-                usedAttrs += mediator.getFieldsUsedBy(m)
+            ((Type) node).getMethods().each { Method m ->
+                usedAttrs += m.getFieldsUsed()
             }
 
-            double usage = inheritedAttrs.intersect(usedAttrs).size()
+            double usage = inheritedAttrs.intersect(usedAttrs).size() // FIXME
             double iaSize = inheritedAttrs.size()
 
             total = usage / iaSize
@@ -87,12 +87,12 @@ class BaseClassUsageRatio extends AbstractMetric {
     }
 
     private Set findInheritedAttributes(Type t) {
-        def parents = mediator.getAllParentClasses(t)
+        def parents = t.getParentTypes()
 
         def attrs = []
         parents.each {
-            attrs += it.fields().findAll {
-                it.access != Accessibility.PRIVATE && !it.modifiers.contains(Modifier.STATIC)
+            attrs += it.getFields().findAll {
+                it.accessibility != Accessibility.PRIVATE && !it.modifiers.contains(Modifier.STATIC) // FIXME
             }
         }
     }

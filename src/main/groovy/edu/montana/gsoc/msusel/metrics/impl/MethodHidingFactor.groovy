@@ -25,17 +25,17 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.Accessibility
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Method
-import edu.montana.gsoc.msusel.datamodel.structural.Structure
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Accessibility
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.Structure
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Method Hiding Factor",
@@ -55,7 +55,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Abreu, F. Brito, Miguel Goulão, and Rita Esteves. "Toward the design quality evaluation of object-oriented software systems." Proceedings of the 5th International Conference on Software Quality, Austin, Texas, USA. 1995.'
         ]
 )
-class MethodHidingFactor extends AbstractMetric {
+class MethodHidingFactor extends MetricEvaluator {
 
     /**
      *
@@ -72,22 +72,22 @@ class MethodHidingFactor extends AbstractMetric {
         double total = 0.0
 
         if (node instanceof Structure) {
-            List<Type> classes = mediator.findTypes(node)
+            List<Type> classes = node.getTypes()
 
             def isVisible = { Method m ->
-                Type t = m.owner
+                Type t = (Type) m.parent
 
                 Set<Type> dc = []
-                dc += mediator.getGeneralizedTo(t)
-                dc += mediator.getRealizedTo(t)
+                dc += t.getGeneralizes()
+                dc += t.getRealizes()
 
                 Set<Type> pc = []
-                pc += mediator.getNamespaceClasses(mediator.findNamespace(t))
+                pc += mediator.getNamespaceClasses(mediator.findNamespace(t)) // FIXME
 
                 Set<Type> mc = []
-                mc += mediator.getModuleClasses(mediator.findModule(t))
+                mc += mediator.getModuleClasses(mediator.findModule(t)) // FIXME
 
-                Accessibility access = m.getAccess()
+                Accessibility access = m.getAccessibility()
 
                 switch (access) {
                     case Accessibility.PUBLIC:
@@ -127,7 +127,7 @@ class MethodHidingFactor extends AbstractMetric {
                 double mo = getMetric(it, "NMO")
                 totalMd += mn + mo
 
-                it.methods().each { method ->
+                it.getMethods().each { method ->
                     totalVis += (1 - visibility(method))
                 }
             }

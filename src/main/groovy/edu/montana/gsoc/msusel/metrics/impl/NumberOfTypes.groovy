@@ -25,18 +25,17 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.measures.Measure
-import edu.montana.gsoc.msusel.datamodel.measures.MeasuresTable
-import edu.montana.gsoc.msusel.datamodel.structural.File
-import edu.montana.gsoc.msusel.datamodel.structural.Namespace
-import edu.montana.gsoc.msusel.datamodel.structural.Structure
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.File
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Namespace
+import edu.isu.isuese.datamodel.Structure
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Number of Types",
@@ -54,7 +53,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class NumberOfTypes extends AbstractMetric {
+class NumberOfTypes extends MetricEvaluator {
 
     /**
      *
@@ -71,15 +70,14 @@ class NumberOfTypes extends AbstractMetric {
         int total = 0
 
         if (node instanceof Structure) {
-            total = mediator.findTypes(node).size()
+            total = node.getTypes().size()
         } else if (node instanceof File) {
-            total = mediator.findTypes(node).size()
+            total = node.getTypes().size()
         } else if (node instanceof Namespace) {
-            total = mediator.findTypes(node).size()
+            total = node.getTypes().size()
         }
 
-        MeasuresTable.store(Measure.of(this).on(node).withValue(total)) // TODO Fix this
-        total
+        Measure.of(this).on(node).withValue(total).store()) // TODO Fix this
     }
 
 }

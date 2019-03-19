@@ -25,16 +25,16 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.Accessibility
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Constructor
-import edu.montana.gsoc.msusel.datamodel.member.Destructor
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Accessibility
+import edu.isu.isuese.datamodel.Constructor
+import edu.isu.isuese.datamodel.Destructor
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Data Access Metric",
@@ -52,12 +52,12 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Bansiya, Jagdish, and Carl G. Davis. "A hierarchical model for object-oriented design quality assessment." IEEE Transactions on software engineering 28.1 (2002): 4-17.'
         ]
 )
-class DataAccessMetric extends AbstractMetric {
+class DataAccessMetricEvaluator extends MetricEvaluator {
 
     /**
      *
      */
-    DataAccessMetric() {
+    DataAccessMetricEvaluator() {
         // TODO Auto-generated constructor stub
     }
 
@@ -69,9 +69,9 @@ class DataAccessMetric extends AbstractMetric {
         double total = 0.0
 
         if (node instanceof Type) {
-            def methods = node.methods().findAll { !(it instanceof Constructor) && !(it instanceof Destructor) }
+            def methods = node.getMethods().findAll { !(it instanceof Constructor) && !(it instanceof Destructor) }
             total = methods.findAll {
-                it.access == Accessibility.PUBLIC
+                it.accessibility == Accessibility.PUBLIC
             }.size()
 
             total /= methods.size()

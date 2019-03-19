@@ -25,15 +25,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Method
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Ancestor Class Method Interaction Coupling",
@@ -52,7 +52,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Briand, Lionel C., John W. Daly, and Jurgen K. Wust. "A unified framework for coupling measurement in object-oriented systems." IEEE Transactions on software Engineering 25.1 (1999): 91-121.'
         ]
 )
-class AncestorClassMethodInteractionCoupling extends AbstractMetric {
+class AncestorClassMethodInteractionCoupling extends MetricEvaluator {
 
     /**
      *
@@ -70,10 +70,10 @@ class AncestorClassMethodInteractionCoupling extends AbstractMetric {
 
         if (node instanceof Type) {
             Set ansc = []
-            ansc += mediator.getAllAncestorClasses(node)
+            ansc += node.getAncestorTypes()
 
             node.methods().each { Method m ->
-                if (!m.isOverriding((Type) node, mediator)) {
+                if (!m.isOverriding((Type) node)) {
                     def p = m.getParams().collect { it.getType() }
                     total += p.findAll { ansc.contains(it) }.size()
                 }

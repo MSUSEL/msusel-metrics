@@ -25,15 +25,16 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.Modifier
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Modifier
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Number of Class Variables",
@@ -52,7 +53,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Hudli, Raghu V., Curtis L. Hoskins, and Anand V. Hudli. "Software metrics for object-oriented designs." Computer Design: VLSI in Computers and Processors, 1994. ICCD\'94. Proceedings., IEEE International Conference on. IEEE, 1994.'
         ]
 )
-class NumberOfClassVariables extends AbstractMetric {
+class NumberOfClassVariables extends MetricEvaluator {
 
     /**
      *
@@ -69,12 +70,12 @@ class NumberOfClassVariables extends AbstractMetric {
         int total = 0
 
         if (node instanceof Type) {
-            total = node.fields().findAll {
-                it.modifiers.contains(Modifier.STATIC) || it.modifiers.contains(Modifier.CONST)
+            total = node.getFields().findAll {
+                it.hasModifier(Modifier.Values.STATIC) || it.hasModifier(Modifier.Values.CONST)
             }.size()
         }
 
-        total
+        Measure.of(this).on(node).withValue(total).store())
     }
 
 }

@@ -25,15 +25,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.structural.Namespace
-import edu.montana.gsoc.msusel.datamodel.structural.Structure
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Structure
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -51,7 +51,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class NumberOfFiles extends AbstractMetric {
+class NumberOfFiles extends MetricEvaluator {
 
     /**
      *
@@ -68,12 +68,10 @@ class NumberOfFiles extends AbstractMetric {
         int total = 0
 
         if (node instanceof Structure) {
-            total = mediator.findFiles(node).size()
-        } else if (node instanceof Namespace) {
-            total = mediator.findFiles((Namespace) node).size()
+            total = node.getFiles().size()
         }
 
-        total
+        Measure.of(this).on(node).withValue(total).store())
     }
 
 }

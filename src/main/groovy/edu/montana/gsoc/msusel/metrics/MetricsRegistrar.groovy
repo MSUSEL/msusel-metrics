@@ -28,6 +28,10 @@ package edu.montana.gsoc.msusel.metrics
 import edu.montana.gsoc.msusel.metrics.annotations.MetricDefinition
 import org.reflections.Reflections
 
+/**
+ * @author Isaac Griffith
+ * @version 1.3.0
+ */
 @Singleton
 class MetricsRegistrar {
 
@@ -52,7 +56,7 @@ class MetricsRegistrar {
         }
     }
 
-    Class<? extends AbstractMetric> getMetric(String primaryHandle) {
+    Class<? extends MetricEvaluator> getMetric(String primaryHandle) {
         if (register[primaryHandle])
             register[primaryHandle]
         else

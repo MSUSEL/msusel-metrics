@@ -25,5 +25,9 @@
  */
 package edu.montana.gsoc.msusel.metrics
 
+/**
+ * @author Isaac Griffith
+ * @version 1.3.0
+ */
 class MetricsAnalyzer {
 }

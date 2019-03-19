@@ -25,14 +25,14 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.structural.Structure
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Structure
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Attribute Inheritance Factor",
@@ -52,7 +52,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Abreu, F. Brito, Miguel Goulão, and Rita Esteves. "Toward the design quality evaluation of object-oriented software systems." Proceedings of the 5th International Conference on Software Quality, Austin, Texas, USA. 1995.'
         ]
 )
-class AttributeInheritanceFactor extends AbstractMetric {
+class AttributeInheritanceFactor extends MetricEvaluator {
 
     /**
      *
@@ -69,13 +69,13 @@ class AttributeInheritanceFactor extends AbstractMetric {
         double total = 0.0
 
         if (node instanceof Structure) {
-            def classes = mediator.findTypes(node)
+            def classes = node.getTypes()
 
             double totalAi = 0.0
             double totalAa = 0.0
 
             classes.each {
-                double ai = getMetric(it, "NIA")
+                double ai = getMetric(it, "NIA") // FIXME
                 double ad = getMetric(it, "NAD")
                 double aa = ai + ad
 

@@ -25,15 +25,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.Accessibility
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Accessibility
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -51,7 +51,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class EncapsulationRatio extends AbstractMetric {
+class EncapsulationRatio extends MetricEvaluator {
 
     /**
      *
@@ -68,8 +68,8 @@ class EncapsulationRatio extends AbstractMetric {
         double total = 0.0
 
         if (node instanceof Type) {
-            def fields = node.fields()
-            total = fields.findAll { it.getAccess() == Accessibility.PRIVATE }.size()
+            def fields = node.getFields()
+            total = fields.findAll { it.getAccessibility() == Accessibility.PRIVATE }.size()
             total /= fields.size()
         }
 

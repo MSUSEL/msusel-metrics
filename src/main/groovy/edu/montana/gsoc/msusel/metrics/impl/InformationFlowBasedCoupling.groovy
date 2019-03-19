@@ -25,16 +25,16 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Method
-import edu.montana.gsoc.msusel.datamodel.structural.Structure
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.Structure
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Information Flow Based Coupling",
@@ -53,7 +53,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Briand, Lionel C., John W. Daly, and Jurgen K. Wust. "A unified framework for coupling measurement in object-oriented systems." IEEE Transactions on software Engineering 25.1 (1999): 91-121.'
         ]
 )
-class InformationFlowBasedCoupling extends AbstractMetric {
+class InformationFlowBasedCoupling extends MetricEvaluator {
 
     /**
      *
@@ -70,8 +70,8 @@ class InformationFlowBasedCoupling extends AbstractMetric {
         int total = 0
 
         if (node instanceof Method) {
-            def others = mediator.getMethodsCalledFrom(node).findAll { Method m ->
-                m.owner != ((Method) node).owner
+            def others = node.getMethodsCalled().findAll { Method m ->
+                m.parent != ((Method) node).parent
             }
 
             others.each { other ->
@@ -81,11 +81,11 @@ class InformationFlowBasedCoupling extends AbstractMetric {
                 total += nop * npi
             }
         } else if (node instanceof Type) {
-            node.methods().each {
+            node.getMethods().each {
                 total += getMetric(it, "ICP")
             }
         } else if (node instanceof Structure) {
-            mediator.findTypes(node).each {
+            node.getTypes().each {
                 total += getMetric(it, "ICP")
             }
         }

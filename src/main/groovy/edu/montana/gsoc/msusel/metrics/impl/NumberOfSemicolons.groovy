@@ -25,12 +25,12 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.metrics.AbstractSourceMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.montana.gsoc.msusel.metrics.SourceMetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Number of Semicolons",
@@ -48,7 +48,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Li, Wei, and Sallie Henry. "Object-oriented metrics that predict maintainability." Journal of systems and software 23.2 (1993): 111-122.'
         ]
 )
-class NumberOfSemicolons extends AbstractSourceMetric {
+class NumberOfSemicolons extends SourceMetricEvaluator {
 
     @Override
     def measure(Measurable node) {

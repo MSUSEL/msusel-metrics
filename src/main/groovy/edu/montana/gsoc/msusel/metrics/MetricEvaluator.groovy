@@ -25,25 +25,17 @@
  */
 package edu.montana.gsoc.msusel.metrics
 
-import com.google.inject.Inject
-import edu.montana.gsoc.msusel.datamodel.DataModelMediator
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.measures.MeasuresTable
-import edu.montana.gsoc.msusel.datamodel.measures.Metric
-import edu.montana.gsoc.msusel.datamodel.measures.MetricRepository
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Metric
+import edu.isu.isuese.datamodel.MetricRepository
 import edu.montana.gsoc.msusel.metrics.annotations.MetricDefinition
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
-abstract class AbstractMetric {
+abstract class MetricEvaluator {
 
-    @Inject
-    protected DataModelMediator mediator
-    @Inject
-    protected MeasuresTable table
-    
     abstract def measure(Measurable node)
 
     double getMetric(Measurable node, String handle) {
@@ -51,11 +43,7 @@ abstract class AbstractMetric {
 
     Metric toMetric(MetricRepository repo) {
         MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
-        Metric.builder()
-                .name(mdef.name())
-                .metricKey("${repo.repoKey}:${mdef.primaryHandle()}")
-                .description(mdef.description())
-                .repository(repo)
-                .create()
+        Metric.findOrCreateIt("name", mdef.name(), "metricKey", "${repo.repoKey}:${mdef.primaryHandle()}",
+                            "description", mdef.description, "evaluator", this.class.name)
     }
 }

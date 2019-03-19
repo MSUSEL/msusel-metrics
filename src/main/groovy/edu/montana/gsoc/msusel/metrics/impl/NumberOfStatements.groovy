@@ -25,19 +25,19 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.cfg.ControlFlowNode
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.measures.Measure
-import edu.montana.gsoc.msusel.datamodel.measures.MeasuresTable
-import edu.montana.gsoc.msusel.datamodel.member.Method
-import edu.montana.gsoc.msusel.datamodel.structural.Structure
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.Structure
+import edu.isu.isuese.datamodel.Type
+import edu.isu.isuese.datamodel.cfg.ControlFlowNode
+import edu.isu.isuese.datamodel.cfg.StatementType
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Number of Statements",
@@ -55,7 +55,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Lorenz, Mark, and Jeff Kidd. Object-oriented software metrics: a practical guide. Prentice-Hall, Inc., 1994.'
         ]
 )
-class NumberOfStatements extends AbstractMetric {
+class NumberOfStatements extends MetricEvaluator {
 
     /**
      * {@inheritDoc}
@@ -69,13 +69,12 @@ class NumberOfStatements extends AbstractMetric {
         } else if (node instanceof Type) {
             total = measureType(node)
         } else if (node instanceof Structure) {
-            node.types().each { Type type ->
+            node.getTypes().each { Type type ->
                 total += measureType(type)
             }
         }
 
-        MeasuresTable.instance.store(Measure.of(this).on(node).withValue(total))
-        total
+        Measure.of(this).on(node).withValue(total).store()) // FIXME
     }
 
     static measureMethod(Method method) {
@@ -89,7 +88,7 @@ class NumberOfStatements extends AbstractMetric {
 
     static measureType(Type type) {
         int total = 0
-        type.methods().each { Method method ->
+        type.getMethods().each { Method method ->
             total += measureMethod(method)
         }
         total

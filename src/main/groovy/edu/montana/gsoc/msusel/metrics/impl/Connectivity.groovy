@@ -25,18 +25,19 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
+import com.google.common.collect.Sets
 import com.google.common.graph.GraphBuilder
 import com.google.common.graph.MutableGraph
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Field
-import edu.montana.gsoc.msusel.datamodel.member.Method
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Field
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -54,7 +55,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class Connectivity extends AbstractMetric {
+class Connectivity extends MetricEvaluator {
 
     /**
      *
@@ -71,10 +72,10 @@ class Connectivity extends AbstractMetric {
         double total = 0.0
 
         if (node instanceof Type) {
-            MutableGraph<Method> graph = GraphBuilder.undirected().build()
+            MutableGraph<Method> graph = GraphBuilder.undirected().build() // FIXME
 
-            Set<Method> methods = node.methods()
-            Set<Field> fields = node.fields()
+            Set<Method> methods = Sets.newHashSet(node.getMethods())
+            Set<Field> fields = Sets.newHashSet(node.getFields())
 
             methods.each { Method m ->
                 graph.addNode(m)
@@ -83,10 +84,10 @@ class Connectivity extends AbstractMetric {
             methods.each { Method m1 ->
                 methods.each { Method m2 ->
                     if (m1 != m2) {
-                        Set<Field> f1 = mediator.getFieldsUsedBy(m1).intersect(fields)
-                        Set<Field> f2 = mediator.getFieldsUsedBy(m2).intersect(fields)
-                        Set<Method> mm1 = mediator.getMethodsCalledFrom(m1)
-                        Set<Method> mm2 = mediator.getMethodsCalledFrom(m2)
+                        Set<Field> f1 = Sets.newHashSet(m1.getFieldsUsed()).intersect(fields)
+                        Set<Field> f2 = Sets.newHashSet(m2.getFieldsUsed()).intersect(fields)
+                        Set<Method> mm1 = Sets.newHashSet(m1.getMethodsCalled())
+                        Set<Method> mm2 = Sets.newHashSet(m2.getMethodsCalled())
 
                         if (!f1.isEmpty() && !f2.isEmpty() && !f1.intersect(f2).isEmpty() ||
                                 mm1.contains(m2) || mm2.contains(m1))

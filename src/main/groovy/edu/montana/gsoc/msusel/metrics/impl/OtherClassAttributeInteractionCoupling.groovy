@@ -25,14 +25,14 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.TypeReference
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.isu.isuese.datamodel.TypeRef
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Other Class Attribute Interaction Coupling",
@@ -51,7 +51,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Briand, Lionel C., John W. Daly, and Jurgen K. Wust. "A unified framework for coupling measurement in object-oriented systems." IEEE Transactions on software Engineering 25.1 (1999): 91-121.'
         ]
 )
-class OtherClassAttributeInteractionCoupling extends AbstractMetric {
+class OtherClassAttributeInteractionCoupling extends MetricEvaluator {
 
     /**
      *
@@ -68,12 +68,12 @@ class OtherClassAttributeInteractionCoupling extends AbstractMetric {
         int total = 0
 
         if (node instanceof Type) {
-            def fieldTypes = node.fields().collect {
+            def fieldTypes = node.getFields().collect {
                 it.getType()
             }
 
-            def parents = mediator.getAllParentClasses(node)
-            fieldTypes -= TypeReference.knownTypes()
+            def parents = node.getAncestorTypes()
+            fieldTypes -= TypeRef.knownTypes()
             fieldTypes -= parents
 
             total = fieldTypes.size()

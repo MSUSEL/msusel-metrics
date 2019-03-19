@@ -25,14 +25,14 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Class Size 2",
@@ -50,7 +50,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Li, Wei, and Sallie Henry. "Object-oriented metrics that predict maintainability." Journal of systems and software 23.2 (1993): 111-122.'
         ]
 )
-class Size2 extends AbstractMetric {
+class Size2 extends MetricEvaluator {
 
     /**
      *
@@ -67,8 +67,8 @@ class Size2 extends AbstractMetric {
         int total = 0
 
         if (node instanceof Type) {
-            int numMethods = node.methods().size()
-            int numFields = node.fields().size()
+            int numMethods = node.getMethods().size()
+            int numFields = node.getFields().size()
 
             total = numMethods + numFields
         }

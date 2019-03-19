@@ -25,15 +25,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.structural.Structure
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Structure
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -51,7 +51,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class EfferentCoupling extends AbstractMetric {
+class EfferentCoupling extends MetricEvaluator {
 
     /**
      *
@@ -68,17 +68,17 @@ class EfferentCoupling extends AbstractMetric {
         int total = 0
 
         if (node instanceof Structure) {
-            def classes = mediator.findTypes(node)
+            def classes = node.getTypes()
 
             Set<Type> couplings = new HashSet<>()
-            classes.each {
-                couplings.addAll(mediator.getRealizedFrom(it))
-                couplings.addAll(mediator.getGeneralizedFrom(it))
-                couplings.addAll(mediator.getAssociatedFrom(it))
-                couplings.addAll(mediator.getAggregatedFrom(it))
-                couplings.addAll(mediator.getComposedFrom(it))
-                couplings.addAll(mediator.getDependencyFrom(it))
-                couplings.addAll(mediator.getUseFrom(it))
+            classes.each { Type type ->
+                couplings.addAll(type.getRealizedBy())
+                couplings.addAll(type.getGeneralizedBy())
+                couplings.addAll(type.getAssociatedFrom())
+                couplings.addAll(type.getAggregatedFrom())
+                couplings.addAll(type.getComposedFrom())
+                couplings.addAll(type.getDependencyFrom())
+                couplings.addAll(type.getUseFrom())
             }
 
             couplings.removeAll(classes)

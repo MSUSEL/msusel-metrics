@@ -25,17 +25,17 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Method
-import edu.montana.gsoc.msusel.datamodel.structural.File
-import edu.montana.gsoc.msusel.datamodel.structural.Structure
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.Structure
+import edu.isu.isuese.datamodel.Type
+import edu.isu.isuese.datamodel.File
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -53,7 +53,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class LogicalLinesOfCode extends AbstractMetric {
+class LogicalLinesOfCode extends MetricEvaluator {
 
     /**
      *
@@ -72,17 +72,17 @@ class LogicalLinesOfCode extends AbstractMetric {
         if (node instanceof Method) {
             total = node.getCfg().getGraph().nodes().size()
         } else if (node instanceof Type) {
-            total += node.fields().size()
-            node.methods().each {
+            total += node.getFields().size()
+            node.getMethods().each {
                 total += measure(it)
             }
         } else if (node instanceof File) {
-            total += node.imports.size()
-            mediator.findTypes(node).each {
+            total += node.getImports().size()
+            node.getTypes().each {
                 total += measure(it)
             }
         } else if (node instanceof Structure) {
-            mediator.findTypes((Structure) node).each {
+            node.getTypes().each {
                 total += measure(it)
             }
         }

@@ -25,18 +25,19 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.Accessibility
-import edu.montana.gsoc.msusel.datamodel.Modifier
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Constructor
-import edu.montana.gsoc.msusel.datamodel.member.Destructor
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Accessibility
+import edu.isu.isuese.datamodel.Constructor
+import edu.isu.isuese.datamodel.Destructor
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Modifier
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Number of Polymorphic Methods",
@@ -54,7 +55,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Bansiya, Jagdish, and Carl G. Davis. "A hierarchical model for object-oriented design quality assessment." IEEE Transactions on software engineering 28.1 (2002): 4-17.'
         ]
 )
-class NumberOfPolymorphicMethods extends AbstractMetric {
+class NumberOfPolymorphicMethods extends MetricEvaluator {
 
     /**
      *
@@ -71,15 +72,15 @@ class NumberOfPolymorphicMethods extends AbstractMetric {
         int total = 0
 
         if (node instanceof Type) {
-            total = node.methods().findAll {
+            total = node.getMethods().findAll {
                 (!(it instanceof Constructor) && !(it instanceof Destructor)) &&
-                        it.getAccess() != Accessibility.PRIVATE &&
-                        (!it.modifiers.contains(Modifier.FINAL) &&
-                                !it.modifiers.contains(Modifier.STATIC))
+                        it.getAccessibility() != Accessibility.PRIVATE &&
+                        (!it.hasModifier(Modifier.Values.FINAL) &&
+                                !it.hasModifier(Modifier.Values.STATIC))
             }.size()
         }
 
-        total
+        Measure.of(this).on(node).withValue(total).store())
     }
 
 }

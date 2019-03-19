@@ -25,16 +25,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.measures.Measure
-import edu.montana.gsoc.msusel.datamodel.measures.MeasuresTable
-import edu.montana.gsoc.msusel.datamodel.structural.Structure
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Structure
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Number of Classes",
@@ -52,7 +51,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Hudli, Raghu V., Curtis L. Hoskins, and Anand V. Hudli. "Software metrics for object-oriented designs." Computer Design: VLSI in Computers and Processors, 1994. ICCD\'94. Proceedings., IEEE International Conference on. IEEE, 1994.'
         ]
 )
-class NumberOfClasses extends AbstractMetric {
+class NumberOfClasses extends MetricEvaluator {
 
     /**
      *
@@ -69,11 +68,10 @@ class NumberOfClasses extends AbstractMetric {
         int total = 0
 
         if (node instanceof Structure) {
-            total = node.types().findAll { it instanceof Class }.size()
+            total = node.getTypes().findAll { it instanceof Class }.size()
         }
 
-        MeasuresTable.instance.store(Measure.of(this).on(node).withValue(total)) // TODO Fix this
-        total
+        Measure.of(this).on(node).withValue(total).store())
     }
 
 }

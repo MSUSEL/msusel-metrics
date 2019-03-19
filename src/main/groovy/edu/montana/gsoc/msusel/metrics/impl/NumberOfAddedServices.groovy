@@ -25,15 +25,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.Accessibility
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Accessibility
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Number of Methods Added by a Subclass",
@@ -51,7 +51,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Lorenz, Mark, and Jeff Kidd. Object-oriented software metrics: a practical guide. Prentice-Hall, Inc., 1994.'
         ]
 )
-class NumberOfAddedServices extends AbstractMetric {
+class NumberOfAddedServices extends MetricEvaluator {
 
     /**
      *
@@ -69,16 +69,16 @@ class NumberOfAddedServices extends AbstractMetric {
 
         if (node instanceof Type) {
             List<Type> parents = []
-            parents += mediator.getAllParentClasses(node)
+            parents += node.getAncestorTypes()
 
             Set methods = []
             parents.each {
-                it.methods().each {
+                it.getMethods().each {
                     methods << it.signature()
                 }
             }
 
-            def pubMethods = ((Type) node).methods().findAll { it.access == Accessibility.PUBLIC }
+            def pubMethods = ((Type) node).getMethods().findAll { it.accessibility == Accessibility.PUBLIC }
             total = pubMethods.size()
 
             pubMethods.each {

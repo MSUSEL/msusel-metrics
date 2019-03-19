@@ -25,15 +25,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Method
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -51,7 +51,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class ForeignDataProviders extends AbstractMetric {
+class ForeignDataProviders extends MetricEvaluator {
 
     /**
      *
@@ -70,18 +70,18 @@ class ForeignDataProviders extends AbstractMetric {
         if (node instanceof Type) {
             def classes = []
             classes << node
-            classes += mediator.getAllParentClasses(node)
+            classes += node.getParentTypes()
 
             Set<Type> uses = []
             Set fdps = []
 
-            node.methods().each { Method m ->
-                uses += mediator.getFieldsUsedBy(m).collect { it.owner }
-                uses += mediator.getMethodsCalledFrom(m).collect { if (!classes.contains(it.owner) && (it.isAccessor() || it.isMutator())) it.owner } // TODO Fix this
+            node.getMethods().each { Method m ->
+                uses += m.getFieldsUsed().collect { (Type) it.parent }
+                uses += m.getMethodsCalled().collect { if (!classes.contains((Type) it.parent) && (it.isAccessor() || it.isMutator())) (Type) it.parent } // fixme
             }
 
             uses.each {
-                fdps << it.owner
+                fdps << (Type) it.parent
             }
 
             total = fdps.size()

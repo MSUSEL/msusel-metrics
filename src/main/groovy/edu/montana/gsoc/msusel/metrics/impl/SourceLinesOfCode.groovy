@@ -25,12 +25,12 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.metrics.AbstractLOCMetric
+import edu.montana.gsoc.msusel.metrics.LOCMetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Source Lines of Code",
@@ -48,13 +48,13 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Hudli, Raghu V., Curtis L. Hoskins, and Anand V. Hudli. "Software metrics for object-oriented designs." Computer Design: VLSI in Computers and Processors, 1994. ICCD\'94. Proceedings., IEEE International Conference on. IEEE, 1994.'
         ]
 )
-class SourceLinesOfCode extends AbstractLOCMetric {
+class SourceLinesOfCode extends LOCMetricEvaluator {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    def count(List<String> lines) {
+    double count(List<String> lines) {
         int total = 0
         boolean blockComment = false
 

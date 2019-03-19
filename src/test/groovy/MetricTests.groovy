@@ -29,7 +29,7 @@ import edu.montana.gsoc.msusel.codetree.node.structural.Project
 import edu.montana.gsoc.msusel.codetree.node.type.Type
 import edu.montana.gsoc.msusel.codetree.parsers.JavaCodeTreeBuilder
 import edu.montana.gsoc.msusel.datamodel.measures.MeasuresTable
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.MetricsRegistrar
 import spock.lang.Shared
 import spock.lang.Specification
@@ -53,7 +53,7 @@ class MetricTests extends Specification {
         def metrics = ["NOS"]
 
         tree.getUtils().getMethods().each { method ->
-            AbstractMetric metric = reg.getMetric("NOS").newInstance()
+            MetricEvaluator metric = reg.getMetric("NOS").newInstance()
             metric.setTree(tree)
             metric.measure(method)
         }
@@ -62,7 +62,7 @@ class MetricTests extends Specification {
 
         tree.getUtils().getTypes().each { type ->
             metrics.each { handle ->
-                AbstractMetric metric = reg.getMetric(handle).newInstance()
+                MetricEvaluator metric = reg.getMetric(handle).newInstance()
                 metric.setTree(tree)
                 metric.measure(type)
             }
@@ -71,7 +71,7 @@ class MetricTests extends Specification {
         Project project = tree.getProject()
         project.files().each { File file ->
             metrics.each { handle ->
-                AbstractMetric metric = reg.getMetric(handle).newInstance()
+                MetricEvaluator metric = reg.getMetric(handle).newInstance()
                 metric.setTree(tree)
                 metric.measure(file)
             }
@@ -79,7 +79,7 @@ class MetricTests extends Specification {
 
         metrics += ["NC"]
         metrics.each { handle ->
-            AbstractMetric metric = reg.getMetric(handle).newInstance()
+            MetricEvaluator metric = reg.getMetric(handle).newInstance()
             metric.setTree(tree)
             metric.measure(project)
         }

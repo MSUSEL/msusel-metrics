@@ -25,14 +25,14 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Method
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -50,7 +50,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class BaseClassOverridingRatio extends AbstractMetric {
+class BaseClassOverridingRatio extends MetricEvaluator {
 
     /**
      *
@@ -67,15 +67,15 @@ class BaseClassOverridingRatio extends AbstractMetric {
         double total = 0.0
 
         if (node instanceof Type) {
-            def methods = node.methods()
+            def methods = node.getMethods()
             Set<Method> overriding = new HashSet<>()
 
-            mediator.getGeneralizedFrom(node).each {
-                overriding.addAll(findOverridingMethods(it, methods)) // TODO Implement this
+            node.getGeneralizedBy().each {
+                overriding.addAll(it.findOverridingMethods(methods))
             }
 
-            mediator.getRealizedFrom(node).each {
-                overriding.addAll(findOverridingMethods()) // TODO implement this
+            node.getRealizedBy().each {
+                overriding.addAll(it.findOverridingMethods())
             }
 
             total = (double) overriding.size() / (double) methods.size()

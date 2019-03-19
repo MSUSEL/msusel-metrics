@@ -25,15 +25,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 import org.apache.commons.lang3.tuple.Pair
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition( // AKA NLE
         name = "Depth of Inheritance Tree",
@@ -54,7 +54,7 @@ import org.apache.commons.lang3.tuple.Pair
                 'Lorenz, Mark, and Jeff Kidd. Object-oriented software metrics: a practical guide. Prentice-Hall, Inc., 1994.'
         ]
 )
-class DepthOfInheritanceTree extends AbstractMetric {
+class DepthOfInheritanceTree extends MetricEvaluator {
 
     /**
      *
@@ -84,11 +84,11 @@ class DepthOfInheritanceTree extends AbstractMetric {
                     max = current
                 }
 
-                mediator.getRealizedFrom(type).each {
+                type.getRealizedBy().each {
                     q.offer(Pair.of(current + 1, it))
                 }
 
-                mediator.getGeneralizedFrom(type).each {
+                type.getGeneralizedBy().each {
                     q.offer(Pair.of(current + 1, it))
                 }
             }

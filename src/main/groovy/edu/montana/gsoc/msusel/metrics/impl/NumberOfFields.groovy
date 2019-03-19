@@ -25,14 +25,13 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.measures.Measure
-import edu.montana.gsoc.msusel.datamodel.measures.MeasuresTable
-import edu.montana.gsoc.msusel.datamodel.structural.File
-import edu.montana.gsoc.msusel.datamodel.structural.Namespace
-import edu.montana.gsoc.msusel.datamodel.structural.Structure
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Namespace
+import edu.isu.isuese.datamodel.Structure
+import edu.isu.isuese.datamodel.Type
+import edu.isu.isuese.datamodel.File
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
@@ -55,7 +54,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class NumberOfFields extends AbstractMetric {
+class NumberOfFields extends MetricEvaluator {
 
     /**
      *
@@ -72,23 +71,22 @@ class NumberOfFields extends AbstractMetric {
         int total = 0
 
         if (node instanceof Type) {
-            total = node.fields().size()
+            total = node.getFields().size()
         } else if (node instanceof File) {
-            mediator.findTypes((File) node).each { Type type ->
-                total += type.fields().size()
+            ((File) node).getTypes().each { Type type ->
+                total += type.getFields().size()
             }
         } else if (node instanceof Namespace) {
-            mediator.findTypes((Namespace) node).each { Type type ->
-                total += type.fields().size()
+            ((Namespace) node).getTypes().each { Type type ->
+                total += type.getFields().size()
             }
         } else if (node instanceof Structure) {
-            mediator.findTypes((Structure) node).each { Type type ->
-                total += type.fields().size()
+            node.getTypes().each { Type type ->
+                total += type.getFields().size()
             }
         }
 
-        MeasuresTable.instance.store(Measure.of(this).on(node).withValue(total)) // TODO Fix this
-        total
+        Measure.of(this).on(node).withValue(total).store())
     }
 
 }

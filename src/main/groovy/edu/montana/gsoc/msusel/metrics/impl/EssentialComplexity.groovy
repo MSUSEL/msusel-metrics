@@ -28,16 +28,16 @@ package edu.montana.gsoc.msusel.metrics.impl
 import com.google.common.graph.Graph
 import com.google.common.graph.GraphBuilder
 import com.google.common.graph.MutableGraph
-import edu.montana.gsoc.msusel.datamodel.cfg.ControlFlowNode
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Method
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.cfg.ControlFlowNode
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 import edu.montana.gsoc.msusel.metrics.cfgredux.CfgReducer
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -55,7 +55,7 @@ import edu.montana.gsoc.msusel.metrics.cfgredux.CfgReducer
                 ''
         ]
 )
-class EssentialComplexity extends AbstractMetric {
+class EssentialComplexity extends MetricEvaluator {
 
     /**
      *
@@ -77,14 +77,14 @@ class EssentialComplexity extends AbstractMetric {
             def nodes = []
             Graph<ControlFlowNode> cfg = node.getCfg().getGraph()
             nodes += cfg.nodes()
-            (1..cfg.nodes().size()) {
+            (1..cfg.nodes().size()) { // FIXME
                 graph.addNode(it)
                 map[nodes[it - 1]] = it
             }
 
             nodes.each { pred ->
                 cfg.successors().each { succ ->
-                    graph.putEdge(map[pred], map[succ])
+                    graph.putEdge(map[pred], map[succ]) // FIXME
                 }
             }
 

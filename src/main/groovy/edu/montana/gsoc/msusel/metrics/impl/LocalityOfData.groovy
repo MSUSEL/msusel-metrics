@@ -25,12 +25,13 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
+
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -48,8 +49,11 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class LocalityOfData extends AbstractMetric {
+class LocalityOfData extends MetricEvaluator {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     def measure(Measurable node) {
         return null

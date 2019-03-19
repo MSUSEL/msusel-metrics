@@ -25,14 +25,14 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Method
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Method
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -50,7 +50,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class NumberOfMethodCalls extends AbstractMetric {
+class NumberOfMethodCalls extends MetricEvaluator {
 
     /**
      *
@@ -67,7 +67,7 @@ class NumberOfMethodCalls extends AbstractMetric {
         int total = 0
 
         if (node instanceof Method) {
-            total = mediator.getMethodsCallingMethod(node).size()
+            total = node.getMethodsCalling().size()
         }
 
         total

@@ -30,6 +30,10 @@ import com.google.gson.reflect.TypeToken
 
 import java.lang.reflect.Type
 
+/**
+ * @author Isaac Griffith
+ * @version 1.3.0
+ */
 @Singleton
 class LoCProfileManager {
 
@@ -112,7 +116,7 @@ class LoCProfileManager {
         List<LoCProfile> profiles = gson.fromJson(gson.newJsonReader(new InputStreamReader(is)), list)
 
         for (LoCProfile profile : profiles) {
-            LoCProfileManager.instance.addProfile(profile)
+            instance.addProfile(profile)
         }
     }
 }

@@ -25,18 +25,20 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
+import com.google.common.collect.Sets
 import com.google.common.graph.GraphBuilder
 import com.google.common.graph.MutableGraph
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Field
-import edu.montana.gsoc.msusel.datamodel.member.Method
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Field
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -54,7 +56,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class LackOfCohesionAmongMethods3 extends AbstractMetric {
+class LackOfCohesionAmongMethods3 extends MetricEvaluator {
 
     /**
      *
@@ -73,8 +75,8 @@ class LackOfCohesionAmongMethods3 extends AbstractMetric {
         if (node instanceof Type) {
             MutableGraph<Method> graph = GraphBuilder.undirected().build()
 
-            Set<Method> methods = node.methods()
-            Set<Field> fields = node.fields()
+            Set<Method> methods = node.getMethods()
+            Set<Field> fields = node.getFields()
 
             methods.each {
                 graph.addNode(it)
@@ -83,8 +85,8 @@ class LackOfCohesionAmongMethods3 extends AbstractMetric {
             methods.each { Method m1 ->
                 methods.each { Method m2 ->
                     if (m1 != m2) {
-                        Set f1 = mediator.getFieldsUsedBy(m1).intersect(fields)
-                        Set f2 = mediator.getFieldsUsedBy(m2).intersect(fields)
+                        Set f1 = Sets.newHashSet(m1.getFieldsUsed()).intersect(fields)
+                        Set f2 = Sets.newHashSet(m2.getFieldsUsed()).intersect(fields)
 
                         if (!f1.isEmpty() && !f2.isEmpty() && !f1.intersect(f2).isEmpty())
                             graph.putEdge(m1, m2)
@@ -98,7 +100,7 @@ class LackOfCohesionAmongMethods3 extends AbstractMetric {
                     identified.add(mnode)
                     Set adj = []
                     adj += graph.adjacentNodes(mnode)
-                    adj.removeAll(adj.intersect(identified))
+                    adj.removeAll(adj.intersect(identified)) // FIXME
 
                     Queue<Method> que = new ArrayDeque<>()
                     que.addAll(adj)
@@ -107,7 +109,7 @@ class LackOfCohesionAmongMethods3 extends AbstractMetric {
                         identified.add(current)
                         adj = []
                         adj += graph.adjacentNodes(mnode)
-                        adj.removeAll(adj.intersect(identified))
+                        adj.removeAll(adj.intersect(identified)) // FIXME
                         que.addAll(adj)
                     }
 
@@ -116,7 +118,7 @@ class LackOfCohesionAmongMethods3 extends AbstractMetric {
             }
         }
 
-        total
+        Measure.of(this).on(node).withValue(total).store())
     }
 
 }

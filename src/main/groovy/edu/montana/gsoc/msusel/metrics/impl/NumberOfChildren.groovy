@@ -25,14 +25,14 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Number of Children",
@@ -51,7 +51,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Chidamber, Shyam R., and Chris F. Kemerer. "A metrics suite for object oriented design." IEEE Transactions on software engineering 20.6 (1994): 476-493.'
         ]
 )
-class NumberOfChildren extends AbstractMetric {
+class NumberOfChildren extends MetricEvaluator {
 
     /**
      *
@@ -68,7 +68,7 @@ class NumberOfChildren extends AbstractMetric {
         int total = 0
 
         if (node instanceof Type) {
-            total = mediator.getRealizedTo(node).size() + mediator.getGeneralizedFrom(node).size()
+            total += node.getChildTypes().size()
         }
 
         total

@@ -28,15 +28,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.Modifier
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.structural.Structure
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Modifier
+import edu.isu.isuese.datamodel.Structure
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- *
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Average Number of Instance Methods per Class",
@@ -54,7 +54,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Lorenz, Mark, and Jeff Kidd. Object-oriented software metrics: a practical guide. Prentice-Hall, Inc., 1994.'
         ]
 )
-class AverageNumberOfInstanceMethodsPerClass extends AbstractMetric {
+class AverageNumberOfInstanceMethodsPerClass extends MetricEvaluator {
 
     /**
      *
@@ -71,8 +71,8 @@ class AverageNumberOfInstanceMethodsPerClass extends AbstractMetric {
         double total = 0.0
 
         if (node instanceof Structure) {
-            def methods = mediator.findMethods(node).findAll { !it.modifiers.contains(Modifier.STATIC) }
-            total = (double) methods.size() / (double) mediator.findTypes(node).size()
+            def methods = node.getAllMethods().findAll { !it.modifiers.contains(Modifier.STATIC) } // FIXME
+            total = (double) methods.size() / (double) node.getTypes().size()
         }
 
         total

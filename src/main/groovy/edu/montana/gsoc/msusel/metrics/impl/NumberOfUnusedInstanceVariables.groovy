@@ -25,17 +25,17 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.Modifier
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Field
-import edu.montana.gsoc.msusel.datamodel.member.Method
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Field
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.Modifier
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -53,7 +53,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class NumberOfUnusedInstanceVariables extends AbstractMetric {
+class NumberOfUnusedInstanceVariables extends MetricEvaluator {
 
     /**
      *
@@ -71,14 +71,14 @@ class NumberOfUnusedInstanceVariables extends AbstractMetric {
 
         if (node instanceof Type) {
             Set<Field> fields = [] as Set
-            fields += node.fields().findAll {
-                !it.modifiers.contains(Modifier.STATIC) && !it.modifiers.contains(Modifier.CONST)
+            fields += node.getFields().findAll {
+                !it.modifiers.contains(Modifier.STATIC) && !it.modifiers.contains(Modifier.CONST) // FIXME
             }
 
             Set usedFields = []
-            node.methods().each { Method m ->
+            node.getMethods().each { Method m ->
                 Set temp = []
-                temp += mediator.getFieldsUsedBy(m)
+                temp += m.getFieldsUsed()
                 usedFields += fields.intersect(temp)
             }
 

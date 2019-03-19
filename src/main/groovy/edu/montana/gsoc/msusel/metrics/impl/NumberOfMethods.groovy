@@ -25,15 +25,14 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.measures.Measure
-import edu.montana.gsoc.msusel.datamodel.measures.MeasuresTable
-import edu.montana.gsoc.msusel.datamodel.pattern.PatternInstance
-import edu.montana.gsoc.msusel.datamodel.structural.File
-import edu.montana.gsoc.msusel.datamodel.structural.Namespace
-import edu.montana.gsoc.msusel.datamodel.structural.Structure
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Namespace
+import edu.isu.isuese.datamodel.PatternInstance
+import edu.isu.isuese.datamodel.Structure
+import edu.isu.isuese.datamodel.File
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
@@ -57,7 +56,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Li, Wei, and Sallie Henry. "Object-oriented metrics that predict maintainability." Journal of systems and software 23.2 (1993): 111-122.'
         ]
 )
-class NumberOfMethods extends AbstractMetric {
+class NumberOfMethods extends MetricEvaluator {
 
     /**
      *
@@ -74,27 +73,26 @@ class NumberOfMethods extends AbstractMetric {
         int total = 0
 
         if (node instanceof Type) {
-            total = node.methods().size()
+            total = node.getMethods().size()
         } else if (node instanceof Structure) {
-            mediator.findTypes(node).each { Type type ->
-                total += type.methods().size()
+            node.getTypes(node).each { Type type ->
+                total += type.getMethods().size()
             }
         } else if (node instanceof PatternInstance) {
-            mediator.findTypes(node).each { Type type ->
-                total += type.methods().size()
+            node.getTypes().each { Type type -> // FIXME
+                total += type.getMethods().size()
             }
         } else if (node instanceof File) {
-            mediator.findTypes((File) node).each { Type type ->
-                total += type.methods().size()
+            node.getTypes().each { Type type ->
+                total += type.getMethods().size()
             }
         } else if (node instanceof Namespace) {
-            mediator.findTypes((Namespace) node).each { Type type ->
-                total += type.methods().size()
+            node.getTypes().each { Type type ->
+                total += type.getMethods().size()
             }
         }
 
-        MeasuresTable.instance.store(Measure.of(this).on(node).withValue(total)) // TODO Fix this
-        total
+        Measure.of(this).on(node).withValue(total).store())
     }
 
 }

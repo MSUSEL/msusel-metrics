@@ -25,12 +25,12 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.metrics.AbstractLOCMetric
+import edu.montana.gsoc.msusel.metrics.LOCMetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Blank Lines of Code",
@@ -48,13 +48,13 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class BlankLinesOfCode extends AbstractLOCMetric {
+class BlankLinesOfCode extends LOCMetricEvaluator {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    def count(List<String> lines) {
+    double count(List<String> lines) {
         int total = 0
 
         boolean blockComment = false

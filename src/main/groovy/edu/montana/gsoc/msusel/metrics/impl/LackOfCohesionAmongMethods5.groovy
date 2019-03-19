@@ -25,14 +25,16 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import com.google.common.collect.Sets
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -50,7 +52,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class LackOfCohesionAmongMethods5 extends AbstractMetric {
+class LackOfCohesionAmongMethods5 extends MetricEvaluator {
 
     /**
      *
@@ -67,19 +69,19 @@ class LackOfCohesionAmongMethods5 extends AbstractMetric {
         double total = 0
 
         if (node instanceof Type) {
-            double nm = node.methods().size()
-            double nf = node.fields().size()
+            double nm = node.getMethods().size()
+            double nf = node.getFields().size()
 
-            Set fields = node.fields()
+            Set fields = node.getFields()
             int count = 0
-            node.methods().each { m ->
-                count += mediator.getFieldsUsedBy(m).intersect(fields)
+            node.getMethods().each { m ->
+                count += Sets.newHashSet(m.getFieldsUsed()).intersect(fields) // FIXME
             }
 
             total = (nm - ((1 / nf) * count)) / (nm - 1)
         }
 
-        total
+        Measure.of(this).on(node).withValue(total).store())
     }
 
 }

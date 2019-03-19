@@ -25,15 +25,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.Accessibility
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Accessibility
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Number of Public Instance Methods",
@@ -51,7 +51,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Lorenz, Mark, and Jeff Kidd. Object-oriented software metrics: a practical guide. Prentice-Hall, Inc., 1994.'
         ]
 )
-class NumberOfPublicMethods extends AbstractMetric {
+class NumberOfPublicMethods extends MetricEvaluator {
 
     /**
      *
@@ -68,7 +68,7 @@ class NumberOfPublicMethods extends AbstractMetric {
         double total = 0.0
 
         if (node instanceof Type) {
-            total = node.methods().findAll { it.access == Accessibility.PUBLIC }.size()
+            total = node.getMethods().findAll { it.accessibility == Accessibility.PUBLIC }.size()
         }
 
         total

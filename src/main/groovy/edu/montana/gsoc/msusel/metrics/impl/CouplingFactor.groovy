@@ -25,15 +25,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.structural.Structure
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Structure
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Coupling Factor",
@@ -53,7 +53,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Abreu, F. Brito, Miguel Goulão, and Rita Esteves. "Toward the design quality evaluation of object-oriented software systems." Proceedings of the 5th International Conference on Software Quality, Austin, Texas, USA. 1995.'
         ]
 )
-class CouplingFactor extends AbstractMetric {
+class CouplingFactor extends MetricEvaluator {
 
     /**
      *
@@ -71,16 +71,16 @@ class CouplingFactor extends AbstractMetric {
 
         if (node instanceof Structure) {
             Set<Type> classes = []
-            classes += node.classes()
+            classes += node.getTypes()
 
             int size = 0
             classes.each {
                 Set<Type> coupled = []
-                coupled += mediator.getAssociatedFrom(it)
-                coupled += mediator.getUseFrom(it)
-                coupled += mediator.getDependencyFrom(it)
-                coupled += mediator.getAggregatedFrom(it)
-                coupled += mediator.getComposedFrom(it)
+                coupled += it.getAssociatedFrom()
+                coupled += it.getUseFrom()
+                coupled += it.getDependencyFrom()
+                coupled += it.getAggregatedFrom()
+                coupled += it.getComposedFrom()
 
                 size += coupled.intersect(classes).size()
             }

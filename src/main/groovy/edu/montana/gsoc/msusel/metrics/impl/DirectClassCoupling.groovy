@@ -26,14 +26,14 @@
 package edu.montana.gsoc.msusel.metrics.impl
 
 import com.google.common.collect.Sets
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Direct Class Coupling",
@@ -51,7 +51,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Bansiya, Jagdish, and Carl G. Davis. "A hierarchical model for object-oriented design quality assessment." IEEE Transactions on software engineering 28.1 (2002): 4-17.'
         ]
 )
-class DirectClassCoupling extends AbstractMetric {
+class DirectClassCoupling extends MetricEvaluator {
 
     /**
      *
@@ -69,13 +69,13 @@ class DirectClassCoupling extends AbstractMetric {
 
         if (node instanceof Type) {
             Set<Type> conn = Sets.newHashSet()
-            conn.addAll(mediator.getGeneralizedFrom(node))
-            conn.addAll(mediator.getRealizedFrom(node))
-            conn.addAll(mediator.getAssociatedFrom(node))
-            conn.addAll(mediator.getAggregatedFrom(node))
-            conn.addAll(mediator.getComposedFrom(node))
-            conn.addAll(mediator.getUseFrom(node))
-            conn.addAll(mediator.getDependencyFrom(node))
+            conn.addAll(node.getGeneralizedBy())
+            conn.addAll(node.getRealizedBy())
+            conn.addAll(node.getAssociatedFrom())
+            conn.addAll(node.getAggregatedFrom())
+            conn.addAll(node.getComposedFrom())
+            conn.addAll(node.getUseFrom())
+            conn.addAll(node.getDependencyFrom())
 
             total = conn.size() // need to ensure none are primitive types
         }

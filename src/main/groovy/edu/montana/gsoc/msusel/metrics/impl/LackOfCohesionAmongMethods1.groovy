@@ -25,16 +25,18 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.Modifier
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Field
-import edu.montana.gsoc.msusel.datamodel.member.Method
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import com.google.common.collect.Sets
+import edu.isu.isuese.datamodel.Field
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.Modifier
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Lack of Cohesion among Object Methods",
@@ -54,7 +56,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Briand, Lionel C., John W. Daly, and Jurgen Wust. "A unified framework for cohesion measurement in object-oriented systems." Software Metrics Symposium, 1997. Proceedings., Fourth International. IEEE, 1997.'
         ]
 )
-class LackOfCohesionAmongMethods1 extends AbstractMetric {
+class LackOfCohesionAmongMethods1 extends MetricEvaluator {
 
     /**
      * {@inheritDoc}
@@ -64,11 +66,11 @@ class LackOfCohesionAmongMethods1 extends AbstractMetric {
         int total = 0
 
         if (node instanceof Type) {
-            List<Field> fields = node.fields().findAll { !it.modifiers.contains(Modifier.STATIC) }
-            List<Method> methods = node.methods()
+            List<Field> fields = node.getFields().findAll { !it.hasModifier(Modifier.Values.STATIC) }
+            List<Method> methods = node.getMethods()
 
             Set I = { Type t, Method m ->
-                mediator.getFieldsUsedBy(m).intersect(fields)
+                Sets.newHashSet(m.getFieldsUsed()).intersect(fields)
             }
 
             Set p = []
@@ -92,6 +94,6 @@ class LackOfCohesionAmongMethods1 extends AbstractMetric {
                 total = p.size() - q.size()
         }
 
-        total
+        Measure.of(this).on(node).withValue(total).store())
     }
 }

@@ -23,14 +23,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/**
- * 
- */
 package edu.montana.gsoc.msusel.metrics.annotations.aggregation
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 class Aggregation {
 
@@ -87,7 +84,8 @@ class Aggregation {
     }
     
     static def randselect(List vals) {
-        Collections.shuffle(vals).first()
+        vals = Collections.shuffle(vals)
+        vals.first()
     }
     
     static def variance(List vals) {

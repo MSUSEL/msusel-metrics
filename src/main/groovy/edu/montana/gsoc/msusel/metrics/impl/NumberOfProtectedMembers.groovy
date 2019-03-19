@@ -25,15 +25,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.Accessibility
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Accessibility
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -51,7 +51,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class NumberOfProtectedMembers extends AbstractMetric {
+class NumberOfProtectedMembers extends MetricEvaluator {
 
     /**
      *
@@ -68,8 +68,8 @@ class NumberOfProtectedMembers extends AbstractMetric {
         int total = 0
 
         if (node instanceof Type) {
-            int numFields = node.fields().findAll { it.getAccess() == Accessibility.PROTECTED }.size()
-            int numMethods = node.methods().findAll { it.getAccess() == Accessibility.PROTECTED }.size()
+            int numFields = node.getFields().findAll { it.getAccessibility() == Accessibility.PROTECTED }.size()
+            int numMethods = node.getMethods().findAll { it.getAccessibility() == Accessibility.PROTECTED }.size()
 
             total = numFields + numMethods
         }

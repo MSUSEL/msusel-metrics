@@ -25,16 +25,16 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.Accessibility
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Constructor
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Accessibility
+import edu.isu.isuese.datamodel.Constructor
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -52,7 +52,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class WeightOfAClass extends AbstractMetric {
+class WeightOfAClass extends MetricEvaluator {
 
     /**
      *
@@ -69,8 +69,8 @@ class WeightOfAClass extends AbstractMetric {
         double total = 0.0
 
         if (node instanceof Type) {
-            def methods = node.methods().findAll {
-                !(it instanceof Constructor) && it.access == Accessibility.PUBLIC
+            def methods = node.getMethods().findAll {
+                !(it instanceof Constructor) && it.accessibility == Accessibility.PUBLIC
             }
             def funcMethods = methods.findAll { !it.isAccessor() && !it.isMutator() }
 

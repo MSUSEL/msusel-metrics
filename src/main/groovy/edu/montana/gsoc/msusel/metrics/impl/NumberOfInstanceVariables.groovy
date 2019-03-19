@@ -25,10 +25,11 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.Modifier
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Modifier
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
@@ -51,7 +52,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Lorenz, Mark, and Jeff Kidd. Object-oriented software metrics: a practical guide. Prentice-Hall, Inc., 1994.'
         ]
 )
-class NumberOfInstanceVariables extends AbstractMetric {
+class NumberOfInstanceVariables extends MetricEvaluator {
 
     /**
      *
@@ -68,12 +69,12 @@ class NumberOfInstanceVariables extends AbstractMetric {
         int total = 0
 
         if (node instanceof Type) {
-            total = node.fields().findAll {
-                !it.modifiers.contains(Modifier.STATIC) && !it.modifiers.contains(Modifier.CONST)
+            total = node.getFields().findAll {
+                !it.hasModifier(Modifier.Values.STATIC) && !it.hasModifier(Modifier.Values.CONST)
             }.size()
         }
 
-        total
+        Measure.of(this).on(node).withValue(total).store())
     }
 
 }

@@ -25,18 +25,19 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.pattern.PatternInstance
-import edu.montana.gsoc.msusel.datamodel.structural.Namespace
-import edu.montana.gsoc.msusel.datamodel.structural.Structure
-import edu.montana.gsoc.msusel.datamodel.structural.File
-import edu.montana.gsoc.msusel.datamodel.type.Interface
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Interface
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Namespace
+import edu.isu.isuese.datamodel.File
+import edu.isu.isuese.datamodel.PatternInstance
+import edu.isu.isuese.datamodel.Structure
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -54,7 +55,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class NumberOfInterfaces extends AbstractMetric {
+class NumberOfInterfaces extends MetricEvaluator {
 
     /**
      *
@@ -71,16 +72,16 @@ class NumberOfInterfaces extends AbstractMetric {
         int total = 0
 
         if (node instanceof Structure) {
-            total = mediator.findTypes(node).findAll { it instanceof Interface }.size()
+            total = node.getTypes().findAll { it instanceof Interface }.size()
         } else if (node instanceof File) {
-            total = mediator.findTypes(node).findAll { it instanceof Interface }.size()
+            total = node.getTypes().findAll { it instanceof Interface }.size()
         } else if (node instanceof PatternInstance) {
-            total = mediator.findTypes(node).findAll { it instanceof Interface }.size()
+            total = node.getTypes().findAll { it instanceof Interface }.size() // FIXME
         } else if (node instanceof Namespace) {
-            total = mediator.findTypes(node).findAll { it instanceof Interface }.size()
+            total = node.getTypes().findAll { it instanceof Interface }.size()
         }
 
-        total
+        Measure.of(this).on(node).withValue(total).store())
     }
 
 }

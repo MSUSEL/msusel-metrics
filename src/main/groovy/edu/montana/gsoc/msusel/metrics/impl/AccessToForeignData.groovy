@@ -25,15 +25,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Method
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Access To Foreign Data",
@@ -51,7 +51,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class AccessToForeignData extends AbstractMetric {
+class AccessToForeignData extends MetricEvaluator {
 
     /**
      *
@@ -70,14 +70,14 @@ class AccessToForeignData extends AbstractMetric {
         if (node instanceof Type) {
             def classes = []
             classes << node
-            classes += mediator.getAllParentClasses(node)
+            classes += mediator.getAllParentClasses(node) // FIXME
 
             def uses = []
 
-            node.methods().each { Method m ->
-                uses += mediator.getFieldsUsedBy(m).findAll { !classes.contains(m.owner) }
-                uses += mediator.getMethodsCalledFrom(m).findAll { Method n ->
-                    !classes.contains(n.owner) && (n.isAccessor() || n.isMutator())
+            ((Type) node).getMethods().each { Method m ->
+                uses += m.getFieldsUsed().findAll { !classes.contains(m.getParentTypes()) } // FIXME
+                uses += m.getMethodsCalled().findAll { Method n ->
+                    !classes.contains(n.getParentTypes()) && (n.isAccessor() || n.isMutator())
                 }
             }
 

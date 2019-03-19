@@ -25,16 +25,16 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.Accessibility
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Field
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Accessibility
+import edu.isu.isuese.datamodel.Field
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Attribute Hiding Factor",
@@ -54,7 +54,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Abreu, F. Brito, Miguel Goulão, and Rita Esteves. "Toward the design quality evaluation of object-oriented software systems." Proceedings of the 5th International Conference on Software Quality, Austin, Texas, USA. 1995.'
         ]
 )
-class AttributeHidingFactor extends AbstractMetric {
+class AttributeHidingFactor extends MetricEvaluator {
 
     /**
      *
@@ -71,22 +71,24 @@ class AttributeHidingFactor extends AbstractMetric {
         double total = 0.0
 
         if (node instanceof Type) {
-            def classes = node.children
+            def classes = node.getChildTypes()
 
             def isVisible = { Field m ->
                 Type t = m.owner
 
                 Set<Type> dc = []
-                dc += mediator.getGeneralizedTo(t)
-                dc += mediator.getRealizedTo(t)
+                dc += t.getGeneralizes()
+                dc += t.getRealizes()
 
                 Set<Type> pc = []
-                pc += mediator.getNamespaceClasses(mediator.findNamespace(t))
+                if (t.getParentNamespaces().size() > 0)
+                    pc += t.getParentNamespaces().get(0).getTypes()
 
                 Set<Type> mc = []
-                mc += mediator.getModuleClasses(mediator.getModuleForType(t))
+                if (t.getParentModules().size() > 0)
+                    mc += t.getParentModules().get(0).getTypes()
 
-                Accessibility access = ((Field) m).getAccess()
+                Accessibility access = ((Field) m).getAccessibility()
 
                 switch (access) {
                     case Accessibility.PUBLIC:
@@ -119,7 +121,7 @@ class AttributeHidingFactor extends AbstractMetric {
                 double totalVisible = 0.0
 
                 classes.each {
-                    totalVisible += isVisible(m, it)
+                    totalVisible += isVisible(m, it) // FIXME
                 }
 
                 totalVisible / (classes.size() - 1)
@@ -132,7 +134,7 @@ class AttributeHidingFactor extends AbstractMetric {
                 totalAd += getMetric(it, "NAD")
 
                 it.fields().each { field ->
-                    totalVis += (1 - visibility(field))
+                    totalVis += (1 - visibility(field)) // FIXME
                 }
             }
 

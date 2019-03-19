@@ -25,15 +25,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import com.google.common.collect.Queues
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -51,7 +51,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class TotalProgenyCount extends AbstractMetric {
+class TotalProgenyCount extends MetricEvaluator {
 
     /**
      *
@@ -68,18 +68,9 @@ class TotalProgenyCount extends AbstractMetric {
         int total = 0
 
         if (node instanceof Type) {
-            Queue<Type> q = Queues.newArrayDeque()
             Set classes = []
 
-            q.offer(node)
-            while (!q.isEmpty()) {
-                Type type = q.poll()
-                classes.add(type)
-                q.addAll(mediator.getGeneralizedTo(type))
-                q.addAll(mediator.getRealizedTo(type))
-            }
-
-            classes.remove(node)
+            classes += node.getChildTypes()
 
             total = classes.size()
         }

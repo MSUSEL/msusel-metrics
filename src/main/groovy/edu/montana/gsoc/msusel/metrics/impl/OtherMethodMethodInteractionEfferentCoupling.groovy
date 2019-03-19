@@ -25,12 +25,12 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Other Class Attribute Interaction Efferent Coupling",
@@ -49,7 +49,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Briand, Lionel C., John W. Daly, and Jurgen K. Wust. "A unified framework for coupling measurement in object-oriented systems." IEEE Transactions on software Engineering 25.1 (1999): 91-121.'
         ]
 )
-class OtherMethodMethodInteractionEfferentCoupling extends AbstractMetric {
+class OtherMethodMethodInteractionEfferentCoupling extends MetricEvaluator {
 
     /**
      *
@@ -58,6 +58,9 @@ class OtherMethodMethodInteractionEfferentCoupling extends AbstractMetric {
         // TODO Auto-generated constructor stub
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     def measure(Measurable node) {
         return null

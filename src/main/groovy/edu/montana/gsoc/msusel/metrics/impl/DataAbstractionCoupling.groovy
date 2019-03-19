@@ -25,14 +25,14 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.TypeReference
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.isu.isuese.datamodel.TypeRef
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Data Abstraction Coupling",
@@ -50,7 +50,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Li, Wei, and Sallie Henry. "Object-oriented metrics that predict maintainability." Journal of systems and software 23.2 (1993): 111-122.'
         ]
 )
-class DataAbstractionCoupling extends AbstractMetric {
+class DataAbstractionCoupling extends MetricEvaluator {
 
     /**
      *
@@ -69,13 +69,13 @@ class DataAbstractionCoupling extends AbstractMetric {
         if (node instanceof Type) {
 
             Set coupled = []
-            coupled += mediator.getAssociatedFrom(node)
-            coupled += mediator.getUseFrom(node)
-            coupled += mediator.getDependencyFrom(node)
-            coupled += mediator.getAggregatedFrom(node)
-            coupled += mediator.getComposedFrom(node)
+            coupled += node.getAssociatedFrom()
+            coupled += node.getUseFrom()
+            coupled += node.getDependencyFrom()
+            coupled += node.getAggregatedFrom()
+            coupled += node.getComposedFrom()
 
-            coupled.removeAll(TypeReference.knownTypes())
+            coupled.removeAll(TypeRef.knownTypes())
             coupled.remove(node)
 
             total = coupled.size()

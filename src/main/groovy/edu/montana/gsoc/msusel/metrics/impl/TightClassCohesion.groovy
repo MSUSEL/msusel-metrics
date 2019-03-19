@@ -25,17 +25,18 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.Accessibility
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Method
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Accessibility
+import edu.isu.isuese.datamodel.Field
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 import org.apache.commons.lang3.tuple.Pair
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -53,7 +54,7 @@ import org.apache.commons.lang3.tuple.Pair
                 ''
         ]
 )
-class TightClassCohesion extends AbstractMetric {
+class TightClassCohesion extends MetricEvaluator {
 
     /**
      *
@@ -70,15 +71,15 @@ class TightClassCohesion extends AbstractMetric {
         double total = 0
 
         if (node instanceof Type) {
-            def methods = node.methods()
-            def pubMethods = methods.findAll { it.access == Accessibility.PUBLIC }
+            def methods = node.getMethods()
+            def pubMethods = methods.findAll { it.accessibility == Accessibility.PUBLIC }
 
             Set<Pair<Method, Method>> ndc = []
             methods.each { Method first ->
                 methods.each { Method second ->
                     if (first != second) {
-                        Set firstFldUse = mediator.getFieldUseInSameClass(first, (Type) node)
-                        Set secondFldUse = mediator.getFieldUseInSameClass(second, (Type) node)
+                        Set<Field> firstFldUse = first.getFieldsUsedSameClass((Type) node)
+                        Set<Field> secondFldUse = second.getFieldsUsedSameClass((Type) node)
 
                         if (!firstFldUse.intersect(secondFldUse).isEmpty())
                             ndc << Pair.of(first, second)

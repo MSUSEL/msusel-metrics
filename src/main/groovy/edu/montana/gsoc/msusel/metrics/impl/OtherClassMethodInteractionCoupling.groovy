@@ -25,14 +25,14 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Other Class Method Interaction Efferent Coupling",
@@ -51,7 +51,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Briand, Lionel C., John W. Daly, and Jurgen K. Wust. "A unified framework for coupling measurement in object-oriented systems." IEEE Transactions on software Engineering 25.1 (1999): 91-121.'
         ]
 )
-class OtherClassMethodInteractionCoupling extends AbstractMetric {
+class OtherClassMethodInteractionCoupling extends MetricEvaluator {
 
     /**
      *
@@ -68,9 +68,9 @@ class OtherClassMethodInteractionCoupling extends AbstractMetric {
         int total = 0
 
         if (node instanceof Type) {
-            def parents = mediator.getAllParentClasses(node)
+            def parents = node.getAncestorTypes()
 
-            node.methods().each { m ->
+            node.getMethods().each { m ->
                 def types = m.getParams().collect { it.getType() }
                 types -= parents
                 total += types.size()

@@ -25,23 +25,20 @@
  */
 package edu.montana.gsoc.msusel.metrics
 
-import edu.montana.gsoc.msusel.datamodel.Component
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.measures.Measure
-import edu.montana.gsoc.msusel.datamodel.measures.MeasuresTable
-import edu.montana.gsoc.msusel.datamodel.structural.Structure
+import edu.isu.isuese.datamodel.Component
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Structure
 import edu.montana.gsoc.msusel.metrics.annotations.MetricDefinition
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-import static edu.montana.gsoc.msusel.datamodel.measures.Measure.getMediator
-
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
-abstract class AbstractLOCMetric extends AbstractSourceMetric {
+abstract class LOCMetricEvaluator extends SourceMetricEvaluator {
 
     /**
      * String indicating the start of a single line comment
@@ -80,7 +77,10 @@ abstract class AbstractLOCMetric extends AbstractSourceMetric {
 
             loadProfile(LoCProfileManager.instance.getProfileByExtension(ext))
 
-            MeasuresTable.instance.store(Measure.of(this).on(node).withValue(count(lines)))
+            int count = count(lines)
+            MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
+            Measure.store(mdef.primaryHandle(), node, count)
+            count
         } else if (node instanceof File) {
             List<String> lines = getLines(node)
             String ext = node.getKey().find(/\.\w{2,4}$/)
@@ -88,16 +88,20 @@ abstract class AbstractLOCMetric extends AbstractSourceMetric {
 
             loadProfile(LoCProfileManager.instance.getProfileByExtension(ext))
 
-            MeasuresTable.instance.store(Measure.of(this).on(node).withValue(count(lines)))
-        }
-        else if (node instanceof Structure) {
+            int count = count(lines)
+            MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
+            Measure.store(mdef.primaryHandle(), node, count)
+            count
+        } else if (node instanceof Structure) {
             int total = 0
 
-            node.files().each { file ->
+            node.getFiles().each { file ->
                 MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
-                total += MeasuresTable.instance.retrieve(file, mdef.primaryHandle())
+                total += Measure.retrieve(file, mdef.primaryHandle())
             }
-            MeasuresTable.instance.store(Measure.of(this).on(node).withValue(total))
+            MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
+            Measure.store(mdef.primaryHandle(), node, total)
+            total
         } else {
             0
         }
@@ -111,7 +115,7 @@ abstract class AbstractLOCMetric extends AbstractSourceMetric {
      * @param lines
      *            List of lines to be counted.
      */
-    abstract def count(List<String> lines)
+    abstract double count(List<String> lines)
 
     /**
      * Sets the current LoCProfile to the provided one, if not null.
@@ -157,7 +161,7 @@ abstract class AbstractLOCMetric extends AbstractSourceMetric {
      */
     protected boolean detectSequence(Pattern pattern, String scrubbed, String sequence) {
         Matcher m = pattern.matcher(scrubbed)
-        boolean found = false
+        boolean found
         boolean retVal = true
         while (true) {
             found = m.find()

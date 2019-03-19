@@ -25,15 +25,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 import org.apache.commons.lang3.tuple.Pair
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Average Depth of Inheritance Tree",
@@ -51,7 +51,7 @@ import org.apache.commons.lang3.tuple.Pair
                 ''
         ]
 )
-class AverageDepthOfInheritanceTree extends AbstractMetric {
+class AverageDepthOfInheritanceTree extends MetricEvaluator {
 
     /**
      *
@@ -78,8 +78,8 @@ class AverageDepthOfInheritanceTree extends AbstractMetric {
                 Type type = pair.getValue()
 
                 def types = []
-                types += mediator.getGeneralizedFrom(type)
-                types += mediator.getRealizedFrom(type)
+                types += type.getGeneralizedBy()
+                types += type.getRealizedBy()
 
                 if (types.isEmpty()) {
                     map[type] = val

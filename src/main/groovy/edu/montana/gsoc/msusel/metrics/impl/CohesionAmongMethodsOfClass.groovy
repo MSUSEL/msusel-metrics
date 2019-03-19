@@ -25,12 +25,12 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Cohesion Among Methods of Class",
@@ -48,7 +48,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Bansiya, Jagdish, and Carl G. Davis. "A hierarchical model for object-oriented design quality assessment." IEEE Transactions on software engineering 28.1 (2002): 4-17.'
         ]
 )
-class CohesionAmongMethodsOfClass extends AbstractMetric {
+class CohesionAmongMethodsOfClass extends MetricEvaluator {
 
     /**
      *
@@ -57,6 +57,9 @@ class CohesionAmongMethodsOfClass extends AbstractMetric {
         // TODO Auto-generated constructor stub
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     def measure(Measurable node) {
         return null

@@ -25,14 +25,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.structural.Structure
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Structure
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
+
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -50,7 +51,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class PackageDataAbstractionCoupling extends AbstractMetric {
+class PackageDataAbstractionCoupling extends MetricEvaluator {
 
     /**
      * {@inheritDoc}
@@ -61,15 +62,15 @@ class PackageDataAbstractionCoupling extends AbstractMetric {
 
         if (node instanceof Structure) {
 
-            Set classes = node.classes()
+            Set<Type> classes = node.getTypes()
 
             Set coupled = []
             classes.each { Type t ->
-                coupled += mediator.getAssociatedFrom(t)
-                coupled += mediator.getUseFrom(t)
-                coupled += mediator.getDependencyFrom(t)
-                coupled += mediator.getAggregatedFrom(t)
-                coupled += mediator.getComposedFrom(t)
+                coupled += t.getAssociatedFrom()
+                coupled += t.getUseFrom()
+                coupled += t.getDependencyFrom()
+                coupled += t.getAggregatedFrom()
+                coupled += t.getComposedFrom()
                 coupled.remove(t)
             }
 

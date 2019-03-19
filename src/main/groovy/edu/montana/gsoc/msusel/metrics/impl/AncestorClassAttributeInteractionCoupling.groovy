@@ -25,14 +25,14 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "Ancestor Class Attribute Interaction Coupling",
@@ -51,7 +51,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Briand, Lionel C., John W. Daly, and Jurgen K. Wust. "A unified framework for coupling measurement in object-oriented systems." IEEE Transactions on software Engineering 25.1 (1999): 91-121.'
         ]
 )
-class AncestorClassAttributeInteractionCoupling extends AbstractMetric {
+class AncestorClassAttributeInteractionCoupling extends MetricEvaluator {
 
     /**
      *
@@ -69,10 +69,10 @@ class AncestorClassAttributeInteractionCoupling extends AbstractMetric {
 
         if (node instanceof Type) {
             Set fieldTypes = []
-            fieldTypes += node.fields().collect {
-                it.getType()
+            fieldTypes += node.getFields().collect {
+                it.getType() // FIXME
             }
-            total = mediator.getAllParentClasses(node).findAll { fieldTypes.contains(it) }.size()
+            total = node.getAncestorTypes().findAll { fieldTypes.contains(it) }.size()
         }
 
         total

@@ -25,14 +25,14 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.type.Type
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -50,7 +50,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class ChangeDependencyOfClasses extends AbstractMetric {
+class ChangeDependencyOfClasses extends MetricEvaluator {
 
     /**
      * {@inheritDoc}
@@ -61,12 +61,14 @@ class ChangeDependencyOfClasses extends AbstractMetric {
 
         if (node instanceof Type) {
             Set classes = []
-            classes += mediator.getTypes()
+            if (!node.getParentProjects().isEmpty()) {
+                classes += node.getParentProjects().get(0).getTypes()
 
-            classes.remove(node)
+                classes.remove(node)
 
-            classes.each { Type t ->
-                total += changeDepsBetweenClasses(t, (Type) node)
+                classes.each { Type t ->
+                    total += changeDepsBetweenClasses(t, (Type) node)
+                }
             }
         }
 

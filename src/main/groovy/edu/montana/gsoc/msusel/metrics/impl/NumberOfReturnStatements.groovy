@@ -25,16 +25,16 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.cfg.ControlFlowNode
-import edu.montana.gsoc.msusel.datamodel.cfg.StatementType
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.member.Method
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.cfg.ControlFlowNode
+import edu.isu.isuese.datamodel.cfg.StatementType
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- *
+ * @version 1.3.0
  */
 @MetricDefinition(
         name = "",
@@ -52,7 +52,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class NumberOfReturnStatements extends AbstractMetric {
+class NumberOfReturnStatements extends MetricEvaluator {
 
     /**
      *

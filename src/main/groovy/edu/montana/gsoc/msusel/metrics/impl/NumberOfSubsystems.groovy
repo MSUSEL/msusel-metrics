@@ -25,8 +25,8 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Measurable
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 /**
  * TODO See NumberOfModules
@@ -49,7 +49,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 ''
         ]
 )
-class NumberOfSubsystems extends AbstractMetric {
+class NumberOfSubsystems extends MetricEvaluator {
 
     /**
      *
@@ -58,6 +58,9 @@ class NumberOfSubsystems extends AbstractMetric {
         // TODO Auto-generated constructor stub
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     def measure(Measurable node) {
         return null

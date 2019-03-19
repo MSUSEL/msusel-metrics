@@ -25,38 +25,39 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.montana.gsoc.msusel.datamodel.Modifier
-import edu.montana.gsoc.msusel.datamodel.measures.Measurable
-import edu.montana.gsoc.msusel.datamodel.structural.Structure
-import edu.montana.gsoc.msusel.metrics.AbstractMetric
+import edu.isu.isuese.datamodel.Field
+import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Type
+import edu.isu.isuese.datamodel.TypeRef
+import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
 /**
  * @author Isaac Griffith
- * @version 1.2.0
+ * @version 1.3.0
  */
 @MetricDefinition(
-        name = "Number of Abstract Classes",
-        primaryHandle = "NAC",
-        description = "Count of the number of abstract classes in a system.",
+        name = "",
+        primaryHandle = "",
+        description = "",
         properties = @MetricProperties(
-                range = "Positive Integers",
+                range = "",
                 aggregation = [],
-                scope = MetricScope.STRUCTURAL,
-                type = MetricType.Model,
+                scope = MetricScope.METHOD,
+                type = MetricType.Derived,
                 scale = MetricScale.Interval,
-                category = MetricCategory.Size
+                category = MetricCategory.Coupling
         ),
         references = [
-                'Hudli, Raghu V., Curtis L. Hoskins, and Anand V. Hudli. "Software metrics for object-oriented designs." Computer Design: VLSI in Computers and Processors, 1994. ICCD\'94. Proceedings., IEEE International Conference on. IEEE, 1994.'
+                ''
         ]
 )
-class NumberOfAbstractClasses extends AbstractMetric {
+class CouplingThroughDataTypesEvaluator extends MetricEvaluator {
 
     /**
      *
      */
-    NumberOfAbstractClasses() {
+    CouplingThroughDataTypesEvaluator() {
         // TODO Auto-generated constructor stub
     }
 
@@ -67,10 +68,15 @@ class NumberOfAbstractClasses extends AbstractMetric {
     def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof Structure) {
-            total = mediator.findTypes(node).findAll {
-                it instanceof Class && it.modifiers.contains(Modifier.ABSTRACT)
-            }.size()
+        if (node instanceof Type) {
+            def fields = node.getFields()
+            Set<TypeRef> adts = []
+
+            fields.each { Field field ->
+                adts << field.getType()
+            }
+
+            total = fields.size()
         }
 
         total

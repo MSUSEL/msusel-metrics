@@ -23,9 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/**
- * 
- */
 package edu.montana.gsoc.msusel.metrics.cfgredux
 
 import com.google.common.graph.MutableGraph
@@ -33,7 +30,7 @@ import com.google.common.graph.GraphBuilder
 
 /**
  * @author Isaac Griffith
- *
+ * @version 1.3.0
  */
 class CfgReducer {
 

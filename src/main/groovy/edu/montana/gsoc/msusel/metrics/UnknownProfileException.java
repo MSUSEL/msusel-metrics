@@ -30,7 +30,7 @@ package edu.montana.gsoc.msusel.metrics;
  * text when no known profile has been loaded.
  * 
  * @author Isaac Griffith
- * @version 1.1.1
+ * @version 1.3.0
  */
 public class UnknownProfileException extends Exception {
 
