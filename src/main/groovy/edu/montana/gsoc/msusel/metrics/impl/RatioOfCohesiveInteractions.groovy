@@ -1,7 +1,14 @@
 package edu.montana.gsoc.msusel.metrics.impl
 
+import com.google.common.collect.Queues
 import com.google.common.graph.Graph
+import com.google.common.graph.GraphBuilder
+import com.google.common.graph.MutableGraph
+import edu.isu.isuese.datamodel.Field
 import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.Parameter
+import edu.isu.isuese.datamodel.Type
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.MetricCategory
 import edu.montana.gsoc.msusel.metrics.annotations.MetricDefinition
@@ -43,13 +50,72 @@ class RatioOfCohesiveInteractions extends MetricEvaluator{
         //    add method parameter nodes
         //    add DD edges
         //    add DM edges
+        MutableGraph<?> graph = GraphBuilder.directed().build()
+        if (node instanceof Type) {
+            graph.addNode(node)
+            List<Type> scope = []
+            Queue<Type> q = Queues.newArrayDeque()
+            q.offer((Type) node)
+
+            int numTypes = 0
+            int numFields = 0
+            int numMethods = 0
+            int numParams = 0
+
+            String projKey = ((Type) node).getParentProjects().get(0).getProjectKey()
+
+            while(!q.isEmpty()) {
+                Type type = q.poll()
+                numTypes += 1
+                scope.add(type)
+                graph.addNode(type)
+                for (Type t : type.getContainedTypes()) {
+                    q.offer(t)
+                }
+                for (Field f : type.getFields()) {
+                    graph.addNode(f)
+                    numFields += 1
+                }
+                for (Method m : type.getMethods()) {
+                    graph.addNode(m)
+                    numMethods += 1
+                    for (Parameter p : m.getParams()) {
+                        graph.addNode(p)
+                        numFields += 1
+                    }
+                }
+            }
+
+            for (Object o : graph.nodes()) {
+                for (Object j : graph.nodes()) {
+                    if (o == j)
+                        continue
+                    if (o instanceof Type) {
+                        if (j instanceof Field) {
+                            if (j.getType().getType(projKey) == o)
+                                graph.putEdge(o, j)
+                        } else if (j instanceof Method) {
+                            if (j.getType().getType(projKey) == o)
+                                graph.putEdge(o, j)
+                        } else if (j instanceof Parameter) {
+                            if (j.getType().getType(projKey) == o)
+                                graph.putEdge(o, j)
+                        }
+                    } else if (o instanceof Field) {
+                        if (j instanceof Method) {
+                            j.getFieldsUsed().contains(o)
+                            graph.putEdge(o, j)
+                        }
+                    }
+                }
+            }
+        }
         // 2. CI(c) = Count the number of interactions (edges)
         double ci = 0
         // 3. Max(c) = Count of all possible interations
-        double max = 0
-        //    number of types * (number of types - 1)
-        //    for each variable add one per type
-        //    for each method add one per type
+        double max = (numTypes * (numTypes - 1)) + (numMethods * numTypes) +
+                (numFields * numTypes) + (numParams * numTypes) +
+                (numFields * numMethods) + (numFields * numParams)
         // 4. RCI = CI(c) / Max(c)
         total = ci / max
         // 5. Return RCI
