@@ -123,7 +123,7 @@ class LackOfCohesionAmongMethods4 extends MetricEvaluator {
             }
         }
 
-        Measure.of(this).on(node).withValue(total).store())
+        //Measure.of(this).on(node).withValue(total).store())
     }
 
 }

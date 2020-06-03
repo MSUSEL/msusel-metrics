@@ -79,11 +79,11 @@ class TotalNumberOfAttributes extends MetricEvaluator {
                 total += getMetric(it, "NOA")
             }
         } else if (node instanceof File) {
-            node.getTypes().each {
+            node.getAllTypes().each {
                 total += getMetric(it, "NOA")
             }
         } else if (node instanceof Namespace) {
-            node.getTypes().each {
+            node.getAllTypes().each {
                 total += getMetric(it, "NOA")
             }
         }

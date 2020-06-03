@@ -37,8 +37,8 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
  * @version 1.3.0
  */
 @MetricDefinition(
-        name = "",
-        primaryHandle = "",
+        name = "Number of Protected Attributes",
+        primaryHandle = "NPROTA",
         description = "",
         properties = @MetricProperties(
                 range = "",

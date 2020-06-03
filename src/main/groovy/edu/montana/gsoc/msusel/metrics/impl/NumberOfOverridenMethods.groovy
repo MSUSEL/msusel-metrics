@@ -86,6 +86,6 @@ class NumberOfOverridenMethods extends MetricEvaluator {
             total = defSigs.intersect(sigs).size() // FIXME
         }
 
-        Measure.of(this).on(node).withValue(total).store())
+        //Measure.of(this).on(node).withValue(total).store())
     }
 }

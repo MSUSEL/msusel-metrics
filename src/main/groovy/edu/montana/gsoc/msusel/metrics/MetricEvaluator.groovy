@@ -26,25 +26,51 @@
  */
 package edu.montana.gsoc.msusel.metrics
 
+import edu.isu.isuese.datamodel.Component
 import edu.isu.isuese.datamodel.Measurable
 import edu.isu.isuese.datamodel.Metric
 import edu.isu.isuese.datamodel.MetricRepository
+import edu.isu.isuese.datamodel.Project
 import edu.montana.gsoc.msusel.metrics.annotations.MetricDefinition
+import org.jetbrains.annotations.NotNull
 
 /**
  * @author Isaac Griffith
  * @version 1.3.0
  */
-abstract class MetricEvaluator {
+abstract class MetricEvaluator implements Comparable<MetricEvaluator> {
 
     abstract def measure(Measurable node)
 
-    double getMetric(Measurable node, String handle) {
+    Metric toMetric(MetricRepository repository) {
+        MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
+        Metric metric = Metric.findFirst("metricKey = ?", "${repository.getRepoKey()}:${mdef.primaryHandle()}")
+        if (!metric) {
+            metric = Metric.builder()
+                    .key("${repository.getRepoKey()}:${mdef.primaryHandle()}")
+                    .handle(mdef.primaryHandle())
+                    .name(mdef.name())
+                    .description(mdef.description())
+                    .evaluator(this.class.getCanonicalName())
+                    .create()
+            repository.addMetric(metric)
+        }
+
+        return metric
     }
 
-    Metric toMetric(MetricRepository repo) {
-        MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
-        Metric.findOrCreateIt("name", mdef.name(), "metricKey", "${repo.repoKey}:${mdef.primaryHandle()}",
-                            "description", mdef.description, "evaluator", this.class.name)
+    List<String> getDependencies() {
+        []
+    }
+
+    @Override
+    int compareTo(MetricEvaluator metricEvaluator) {
+        getDependencies().size() <=> metricEvaluator.getDependencies().size()
+    }
+
+    double getMeasure(Component comp, String repo, String handle) {
+        Project proj = comp.getParentProjects().first()
+
+        proj.getMeasuredValue(comp, repo, handle)
     }
 }

@@ -40,5 +40,6 @@ enum MetricScope {
     CLASS,
     FILE,
     NAMESPACE,
-    MODULE
+    MODULE,
+    PATTERN
 }

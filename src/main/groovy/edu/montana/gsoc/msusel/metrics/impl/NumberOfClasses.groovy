@@ -72,7 +72,7 @@ class NumberOfClasses extends MetricEvaluator {
             total = node.getTypes().findAll { it instanceof Class }.size()
         }
 
-        Measure.of(this).on(node).withValue(total).store())
+        //Measure.of(this).on(node).withValue(total).store())
     }
 
 }

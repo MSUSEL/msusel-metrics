@@ -75,7 +75,7 @@ class NumberOfStatements extends MetricEvaluator {
             }
         }
 
-        Measure.of(this).on(node).withValue(total).store()) // FIXME
+        //Measure.of(this).on(node).withValue(total).store()) // FIXME
     }
 
     static measureMethod(Method method) {

@@ -117,7 +117,7 @@ class LoCProfileManager {
         List<LoCProfile> profiles = gson.fromJson(gson.newJsonReader(new InputStreamReader(is)), list)
 
         for (LoCProfile profile : profiles) {
-            instance.addProfile(profile)
+            LoCProfileManager.instance.addProfile(profile)
         }
     }
 }

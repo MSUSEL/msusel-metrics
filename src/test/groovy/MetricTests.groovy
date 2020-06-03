@@ -60,7 +60,7 @@ class MetricTests extends Specification {
 
         metrics += ["NOF", "NOM", "SLOC", "BLOC", "CLOC"]
 
-        tree.getUtils().getTypes().each { type ->
+        tree.getUtils().getAllTypes().each { type ->
             metrics.each { handle ->
                 MetricEvaluator metric = reg.getMetric(handle).newInstance()
                 metric.setTree(tree)

@@ -69,10 +69,15 @@ class LinesOfCodePerClass extends MetricEvaluator {
 
         if (node instanceof Type) {
             node.getMethods().each {
-                total += getMetric(it, "LOC")
+                total += getMeasure(it, "LOC")
             }
         }
 
         total
+    }
+
+    @Override
+    List<String> getDependencies() {
+        return ["LOC"]
     }
 }

@@ -37,7 +37,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
  * @version 1.3.0
  */
 @MetricDefinition(
-        name = "Number of Encapsulated Variables",
+        name = "Number of Private Attributes",
         primaryHandle = "NPRIVA",
         description = "Count of the number of private attributes",
         properties = @MetricProperties(

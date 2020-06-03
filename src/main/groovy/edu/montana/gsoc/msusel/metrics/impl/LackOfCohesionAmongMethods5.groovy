@@ -82,7 +82,7 @@ class LackOfCohesionAmongMethods5 extends MetricEvaluator {
             total = (nm - ((1 / nf) * count)) / (nm - 1)
         }
 
-        Measure.of(this).on(node).withValue(total).store())
+        //Measure.of(this).on(node).withValue(total).store())
     }
 
 }

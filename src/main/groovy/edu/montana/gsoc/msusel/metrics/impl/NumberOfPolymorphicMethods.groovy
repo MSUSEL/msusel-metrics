@@ -81,7 +81,7 @@ class NumberOfPolymorphicMethods extends MetricEvaluator {
             }.size()
         }
 
-        Measure.of(this).on(node).withValue(total).store())
+        //Measure.of(this).on(node).withValue(total).store())
     }
 
 }

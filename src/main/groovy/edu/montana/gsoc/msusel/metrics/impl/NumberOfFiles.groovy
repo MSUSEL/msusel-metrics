@@ -72,7 +72,7 @@ class NumberOfFiles extends MetricEvaluator {
             total = node.getFiles().size()
         }
 
-        Measure.of(this).on(node).withValue(total).store())
+        //Measure.of(this).on(node).withValue(total).store())
     }
 
 }

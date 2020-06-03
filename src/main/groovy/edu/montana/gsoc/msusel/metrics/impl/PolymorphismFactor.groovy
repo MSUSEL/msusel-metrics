@@ -39,7 +39,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
 @MetricDefinition(
         name = "Polymorphism Factor",
         primaryHandle = "PF",
-        description = "Ratio of the number of overriding methods of a class tot he total possible number of overriden methods",
+        description = "Ratio of the number of overriding methods of a class to the total possible number of overridden methods",
         properties = @MetricProperties(
                 range = "",
                 aggregation = [],

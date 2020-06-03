@@ -79,11 +79,11 @@ class TotalNumberOfClasses extends MetricEvaluator {
                 total += getMetric(it, "NC")
             }
         } else if (node instanceof File) {
-            node.getTypes().each {
+            node.getAllTypes().each {
                 total += getMetric(it, "NC")
             }
         } else if (node instanceof Namespace) {
-            node.getTypes().each {
+            node.getAllTypes().each {
                 total += getMetric(it, "NC")
             }
         }

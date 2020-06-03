@@ -42,7 +42,7 @@ import java.lang.annotation.Target
     String name()
     String description()
     String primaryHandle()
-    //String[] otherHandles() default []
+    String[] otherHandles() default []
     //String definition() default ""
     //String calculation() default ""
     //String[] relatedQualityAttributes() default []

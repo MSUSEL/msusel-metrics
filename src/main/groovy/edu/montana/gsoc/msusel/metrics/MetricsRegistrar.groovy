@@ -33,34 +33,40 @@ import org.reflections.Reflections
  * @author Isaac Griffith
  * @version 1.3.0
  */
-@Singleton
 class MetricsRegistrar {
 
-    static final String METRICS_PKG = "edu.montana.gsoc.msusel.metrics.impl"
+    Map<String, MetricEvaluator> register = [:]
+    Map<String, String> handles = [:]
 
-    def register = [:]
-
-    static {
-        register()
-    }
-
-    static void register() {
-        Reflections reflections = new Reflections(METRICS_PKG)
-
-        Set<Class<?>> annotated = reflections.getTypesAnnotatedWith(MetricDefinition.class)
-
-        annotated.each {
-            MetricDefinition mdef = it.getAnnotation(MetricDefinition.class)
-            if ((mdef.name() != null && !mdef.name().isEmpty()) && (mdef.primaryHandle() != null && !mdef.primaryHandle().isEmpty())) {
-                MetricsRegistrar.instance.register[mdef.primaryHandle()] = it
+    void register(MetricEvaluator evaluator) {
+        Class<? extends MetricEvaluator> clazz = evaluator.getClass()
+        MetricDefinition mdef = clazz.getAnnotation(MetricDefinition.class)
+        if ((mdef.name() != null && !mdef.name().isEmpty()) && (mdef.primaryHandle() != null && !mdef.primaryHandle().isEmpty())) {
+            register[mdef.primaryHandle()] = evaluator
+            handles[mdef.primaryHandle()] = mdef.primaryHandle()
+            mdef.otherHandles().each {
+                handles[it] = mdef.primaryHandle()
             }
         }
     }
 
-    Class<? extends MetricEvaluator> getMetric(String primaryHandle) {
+    MetricEvaluator getMetric(String primaryHandle) {
         if (register[primaryHandle])
             register[primaryHandle]
         else
             null
+    }
+
+    List<MetricEvaluator> getEvaluators() {
+        return register.values().asList()
+    }
+
+    String getHandle(String handle) {
+        handles[handle]
+    }
+
+    MetricEvaluator getEvaluator(String handle) {
+        String primary = getHandle(handle)
+        register[primary]
     }
 }

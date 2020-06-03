@@ -83,11 +83,11 @@ class AttributeHidingFactor extends MetricEvaluator {
 
                 Set<Type> pc = []
                 if (t.getParentNamespaces().size() > 0)
-                    pc += t.getParentNamespaces().get(0).getTypes()
+                    pc += t.getParentNamespaces().get(0).getAllTypes()
 
                 Set<Type> mc = []
                 if (t.getParentModules().size() > 0)
-                    mc += t.getParentModules().get(0).getTypes()
+                    mc += t.getParentModules().get(0).getAllTypes()
 
                 Accessibility access = ((Field) m).getAccessibility()
 

@@ -79,7 +79,7 @@ class LogicalLinesOfCode extends MetricEvaluator {
             }
         } else if (node instanceof File) {
             total += node.getImports().size()
-            node.getTypes().each {
+            node.getAllTypes().each {
                 total += measure(it)
             }
         } else if (node instanceof Structure) {

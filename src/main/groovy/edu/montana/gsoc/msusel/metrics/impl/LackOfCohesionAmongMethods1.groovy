@@ -95,6 +95,6 @@ class LackOfCohesionAmongMethods1 extends MetricEvaluator {
                 total = p.size() - q.size()
         }
 
-        Measure.of(this).on(node).withValue(total).store())
+        //Measure.of(this).on(node).withValue(total).store())
     }
 }

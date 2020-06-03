@@ -71,7 +71,7 @@ class NumberOfCoupledPackages extends MetricEvaluator {
             Set classes = []
             Set otherNS = []
 
-            node.getTypes().each {
+            node.getAllTypes().each {
                 classes += it.getAssociatedFrom()
                 classes += it.getAssociatedTo()
                 classes += it.getAggregatedFrom()
@@ -88,7 +88,7 @@ class NumberOfCoupledPackages extends MetricEvaluator {
                 classes += it.getDependencyTo()
             }
 
-            classes.removeAll(node.getTypes())
+            classes.removeAll(node.getAllTypes())
 
             classes.each { Type t ->
                 otherNS << mediator.findNamespace(t) // FIXME

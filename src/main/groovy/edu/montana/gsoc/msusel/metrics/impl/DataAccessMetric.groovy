@@ -53,12 +53,12 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
                 'Bansiya, Jagdish, and Carl G. Davis. "A hierarchical model for object-oriented design quality assessment." IEEE Transactions on software engineering 28.1 (2002): 4-17.'
         ]
 )
-class DataAccessMetricEvaluator extends MetricEvaluator {
+class DataAccessMetric extends MetricEvaluator {
 
     /**
      *
      */
-    DataAccessMetricEvaluator() {
+    DataAccessMetric() {
         // TODO Auto-generated constructor stub
     }
 

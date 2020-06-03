@@ -63,7 +63,7 @@ class ChangeDependencyOfClasses extends MetricEvaluator {
         if (node instanceof Type) {
             Set classes = []
             if (!node.getParentProjects().isEmpty()) {
-                classes += node.getParentProjects().get(0).getTypes()
+                classes += node.getParentProjects().get(0).getAllTypes()
 
                 classes.remove(node)
 
