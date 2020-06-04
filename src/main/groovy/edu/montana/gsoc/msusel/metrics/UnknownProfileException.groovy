@@ -24,7 +24,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package edu.montana.gsoc.msusel.metrics;
+package edu.montana.gsoc.msusel.metrics
 
 /**
  * An exception that occurs when attempting to process a file or selection of
@@ -33,14 +33,14 @@ package edu.montana.gsoc.msusel.metrics;
  * @author Isaac Griffith
  * @version 1.3.0
  */
-public class UnknownProfileException extends Exception {
+class UnknownProfileException extends Exception {
 
     /**
      * Constructs a new UnknownProfileException with no message.
      */
-    public UnknownProfileException()
+    UnknownProfileException()
     {
-        super();
+        super()
         // TODO Auto-generated constructor stub
     }
 
@@ -57,10 +57,10 @@ public class UnknownProfileException extends Exception {
      * @param writableStackTrace
      *            Flag enabling stack trace
      */
-    public UnknownProfileException(String message, Throwable cause, boolean enableSuppression,
+    UnknownProfileException(String message, Throwable cause, boolean enableSuppression,
                                    boolean writableStackTrace)
     {
-        super(message, cause, enableSuppression, writableStackTrace);
+        super(message, cause, enableSuppression, writableStackTrace)
         // TODO Auto-generated constructor stub
     }
 
@@ -73,9 +73,9 @@ public class UnknownProfileException extends Exception {
      * @param cause
      *            The originating cause
      */
-    public UnknownProfileException(String message, Throwable cause)
+    UnknownProfileException(String message, Throwable cause)
     {
-        super(message, cause);
+        super(message, cause)
         // TODO Auto-generated constructor stub
     }
 
@@ -85,9 +85,9 @@ public class UnknownProfileException extends Exception {
      * @param message
      *            The message
      */
-    public UnknownProfileException(String message)
+    UnknownProfileException(String message)
     {
-        super(message);
+        super(message)
         // TODO Auto-generated constructor stub
     }
 
@@ -97,9 +97,9 @@ public class UnknownProfileException extends Exception {
      * @param cause
      *            The originating cause
      */
-    public UnknownProfileException(Throwable cause)
+    UnknownProfileException(Throwable cause)
     {
-        super(cause);
+        super(cause)
         // TODO Auto-generated constructor stub
     }
 
