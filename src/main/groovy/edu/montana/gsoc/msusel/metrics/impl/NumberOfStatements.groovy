@@ -70,12 +70,14 @@ class NumberOfStatements extends MetricEvaluator {
         } else if (node instanceof Type) {
             total = measureType(node)
         } else if (node instanceof Structure) {
-            node.getTypes().each { Type type ->
+            node.getAllTypes().each { Type type ->
                 total += measureType(type)
             }
         }
 
-        //Measure.of(this).on(node).withValue(total).store()) // FIXME
+        Measure.of("${repo.getRepoKey()}:NOS").on(node).withValue(total)
+
+        total
     }
 
     static measureMethod(Method method) {

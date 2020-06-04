@@ -75,7 +75,7 @@ class NumberOfInstanceVariables extends MetricEvaluator {
             }.size()
         }
 
-        //Measure.of(this).on(node).withValue(total).store())
+        Measure.of("${repo.getRepoKey()}:NIV").on(node).withValue(total)
     }
 
 }

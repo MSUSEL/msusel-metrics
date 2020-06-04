@@ -27,6 +27,8 @@
 package edu.montana.gsoc.msusel.metrics.impl
 
 import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Project
 import edu.isu.isuese.datamodel.Structure
 import edu.isu.isuese.datamodel.Type
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
@@ -68,14 +70,18 @@ class AverageNumberOfAncestors extends MetricEvaluator {
     def measure(Measurable node) {
         double total = 0.0
 
-        if (node instanceof Structure) {
+        if (node instanceof Project) {
+            Project struct = (Project) node
             def map = [:]
-            def classes = node.getTypes()
-            classes.each { Type ->
+            def classes = struct.getAllTypes()
+            classes.each { Type t ->
                 total += recursiveSearch(t, map)
             }
-            total /= classes.size()
+            if (classes)
+                total /= classes.size()
         }
+
+        Measure.of("${repo.getRepoKey()}:ANA").on(node).withValue(total)
 
         total
     }

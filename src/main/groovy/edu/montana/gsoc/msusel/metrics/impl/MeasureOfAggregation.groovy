@@ -27,8 +27,14 @@
 package edu.montana.gsoc.msusel.metrics.impl
 
 import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Project
+import edu.isu.isuese.datamodel.Type
+import edu.isu.isuese.datamodel.TypeRefType
+import edu.isu.isuese.datamodel.UnknownType
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
+
 /**
  * @author Isaac Griffith
  * @version 1.3.0
@@ -63,6 +69,26 @@ class MeasureOfAggregation extends MetricEvaluator {
      */
     @Override
     def measure(Measurable node) {
-        return null
+        double total = 0
+
+        if (node instanceof Type) {
+            node.getFields().each {
+                if (it.getType().getType() != TypeRefType.Primitive) {
+                    if (!(it.getType().getReference().getReferencedComponent(node.getParentProject()) instanceof UnknownType))
+                        total += 1
+                }
+            }
+        } else if (node instanceof Project) {
+            node.getAllTypes().each {
+                total += measure(it)
+            }
+
+            if (node.getAllTypes())
+                total /= node.getAllTypes().size()
+        }
+
+        Measure.of("${repo.getRepoKey()}:MOA").on(node).withValue(total)
+
+        total
     }
 }

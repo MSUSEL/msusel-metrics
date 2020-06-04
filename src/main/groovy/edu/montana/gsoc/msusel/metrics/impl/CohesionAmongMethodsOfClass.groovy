@@ -26,7 +26,11 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
+import com.google.common.collect.Sets
 import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Project
+import edu.isu.isuese.datamodel.Type
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 /**
@@ -36,7 +40,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
 @MetricDefinition(
         name = "Cohesion Among Methods of Class",
         primaryHandle = "CAM",
-        description = "The relatedness among methods of a class based upon the parameterlist ofthe methods. This metric is computed using the summationof the intersection of paramters of a method with the maximum independent set of all parameter types in the class.",
+        description = "The relatedness among methods of a class based upon the parameter list of the methods. This metric is computed using the summation of the intersection of parameters of a method with the maximum independent set of all parameter types in the class.",
         properties = @MetricProperties(
                 range = "0.0..1.0",
                 aggregation = [],
@@ -63,6 +67,33 @@ class CohesionAmongMethodsOfClass extends MetricEvaluator {
      */
     @Override
     def measure(Measurable node) {
-        return null
+        double total = 0
+
+        if (node instanceof Type) {
+            Set<String> types = Sets.newHashSet()
+
+            double num = 0
+            node.getMethods().each { m ->
+                Set<String> mset = Sets.newHashSet()
+                m.getParams().each { p ->
+                    types.add(p.getType().getTypeFullName())
+                    mset.add(p.getType().getTypeFullName())
+                }
+                num += mset.size()
+            }
+
+            double denom = types.size() * node.getMethods().size()
+
+            total = num / denom
+        }
+        if (node instanceof Project) {
+            node.getAllTypes().each { total += measure(it) }
+            if (node.getAllTypes())
+                total /= node.getAllTypes().size()
+        }
+
+        Measure.of("${repo.getRepoKey()}:CAM").on(node).withValue(total)
+
+        total
     }
 }

@@ -32,6 +32,7 @@ import edu.isu.isuese.datamodel.Destructor
 import edu.isu.isuese.datamodel.Measurable
 import edu.isu.isuese.datamodel.Measure
 import edu.isu.isuese.datamodel.Modifier
+import edu.isu.isuese.datamodel.Project
 import edu.isu.isuese.datamodel.Type
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
@@ -79,9 +80,15 @@ class NumberOfPolymorphicMethods extends MetricEvaluator {
                         (!it.hasModifier(Modifier.Values.FINAL) &&
                                 !it.hasModifier(Modifier.Values.STATIC))
             }.size()
+        } else if (node instanceof Project) {
+            node.getAllTypes().each {
+                total += measure(it)
+            }
         }
 
-        //Measure.of(this).on(node).withValue(total).store())
+        Measure.of("${repo.getRepoKey()}:NOP").on(node).withValue(total)
+
+        total
     }
 
 }

@@ -69,10 +69,10 @@ class NumberOfClasses extends MetricEvaluator {
         int total = 0
 
         if (node instanceof Structure) {
-            total = node.getTypes().findAll { it instanceof Class }.size()
+            total = node.getAllTypes().findAll { it instanceof Class }.size()
         }
 
-        //Measure.of(this).on(node).withValue(total).store())
+        Measure.of("${repo.getRepoKey()}:NC").on(node).withValue(total)
     }
 
 }

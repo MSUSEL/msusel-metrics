@@ -30,9 +30,13 @@ import edu.isu.isuese.datamodel.Accessibility
 import edu.isu.isuese.datamodel.Constructor
 import edu.isu.isuese.datamodel.Destructor
 import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Project
+import edu.isu.isuese.datamodel.Structure
 import edu.isu.isuese.datamodel.Type
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
+
 /**
  * @author Isaac Griffith
  * @version 1.3.0
@@ -40,7 +44,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
 @MetricDefinition(
         name = "Data Access Metric",
         primaryHandle = "DAM",
-        description = "Ratio of the number of private (protected) attributesto thetotal numberof attributes declaredin the class.",
+        description = "Ratio of the number of private (protected) attributes to thetotal numberof attributes declaredin the class.",
         properties = @MetricProperties(
                 range = "0.0..1.0",
                 aggregation = [],
@@ -75,8 +79,18 @@ class DataAccessMetric extends MetricEvaluator {
                 it.accessibility == Accessibility.PUBLIC
             }.size()
 
-            total /= methods.size()
+            if (methods)
+                total /= methods.size()
+        } else if (node instanceof Project) {
+            node.getAllTypes().each {
+                total += measure(it)
+            }
+
+            if (node.getAllTypes())
+                total /= node.getAllTypes().size()
         }
+
+        Measure.of("${repo.getRepoKey()}:DAM").on(node).withValue(total)
 
         total
     }

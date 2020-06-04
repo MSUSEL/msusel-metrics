@@ -27,6 +27,8 @@
 package edu.montana.gsoc.msusel.metrics.impl
 
 import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Parameter
 import edu.isu.isuese.datamodel.Type
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
@@ -69,9 +71,9 @@ class PolymorphicMethods extends MetricEvaluator {
 
         if (node instanceof Type) {
             node.getMethods().each { m ->
-                for (t in m.params) {
-                    if (!(t.getType().isKnownType())) {
-                        double noc = getMetric(mediator.findType(t.type.ref.refKey), "NOC") // FIXME
+                for (Parameter p in m.params) {
+                    if (!(p.getType().isKnownType())) {
+                        double noc = getMeasure(p.getType().getReference().getReferencedComponent(node.getParentProject()), repo.getRepoKey(), "NOC")
                         if (noc > 0) {
                             total += 1
                             break
@@ -80,6 +82,8 @@ class PolymorphicMethods extends MetricEvaluator {
                 }
             }
         }
+
+        Measure.of("${repo.getRepoKey()}:PM").on(node).withValue(total)
 
         total
     }

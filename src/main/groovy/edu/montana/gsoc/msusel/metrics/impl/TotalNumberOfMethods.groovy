@@ -28,6 +28,7 @@ package edu.montana.gsoc.msusel.metrics.impl
 
 import edu.isu.isuese.datamodel.File
 import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
 import edu.isu.isuese.datamodel.Namespace
 import edu.isu.isuese.datamodel.PatternInstance
 import edu.isu.isuese.datamodel.Structure
@@ -39,16 +40,16 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
  * @version 1.3.0
  */
 @MetricDefinition(
-        name = "",
-        primaryHandle = "",
-        description = "",
+        name = "Total Number of Methods",
+        primaryHandle = "TNOM",
+        description = "A count of the total number of methods defined within a component and all of its subcomponents",
         properties = @MetricProperties(
                 range = "",
                 aggregation = [],
-                scope = MetricScope.METHOD,
+                scope = MetricScope.ALL,
                 type = MetricType.Derived,
                 scale = MetricScale.Interval,
-                category = MetricCategory.Coupling
+                category = MetricCategory.Size
         ),
         references = [
                 ''
@@ -70,22 +71,24 @@ class TotalNumberOfMethods extends MetricEvaluator {
         int total = 0
 
         if (node instanceof Structure) {
-            node.getTypes().each {
-                total += getMetric(it, "NOM")
+            node.getAllTypes().each {
+                total += getMeasure(it, repo.getRepoKey(), "NOM")
             }
         } else if (node instanceof PatternInstance) {
-            node.getTypes().each { // FIXME
-                total += getMetric(it, "NOM")
+            node.getTypes().each {
+                total += getMeasure(it, repo.getRepoKey(), "NOM")
             }
         } else if (node instanceof File) {
             node.getAllTypes().each {
-                total += getMetric(it, "NOM")
+                total += getMeasure(it, repo.getRepoKey(),"NOM")
             }
         } else if (node instanceof Namespace) {
             node.getAllTypes().each {
-                total += getMetric(it, "NOM")
+                total += getMeasure(it, repo.getRepoKey(), "NOM")
             }
         }
+
+        Measure.of("${repo.getRepoKey()}:TNOM").on(node).withValue(total)
 
         total
     }

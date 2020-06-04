@@ -44,5 +44,6 @@ enum MetricCategory {
     Volume,
     Encapsulation,
     BasicProperty,
-    Documentation
+    Documentation,
+    Quality
 }

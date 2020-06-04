@@ -71,42 +71,35 @@ abstract class LOCMetricEvaluator extends SourceMetricEvaluator {
      */
     @Override
     def measure(Measurable node) {
+        int count = 0
+
         if (node instanceof Component) {
             List<String> lines = getLines(node)
-            String ext = mediator.findParent(node).getKey().find(/\.\w{2,4}$/)
+            String ext = node.getParent().getRefKey().find(/\.\w{2,4}$/)
             ext = ext.substring(1)
 
             loadProfile(LoCProfileManager.instance.getProfileByExtension(ext))
 
-            int count = count(lines)
-            MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
-            Measure.store(mdef.primaryHandle(), node, count)
-            count
+            count = count(lines)
         } else if (node instanceof File) {
             List<String> lines = getLines(node)
-            String ext = node.getKey().find(/\.\w{2,4}$/)
+            String ext = node.getRefKey().find(/\.\w{2,4}$/)
             ext = ext.substring(1)
 
             loadProfile(LoCProfileManager.instance.getProfileByExtension(ext))
 
-            int count = count(lines)
-            MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
-            Measure.store(mdef.primaryHandle(), node, count)
-            count
+            count = count(lines)
         } else if (node instanceof Structure) {
-            int total = 0
-
             node.getFiles().each { file ->
                 MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
-                total += Measure.retrieve(file, mdef.primaryHandle())
+                count += Measure.retrieve(file, "${repo.getRepoKey()}:${mdef.primaryHandle()}")
             }
-            MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
-            Measure.store(mdef.primaryHandle(), node, total)
-            total
-        } else {
-            0
         }
 
+        MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
+        Measure.of("${repo.getRepoKey()}:${mdef.primaryHandle()}").on(node).withValue(count)
+
+        count
     }
 
     /**

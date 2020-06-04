@@ -27,6 +27,8 @@
 package edu.montana.gsoc.msusel.metrics.impl
 
 import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Project
 import edu.isu.isuese.datamodel.Structure
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
@@ -67,14 +69,17 @@ class NumberOfHierarchies extends MetricEvaluator {
     def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof Structure) {
-            def types = node.getTypes()
+        if (node instanceof Project) {
+            Structure struct = (Structure) node
+            def types = struct.getAllTypes()
 
             total = types.findAll {
                 (it.getRealizedBy().isEmpty() && it.getGeneralizedBy().isEmpty()) &&
                         (!it.getRealizes().isEmpty() || !it.getGeneralizes().isEmpty())
             }.size()
         }
+
+        Measure.of("${repo.getRepoKey()}:NOH").on(node).withValue(total)
 
         total
     }

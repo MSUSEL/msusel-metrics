@@ -28,6 +28,8 @@ package edu.montana.gsoc.msusel.metrics.impl
 
 import edu.isu.isuese.datamodel.Accessibility
 import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Project
 import edu.isu.isuese.datamodel.Type
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
@@ -70,7 +72,16 @@ class ClassInterfaceSize extends MetricEvaluator {
 
         if (node instanceof Type) {
             total = node.getMethods().findAll { it.accessibility == Accessibility.PUBLIC }.size()
+        } else if (node instanceof Project) {
+            node.getAllTypes().each {
+                total += measure(it)
+            }
+
+            if (node.getAllTypes())
+                total /= node.getAllTypes().size()
         }
+
+        Measure.of("${repo.getRepoKey()}:CIS").on(node).withValue(total)
 
         total
     }

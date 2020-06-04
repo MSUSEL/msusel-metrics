@@ -26,8 +26,9 @@
  */
 package edu.montana.gsoc.msusel.metrics
 
+
+import edu.isu.isuese.datamodel.MetricRepository
 import edu.montana.gsoc.msusel.metrics.annotations.MetricDefinition
-import org.reflections.Reflections
 
 /**
  * @author Isaac Griffith
@@ -35,30 +36,58 @@ import org.reflections.Reflections
  */
 class MetricsRegistrar {
 
-    Map<String, MetricEvaluator> register = [:]
+    Map<String, MetricEvaluator> primary = [:]
+    Map<String, MetricEvaluator> secondary = [:]
     Map<String, String> handles = [:]
+    MetricRepository repo
 
-    void register(MetricEvaluator evaluator) {
+    MetricsRegistrar(MetricRepository repo) {
+        this.repo = repo
+    }
+
+    void registerPrimary(MetricEvaluator evaluator) {
         Class<? extends MetricEvaluator> clazz = evaluator.getClass()
         MetricDefinition mdef = clazz.getAnnotation(MetricDefinition.class)
         if ((mdef.name() != null && !mdef.name().isEmpty()) && (mdef.primaryHandle() != null && !mdef.primaryHandle().isEmpty())) {
-            register[mdef.primaryHandle()] = evaluator
+            primary[mdef.primaryHandle()] = evaluator
             handles[mdef.primaryHandle()] = mdef.primaryHandle()
             mdef.otherHandles().each {
                 handles[it] = mdef.primaryHandle()
             }
         }
+
+        evaluator.setRepo(this.repo)
+    }
+
+    void registerSecondary(MetricEvaluator evaluator) {
+        Class<? extends MetricEvaluator> clazz = evaluator.getClass()
+        MetricDefinition mdef = clazz.getAnnotation(MetricDefinition.class)
+        if ((mdef.name() != null && !mdef.name().isEmpty()) && (mdef.primaryHandle() != null && !mdef.primaryHandle().isEmpty())) {
+            secondary[mdef.primaryHandle()] = evaluator
+            handles[mdef.primaryHandle()] = mdef.primaryHandle()
+            mdef.otherHandles().each {
+                handles[it] = mdef.primaryHandle()
+            }
+        }
+
+        evaluator.setRepo(this.repo)
     }
 
     MetricEvaluator getMetric(String primaryHandle) {
-        if (register[primaryHandle])
-            register[primaryHandle]
+        if (primary[primaryHandle])
+            primary[primaryHandle]
+        else if (secondary[primaryHandle])
+            secondary[primaryHandle]
         else
             null
     }
 
-    List<MetricEvaluator> getEvaluators() {
-        return register.values().asList()
+    List<MetricEvaluator> getPrimaryEvaluators() {
+        return primary.values().asList()
+    }
+
+    List<MetricEvaluator> getSecondaryEvaluators() {
+        return secondary.values().asList()
     }
 
     String getHandle(String handle) {
@@ -66,7 +95,12 @@ class MetricsRegistrar {
     }
 
     MetricEvaluator getEvaluator(String handle) {
-        String primary = getHandle(handle)
-        register[primary]
+        String eval = getHandle(handle)
+        if (this.primary[eval])
+            this.primary[eval]
+        else if (this.secondary[eval])
+            this.secondary[eval]
+        else
+            null
     }
 }

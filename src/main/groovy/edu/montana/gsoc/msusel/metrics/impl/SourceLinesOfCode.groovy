@@ -66,7 +66,7 @@ class SourceLinesOfCode extends LOCMetricEvaluator {
                     blockComment = true
                 }
                 else if (blockCommentStart != null && scrubbed.contains(blockCommentStart) && !blockComment) {
-                    blockComment = detectSequence(bcsQuotes, scrubbed, blockCommentStart)
+                    blockComment = detectSequence(bcsQuotes, scrubbed, blockCommentStart as String)
                     boolean bcEnd = detectSequence(bceQuotes, scrubbed, blockCommentEnd)
 
                     if (!bcEnd || (blockComment && scrubbed.substring(scrubbed.indexOf(blockCommentEnd) + 2).isEmpty())) {

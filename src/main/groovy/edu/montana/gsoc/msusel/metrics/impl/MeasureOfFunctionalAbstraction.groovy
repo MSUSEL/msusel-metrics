@@ -26,7 +26,13 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
+import com.google.common.collect.Queues
+import edu.isu.isuese.datamodel.Accessibility
 import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.Modifier
+import edu.isu.isuese.datamodel.Project
 import edu.isu.isuese.datamodel.Type
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
@@ -68,12 +74,37 @@ class MeasureOfFunctionalAbstraction extends MetricEvaluator {
         double total = 0.0
 
         if (node instanceof Type) {
-            double nmi = getMetric(node, "NMI")
-            double nma = getMetric(node, "NMA")
+            compute((Type) node)
+        } else if (node instanceof Project) {
+            node.getAllTypes().each {
+                total += measure(it)
+            }
 
-            total = nmi / (nmi + nma)
+            if (node.getAllTypes())
+                total /= node.getAllTypes().size()
         }
 
+        Measure.of("${repo.getRepoKey()}:MFA").on(node).withValue(total)
+
         total
+    }
+
+    def compute(Type type) {
+        double nmi = 0
+
+        Queue<Type> q = Queues.newArrayDeque()
+        q.offer(type)
+
+        while (!q.isEmpty()) {
+            Type t = q.poll()
+            t.getGeneralizedBy().each { Type x ->
+                q.offer(x)
+                nmi += x.getMethods().count { Method m -> m.getAccessibility() != Accessibility.PRIVATE && !m.isAbstract() && !m.hasModifier("STATIC") }
+            }
+        }
+
+        double nma = nmi + type.getMethods().count { Method m -> !m.isAbstract() && !m.hasModifier("STATIC") }
+
+        return nmi / nma
     }
 }

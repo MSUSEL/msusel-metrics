@@ -27,6 +27,7 @@
 package edu.montana.gsoc.msusel.metrics.impl
 
 import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
 import edu.isu.isuese.datamodel.Type
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
@@ -37,16 +38,16 @@ import org.apache.commons.lang3.tuple.Pair
  * @version 1.3.0
  */
 @MetricDefinition(
-        name = "",
-        primaryHandle = "",
-        description = "",
+        name = "Number of Ancestor Classes",
+        primaryHandle = "NOA",
+        description = "A count of the number of ancestor classes for a given classes",
         properties = @MetricProperties(
                 range = "",
                 aggregation = [],
-                scope = MetricScope.METHOD,
+                scope = MetricScope.TYPE,
                 type = MetricType.Derived,
                 scale = MetricScale.Interval,
-                category = MetricCategory.Coupling
+                category = MetricCategory.Inheritance
         ),
         references = [
                 ''
@@ -88,6 +89,8 @@ class NumberOfAncestorClasses extends MetricEvaluator {
                 total += 1
             }
         }
+
+        Measure.of("${repo.getRepoKey()}:NOA").on(node).withValue(total)
 
         total
     }

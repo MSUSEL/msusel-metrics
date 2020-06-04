@@ -28,6 +28,7 @@ package edu.montana.gsoc.msusel.metrics.impl
 
 import edu.isu.isuese.datamodel.File
 import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
 import edu.isu.isuese.datamodel.Namespace
 import edu.isu.isuese.datamodel.Structure
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
@@ -70,14 +71,14 @@ class NumberOfTypes extends MetricEvaluator {
         int total = 0
 
         if (node instanceof Structure) {
-            total = node.getTypes().size()
+            total = node.getAllTypes().size()
         } else if (node instanceof File) {
             total = node.getAllTypes().size()
         } else if (node instanceof Namespace) {
             total = node.getAllTypes().size()
         }
 
-        //Measure.of(this).on(node).withValue(total).store()) // TODO Fix this
+        Measure.of("${repo.getRepoKey()}:NOT").on(node).withValue(total)
     }
 
 }

@@ -27,6 +27,7 @@
 package edu.montana.gsoc.msusel.metrics.impl
 
 import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
 import edu.isu.isuese.datamodel.Method
 import edu.isu.isuese.datamodel.Structure
 import edu.isu.isuese.datamodel.Type
@@ -39,16 +40,16 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
  * @version 1.3.0
  */
 @MetricDefinition(
-        name = "",
-        primaryHandle = "",
+        name = "Logical Lines of Code",
+        primaryHandle = "LLOC",
         description = "",
         properties = @MetricProperties(
                 range = "",
                 aggregation = [],
                 scope = MetricScope.METHOD,
-                type = MetricType.Derived,
+                type = MetricType.Model,
                 scale = MetricScale.Interval,
-                category = MetricCategory.Coupling
+                category = MetricCategory.Size
         ),
         references = [
                 ''
@@ -83,10 +84,12 @@ class LogicalLinesOfCode extends MetricEvaluator {
                 total += measure(it)
             }
         } else if (node instanceof Structure) {
-            node.getTypes().each {
+            node.getAllTypes().each {
                 total += measure(it)
             }
         }
+
+        Measure.of("${repo.getRepoKey()}:LLOC").on(node).withValue(total)
 
         total
     }

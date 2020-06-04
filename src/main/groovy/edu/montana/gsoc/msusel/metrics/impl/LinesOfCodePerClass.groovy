@@ -36,16 +36,16 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
  * @version 1.3.0
  */
 @MetricDefinition(
-        name = "",
-        primaryHandle = "",
-        description = "",
+        name = "Lines of Code Per Class",
+        primaryHandle = "LOCPC",
+        description = "Lines of Code average per class",
         properties = @MetricProperties(
                 range = "",
                 aggregation = [],
-                scope = MetricScope.METHOD,
+                scope = MetricScope.PROJECT,
                 type = MetricType.Derived,
                 scale = MetricScale.Interval,
-                category = MetricCategory.Coupling
+                category = MetricCategory.Size
         ),
         references = [
                 ''
@@ -69,7 +69,7 @@ class LinesOfCodePerClass extends MetricEvaluator {
 
         if (node instanceof Type) {
             node.getMethods().each {
-                total += getMeasure(it, "LOC")
+                total += getMeasure(it, getRepo().getRepoKey(), "LOC")
             }
         }
 

@@ -28,6 +28,8 @@ package edu.montana.gsoc.msusel.metrics.impl
 
 import com.google.common.collect.Sets
 import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Project
 import edu.isu.isuese.datamodel.Type
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
@@ -79,7 +81,16 @@ class DirectClassCoupling extends MetricEvaluator {
             conn.addAll(node.getDependencyFrom())
 
             total = conn.size() // need to ensure none are primitive types
+        } else if (node instanceof Project) {
+            node.getAllTypes().each {
+                total += measure(it)
+            }
+
+            if (node.getAllTypes())
+                total /= node.getAllTypes().size()
         }
+
+        Measure.of("${repo.getRepoKey()}:DCC").on(node).withValue(total)
 
         total
     }

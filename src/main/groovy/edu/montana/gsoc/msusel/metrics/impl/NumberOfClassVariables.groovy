@@ -76,7 +76,7 @@ class NumberOfClassVariables extends MetricEvaluator {
             }.size()
         }
 
-        //Measure.of(this).on(node).withValue(total).store())
+        Measure.of("${repo.getRepoKey()}:NCV").on(node).withValue(total)
     }
 
 }

@@ -29,6 +29,7 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
+import edu.isu.isuese.datamodel.Measure
 import edu.montana.gsoc.msusel.metrics.LOCMetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -60,10 +61,8 @@ class LinesOfCode extends LOCMetricEvaluator {
     @Override
     double count(List<String> lines)
     {
-        int total = 0
-        
-        total = lines.size()
-        
+        int total = lines.size()
+
         total
     }
 

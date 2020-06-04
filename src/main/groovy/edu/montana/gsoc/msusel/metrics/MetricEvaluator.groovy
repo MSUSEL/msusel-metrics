@@ -40,6 +40,8 @@ import org.jetbrains.annotations.NotNull
  */
 abstract class MetricEvaluator implements Comparable<MetricEvaluator> {
 
+    MetricRepository repo;
+
     abstract def measure(Measurable node)
 
     Metric toMetric(MetricRepository repository) {
