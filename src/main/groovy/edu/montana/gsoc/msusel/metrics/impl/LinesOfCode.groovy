@@ -40,6 +40,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
 @MetricDefinition(
     name = "Lines of Code",
     primaryHandle = "LOC",
+    otherHandles = ['LoC'],
     description = "The number of physical lines of code",
     properties = @MetricProperties(
         range = "Positive Integers",

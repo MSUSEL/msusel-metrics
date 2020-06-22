@@ -39,6 +39,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
 @MetricDefinition(
         name = "Number of Classes",
         primaryHandle = "NC",
+        otherHandles = ['#Classes'],
         description = "A count of the total number of classes in a system",
         properties = @MetricProperties(
                 range = "Positive Integer",

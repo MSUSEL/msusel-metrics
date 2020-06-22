@@ -36,6 +36,8 @@ import edu.montana.gsoc.msusel.metrics.annotations.MetricDefinition
  */
 class MetricsRegistrar {
 
+    public static Map<String, MetricsRegistrar> instances = [:]
+
     Map<String, MetricEvaluator> primary = [:]
     Map<String, MetricEvaluator> secondary = [:]
     Map<String, String> handles = [:]
@@ -43,6 +45,7 @@ class MetricsRegistrar {
 
     MetricsRegistrar(MetricRepository repo) {
         this.repo = repo
+        instances[repo.getRepoKey()] = this
     }
 
     void registerPrimary(MetricEvaluator evaluator) {

@@ -73,7 +73,7 @@ class TotalNumberOfAttributes extends MetricEvaluator {
 
         if (node instanceof Structure) {
             node.getAllTypes().each {
-                total += getMeasure(it, repo.getRepoKey() "NOA")
+                total += getMeasure(it, repo.getRepoKey(), "NOA")
             }
         } else if (node instanceof PatternInstance) {
             node.getTypes().each {

@@ -43,6 +43,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
 @MetricDefinition(
         name = "Number of Methods",
         primaryHandle = "NOM",
+        otherHandles = ['#Methods'],
         description = "Count of all the methods defined in a class (but not inherited).",
         properties = @MetricProperties(
                 range = "Positive Integers",

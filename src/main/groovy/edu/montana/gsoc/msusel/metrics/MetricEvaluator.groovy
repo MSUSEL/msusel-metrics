@@ -40,11 +40,12 @@ import org.jetbrains.annotations.NotNull
  */
 abstract class MetricEvaluator implements Comparable<MetricEvaluator> {
 
-    MetricRepository repo;
+    MetricRepository repo
 
     abstract def measure(Measurable node)
 
     Metric toMetric(MetricRepository repository) {
+        repo = repository
         MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
         Metric metric = Metric.findFirst("metricKey = ?", "${repository.getRepoKey()}:${mdef.primaryHandle()}")
         if (!metric) {

@@ -42,6 +42,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
 @MetricDefinition(
         name = "Number of Fields",
         primaryHandle = "NOF",
+        otherHandles = ['#FieldDeclarations'],
         description = "Count of the number of fields or attributes defined but not inherited by a class",
         properties = @MetricProperties(
                 range = "Postive Integers",

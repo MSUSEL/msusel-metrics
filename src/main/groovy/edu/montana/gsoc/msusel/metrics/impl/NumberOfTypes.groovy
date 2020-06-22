@@ -41,6 +41,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
 @MetricDefinition(
         name = "Number of Types",
         primaryHandle = "NOT",
+        otherHandles = ['#Types'],
         description = "A Count of the types defined within the scope of the item measured.",
         properties = @MetricProperties(
                 range = "Positive Integers",

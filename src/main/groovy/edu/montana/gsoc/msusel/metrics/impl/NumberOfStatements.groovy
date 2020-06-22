@@ -43,6 +43,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
 @MetricDefinition(
         name = "Number of Statements",
         primaryHandle = "NOS",
+        otherHandles = ['#Statements'],
         description = "Count of the number of statements in a method's body",
         properties = @MetricProperties(
                 range = "Positive Integers",
