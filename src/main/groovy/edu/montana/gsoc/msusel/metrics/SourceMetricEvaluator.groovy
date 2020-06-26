@@ -40,7 +40,7 @@ abstract class SourceMetricEvaluator extends MetricEvaluator {
 
     List<String> getLines(Measurable node) {
         if (node instanceof Component) {
-            File f = mediator.findParentFile(node)
+            File f = node.getParentFile()
 
             def x = Files.readAllLines(Paths.get(f.getName()))
             int start = node.start - 1
