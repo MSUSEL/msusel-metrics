@@ -70,7 +70,7 @@ class NumberOfLocalVariables extends MetricEvaluator {
         if (node instanceof Method) {
             ControlFlowGraph cfg = node.getCfg()
             cfg.graph.nodes().each {
-                if (it.getType() == StatementType.VAR_DECL)
+                if (it.getType() == StatementType.VARDECL)
                     total += 1
             }
         }
