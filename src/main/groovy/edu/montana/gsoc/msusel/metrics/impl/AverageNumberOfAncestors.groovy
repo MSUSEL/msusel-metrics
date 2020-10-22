@@ -72,7 +72,7 @@ class AverageNumberOfAncestors extends MetricEvaluator {
 
         if (node instanceof Project) {
             Project struct = (Project) node
-            def map = [:]
+            Map<Type, Integer> map = new HashMap<>()
             def classes = struct.getAllTypes()
             classes.each { Type t ->
                 total += recursiveSearch(t, map)
@@ -86,17 +86,20 @@ class AverageNumberOfAncestors extends MetricEvaluator {
         total
     }
 
-    private def recursiveSearch(Type type, map) {
-        if (map[type]) {
-            map[type]
-        } else if (type.getRealizedBy().isEmpty() && type.getGeneralizedBy().isEmpty()) {
+    private int recursiveSearch(Type type, Map<Type, Integer> map) {
+        if (type.getRealizedBy().isEmpty() && type.getGeneralizedBy().isEmpty()) {
             map[type] = 0
-            map[type]
-        } else {
-            int real = type.getRealizedBy().collect {}
-            int gen = type.getGeneralizedBy().collect {}
+        } else if (!map[type]) {
+            int real = 0
+            int gen = 0
+            type.getRealizedBy().each {
+                real += recursiveSearch(it, map)
+            }
+            type.getGeneralizedBy().each {
+                gen += recursiveSearch(it, map)
+            }
             map[type] = 1 + real + gen
-            map[type]
         }
+        map[type]
     }
 }
