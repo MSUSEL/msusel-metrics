@@ -70,7 +70,7 @@ class NumberOfHierarchies extends MetricEvaluator {
         int total = 0
 
         if (node instanceof Project) {
-            Structure struct = (Structure) node
+            Project struct = (Project) node
             def types = struct.getAllTypes()
 
             total = types.findAll {
