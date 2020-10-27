@@ -74,7 +74,7 @@ class MeasureOfAggregation extends MetricEvaluator {
         if (node instanceof Type) {
             node.getFields().each {
                 if (it.getType().getType() != TypeRefType.Primitive) {
-                    if (!(it.getType().getReference())) {
+                    if (it.getType().getReference()) {
                         if (!(it.getType().getReference().getReferencedComponent(node.getParentProject()) instanceof UnknownType))
                             total += 1
                     }
