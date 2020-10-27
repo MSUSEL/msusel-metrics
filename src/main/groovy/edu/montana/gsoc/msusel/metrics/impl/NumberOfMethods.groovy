@@ -26,6 +26,7 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
+import edu.isu.isuese.datamodel.ComponentContainer
 import edu.isu.isuese.datamodel.Measurable
 import edu.isu.isuese.datamodel.Measure
 import edu.isu.isuese.datamodel.Namespace
@@ -76,19 +77,7 @@ class NumberOfMethods extends MetricEvaluator {
 
         if (node instanceof Type) {
             total = node.getMethods().size()
-        } else if (node instanceof Structure) {
-            node.getAllTypes().each { Type type ->
-                total += type.getMethods().size()
-            }
-        } else if (node instanceof PatternInstance) {
-            node.getTypes().each { Type type ->
-                total += type.getMethods().size()
-            }
-        } else if (node instanceof File) {
-            node.getAllTypes().each { Type type ->
-                total += type.getMethods().size()
-            }
-        } else if (node instanceof Namespace) {
+        } else if (node instanceof ComponentContainer) {
             node.getAllTypes().each { Type type ->
                 total += type.getMethods().size()
             }

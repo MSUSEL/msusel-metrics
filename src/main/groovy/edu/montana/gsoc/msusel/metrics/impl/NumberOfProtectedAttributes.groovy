@@ -27,6 +27,7 @@
 package edu.montana.gsoc.msusel.metrics.impl
 
 import edu.isu.isuese.datamodel.Accessibility
+import edu.isu.isuese.datamodel.ComponentContainer
 import edu.isu.isuese.datamodel.Measurable
 import edu.isu.isuese.datamodel.Measure
 import edu.isu.isuese.datamodel.Type
@@ -71,6 +72,10 @@ class NumberOfProtectedAttributes extends MetricEvaluator {
 
         if (node instanceof Type) {
             total = node.getFields().findAll { it.accessibility == Accessibility.PROTECTED }.size()
+        } else if (node instanceof ComponentContainer) {
+            node.getAllTypes().each { Type type ->
+                total += Measure.valueFor(repo.getRepoKey(), "NPROTA", type)
+            }
         }
 
         Measure.of("${repo.getRepoKey()}:NPROTA").on(node).withValue(total)

@@ -26,6 +26,7 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
+import edu.isu.isuese.datamodel.ComponentContainer
 import edu.isu.isuese.datamodel.File
 import edu.isu.isuese.datamodel.Measurable
 import edu.isu.isuese.datamodel.Measure
@@ -71,19 +72,7 @@ class TotalNumberOfClasses extends MetricEvaluator {
     def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof Structure) {
-            node.getAllTypes().each {
-                total += getMeasure(it, repo.getRepoKey(), "NC")
-            }
-        } else if (node instanceof PatternInstance) {
-            node.getTypes().each {
-                total += getMeasure(it, repo.getRepoKey(), "NC")
-            }
-        } else if (node instanceof File) {
-            node.getAllTypes().each {
-                total += getMeasure(it, repo.getRepoKey(), "NC")
-            }
-        } else if (node instanceof Namespace) {
+        if (node instanceof ComponentContainer) {
             node.getAllTypes().each {
                 total += getMeasure(it, repo.getRepoKey(), "NC")
             }

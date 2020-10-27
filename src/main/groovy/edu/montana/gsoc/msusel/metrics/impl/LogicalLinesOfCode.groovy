@@ -26,6 +26,7 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
+import edu.isu.isuese.datamodel.ComponentContainer
 import edu.isu.isuese.datamodel.Measurable
 import edu.isu.isuese.datamodel.Measure
 import edu.isu.isuese.datamodel.Method
@@ -83,7 +84,7 @@ class LogicalLinesOfCode extends MetricEvaluator {
             node.getAllTypes().each {
                 total += measure(it)
             }
-        } else if (node instanceof Structure) {
+        } else if (node instanceof ComponentContainer) {
             node.getAllTypes().each {
                 total += measure(it)
             }

@@ -26,7 +26,9 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
+import edu.isu.isuese.datamodel.ComponentContainer
 import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
 import edu.isu.isuese.datamodel.Type
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
@@ -71,7 +73,13 @@ class LinesOfCodePerClass extends MetricEvaluator {
             node.getMethods().each {
                 total += getMeasure(it, getRepo().getRepoKey(), "LOC")
             }
+        } else if (node instanceof ComponentContainer) {
+            node.getAllTypes().each { Type type ->
+                total += Measure.valueFor(repo.getRepoKey(), "LOCPC", type)
+            }
         }
+
+        Measure.of("${repo.getRepoKey()}:LOCPC").on(node).withValue(total)
 
         total
     }

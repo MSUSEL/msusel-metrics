@@ -26,6 +26,7 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
+import edu.isu.isuese.datamodel.ComponentContainer
 import edu.isu.isuese.datamodel.Measurable
 import edu.isu.isuese.datamodel.Measure
 import edu.isu.isuese.datamodel.Method
@@ -76,11 +77,11 @@ class NumberOfLocalVariables extends MetricEvaluator {
         }
         else if (node instanceof Type) {
             node.getMethods().each {
-                total += measure(it)
+                total += Measure.valueFor(repo.getRepoKey(), "NOV", it)
             }
-        } else if (node instanceof Project) {
-            node.getAllTypes().each {
-                total += measure(it)
+        } else if (node instanceof ComponentContainer) {
+            node.getAllTypes().each { Type type ->
+                total += Measure.valueFor(repo.getRepoKey(), "NOV", type)
             }
         }
 
