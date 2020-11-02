@@ -84,7 +84,10 @@ class CohesionAmongMethodsOfClass extends MetricEvaluator {
 
             double denom = types.size() * node.getMethods().size()
 
-            total = num / denom
+            if (denom.abs() > 0)
+                total = num / denom
+            else
+                total = 0
         }
         if (node instanceof Project) {
             node.getAllTypes().each { total += measure(it) }
