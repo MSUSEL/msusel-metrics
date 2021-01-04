@@ -75,7 +75,7 @@ abstract class LOCMetricEvaluator extends SourceMetricEvaluator {
 
         if (node instanceof Component) {
             List<String> lines = getLines(node)
-            String ext = node.getParent().getRefKey().find(/\.\w{2,4}$/)
+            String ext = node.getParentFile().getRefKey().find(/\.\w{2,4}$/)
             ext = ext.substring(1)
 
             loadProfile(LoCProfileManager.instance.getProfileByExtension(ext))
