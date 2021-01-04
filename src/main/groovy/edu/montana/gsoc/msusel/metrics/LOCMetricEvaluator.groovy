@@ -71,7 +71,7 @@ abstract class LOCMetricEvaluator extends SourceMetricEvaluator {
      */
     @Override
     def measure(Measurable node) {
-        int count = 0
+        int cnt = 0
 
         if (node instanceof Component) {
             List<String> lines = getLines(node)
@@ -80,7 +80,7 @@ abstract class LOCMetricEvaluator extends SourceMetricEvaluator {
 
             loadProfile(LoCProfileManager.instance.getProfileByExtension(ext))
 
-            count = count(lines)
+            cnt = count(lines)
         } else if (node instanceof File) {
             List<String> lines = getLines(node)
             String ext = node.getRefKey().find(/\.\w{2,4}$/)
@@ -88,18 +88,18 @@ abstract class LOCMetricEvaluator extends SourceMetricEvaluator {
 
             loadProfile(LoCProfileManager.instance.getProfileByExtension(ext))
 
-            count = count(lines)
+            cnt = count(lines)
         } else if (node instanceof Structure) {
             node.getFiles().each { file ->
                 MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
-                count += Measure.retrieve(file, "${repo.getRepoKey()}:${mdef.primaryHandle()}")
+                cnt += Measure.retrieve(file, "${repo.getRepoKey()}:${mdef.primaryHandle()}")
             }
         }
 
         MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
-        Measure.of("${repo.getRepoKey()}:${mdef.primaryHandle()}").on(node).withValue(count)
+        Measure.of("${repo.getRepoKey()}:${mdef.primaryHandle()}").on(node).withValue(cnt)
 
-        count
+        cnt
     }
 
     /**
