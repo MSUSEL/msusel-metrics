@@ -74,7 +74,7 @@ abstract class MetricEvaluator implements Comparable<MetricEvaluator> {
     double getMeasure(Component comp, String repo, String handle) {
         if (comp == null)
             return 0.0
-        
+
         Project proj = comp.getParentProject()
 
         proj.getMeasuredValue(comp, repo, handle)
