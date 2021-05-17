@@ -79,7 +79,7 @@ class NumberOfAncestorClasses extends MetricEvaluator {
                 Type type = pair.right
                 Integer current = pair.left
 
-                type.getRealizedBy().each { Type t ->
+                type.getRealizes().each { Type t ->
                     q.offer(Pair.of(current + 1, t))
                 }
 

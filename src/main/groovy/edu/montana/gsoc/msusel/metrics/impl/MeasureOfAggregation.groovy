@@ -26,6 +26,7 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
+import edu.isu.isuese.datamodel.Field
 import edu.isu.isuese.datamodel.Measurable
 import edu.isu.isuese.datamodel.Measure
 import edu.isu.isuese.datamodel.Project
@@ -73,24 +74,28 @@ class MeasureOfAggregation extends MetricEvaluator {
 
         if (node instanceof Type) {
             node.getFields().each {
-                if (it.getType().getType() != TypeRefType.Primitive) {
-                    if (it.getType().getReference()) {
-                        if (!(it.getType().getReference().getReferencedComponent(node.getParentProject()) instanceof UnknownType))
-                            total += 1
-                    }
+                if (shouldCount(it, node)) {
+                    total += 1
                 }
             }
         } else if (node instanceof Project) {
-            node.getAllTypes().each {
+            List<Type> types = node.getAllTypes()
+            types.each {
                 total += measure(it)
             }
 
-            if (node.getAllTypes())
-                total /= node.getAllTypes().size()
+            if (types)
+                total /= types.size()
         }
 
         Measure.of("${repo.getRepoKey()}:MOA").on(node).withValue(total)
 
         total
+    }
+
+    private boolean shouldCount(Field field, Measurable node) {
+        field.getType().getType() == TypeRefType.Type &&
+                field.getType().getReference() &&
+                !(field.getType().getReference().getReferencedComponent(node.getParentProject()) instanceof UnknownType)
     }
 }

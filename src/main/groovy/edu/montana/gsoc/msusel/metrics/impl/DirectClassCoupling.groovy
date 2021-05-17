@@ -73,7 +73,7 @@ class DirectClassCoupling extends MetricEvaluator {
         if (node instanceof Type) {
             Set<Type> conn = Sets.newHashSet()
             conn.addAll(node.getGeneralizedBy())
-            conn.addAll(node.getRealizedBy())
+            conn.addAll(node.getRealizes())
             conn.addAll(node.getAssociatedFrom())
             conn.addAll(node.getAggregatedFrom())
             conn.addAll(node.getComposedFrom())
@@ -82,12 +82,13 @@ class DirectClassCoupling extends MetricEvaluator {
 
             total = conn.size() // need to ensure none are primitive types
         } else if (node instanceof Project) {
-            node.getAllTypes().each {
+            List<Type> types = node.getAllTypes()
+            types.each {
                 total += measure(it)
             }
 
-            if (node.getAllTypes())
-                total /= node.getAllTypes().size()
+            if (types)
+                total /= types.size()
         }
 
         Measure.of("${repo.getRepoKey()}:DCC").on(node).withValue(total)

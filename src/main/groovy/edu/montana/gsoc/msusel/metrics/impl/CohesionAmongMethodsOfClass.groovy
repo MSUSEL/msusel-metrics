@@ -90,9 +90,10 @@ class CohesionAmongMethodsOfClass extends MetricEvaluator {
                 total = 0
         }
         if (node instanceof Project) {
-            node.getAllTypes().each { total += measure(it) }
-            if (node.getAllTypes())
-                total /= node.getAllTypes().size()
+            List<Type> types = node.getAllTypes()
+            types.each { total += measure(it) }
+            if (types)
+                total /= types.size()
         }
 
         Measure.of("${repo.getRepoKey()}:CAM").on(node).withValue(total)

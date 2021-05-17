@@ -82,12 +82,13 @@ class DataAccessMetric extends MetricEvaluator {
             if (methods)
                 total /= methods.size()
         } else if (node instanceof Project) {
-            node.getAllTypes().each {
+            List<Type> types = node.getAllTypes()
+            types.each {
                 total += measure(it)
             }
 
-            if (node.getAllTypes())
-                total /= node.getAllTypes().size()
+            if (types)
+                total /= types.size()
         }
 
         Measure.of("${repo.getRepoKey()}:DAM").on(node).withValue(total)

@@ -74,8 +74,8 @@ class NumberOfHierarchies extends MetricEvaluator {
             def types = struct.getAllTypes()
 
             total = types.findAll {
-                (it.getRealizedBy().isEmpty() && it.getGeneralizedBy().isEmpty()) &&
-                        (!it.getRealizes().isEmpty() || !it.getGeneralizes().isEmpty())
+                (it.getRealizes().isEmpty() && it.getGeneralizedBy().isEmpty()) &&
+                        (!it.getRealizedBy().isEmpty() || !it.getGeneralizes().isEmpty())
             }.size()
         }
 

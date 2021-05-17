@@ -79,7 +79,7 @@ class NumberOfMethods extends MetricEvaluator {
             total = node.getMethods().size()
         } else if (node instanceof ComponentContainer) {
             node.getAllTypes().each { Type type ->
-                total += type.getMethods().size()
+                total += Measure.valueFor(repo.getRepoKey(), "NOM", type)
             }
         }
 

@@ -76,12 +76,13 @@ class MeasureOfFunctionalAbstraction extends MetricEvaluator {
         if (node instanceof Type) {
             compute((Type) node)
         } else if (node instanceof Project) {
-            node.getAllTypes().each {
+            List<Type> types = node.getAllTypes()
+            types.each {
                 total += measure(it)
             }
 
-            if (node.getAllTypes())
-                total /= node.getAllTypes().size()
+            if (types)
+                total /= types.size()
         }
 
         Measure.of("${repo.getRepoKey()}:MFA").on(node).withValue(total)

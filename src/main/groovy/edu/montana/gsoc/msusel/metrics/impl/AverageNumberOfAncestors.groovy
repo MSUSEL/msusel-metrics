@@ -75,7 +75,7 @@ class AverageNumberOfAncestors extends MetricEvaluator {
             Map<Type, Integer> map = new HashMap<>()
             def classes = struct.getAllTypes()
             classes.each { Type t ->
-                total += recursiveSearch(t, map)
+                total += Measure.valueFor(repo.getRepoKey(), "NOA", t)
             }
             if (classes)
                 total /= classes.size()
