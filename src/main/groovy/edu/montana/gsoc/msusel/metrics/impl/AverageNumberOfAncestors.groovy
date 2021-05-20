@@ -75,7 +75,7 @@ class AverageNumberOfAncestors extends MetricEvaluator {
             Map<Type, Integer> map = new HashMap<>()
             def classes = struct.getAllTypes()
             classes.each { Type t ->
-                total += Measure.valueFor(repo.getRepoKey(), "NOA", t)
+                total += Measure.valueFor("arc-metrics", "NOA", t)
             }
             if (classes)
                 total /= classes.size()
