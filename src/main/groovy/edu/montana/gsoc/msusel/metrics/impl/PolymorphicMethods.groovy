@@ -74,7 +74,7 @@ class PolymorphicMethods extends MetricEvaluator {
             node.getMethods().each { m ->
                 for (Parameter p in m.params) {
                     if (!(p.getType().isKnownType())) {
-                        double noc = getMeasure(p.getType().getReference().getReferencedComponent(node.getParentProject()), repo.getRepoKey(), "NOC")
+                        double noc = Measure.valueFor(repo.getRepoKey(), "NOC", p.getType().getReference().getReferencedComponent(node.getParentProject()))
                         if (noc > 0) {
                             total += 1
                             break
