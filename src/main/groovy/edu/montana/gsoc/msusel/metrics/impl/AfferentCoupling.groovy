@@ -26,10 +26,7 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.isu.isuese.datamodel.Measurable
-import edu.isu.isuese.datamodel.PatternInstance
-import edu.isu.isuese.datamodel.Structure
-import edu.isu.isuese.datamodel.Type
+import edu.isu.isuese.datamodel.*
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -38,8 +35,8 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
  * @version 1.3.0
  */
 @MetricDefinition(
-        name = "",
-        primaryHandle = "",
+        name = "Afferent Coupling",
+        primaryHandle = "Ca",
         description = "",
         properties = @MetricProperties(
                 range = "",
@@ -67,18 +64,8 @@ class AfferentCoupling extends MetricEvaluator {
      */
     @Override
     def measure(Measurable node) {
-        int total = 0
-
-        List<Type> types = []
-        if (node instanceof Structure) {
-            types = node.getTypes()
-        }
-        else if (node instanceof PatternInstance) {
-            PatternInstance pi = (PatternInstance) node
-            types = pi.getTypes()
-        }
-
         Set<Type> couplings = new HashSet<>()
+        List<Type> types = []
         types.each {
             couplings.addAll(it.getRealizedBy())
             couplings.addAll(it.getGeneralizedBy())
@@ -93,6 +80,63 @@ class AfferentCoupling extends MetricEvaluator {
         total = couplings.size()
 
         total
+
+        double total = 0
+
+        if (node instanceof Type) {
+            Type type = node as Type
+            total += findCouplings([type]).size()
+        }
+        else if (node instanceof File) {
+            File file = node as File
+            file.getAllTypes().each {
+                total += findCouplings(file.getAllTypes()).size()
+            }
+        }
+        else if (node instanceof PatternInstance) {
+            PatternInstance inst = node as PatternInstance
+            inst.getTypes().each {
+                total += findCouplings(inst.getAllTypes()).size()
+            }
+        }
+        else if (node instanceof System) {
+            System sys = node as System
+            sys.getProjects().each {
+                total += findCouplings(sys.getAllTypes()).size()
+            }
+        }
+        else if (node instanceof Namespace) {
+            Namespace ns = node as Namespace
+            ns.getAllTypes().each {
+                total += findCouplings(ns.getAllTypes()).size()
+            }
+        }
+        else if (node instanceof Project) {
+            Project proj = node as Project
+            proj.getNamespaces().each {
+                total += findCouplings(proj.getAllTypes()).size()
+            }
+        }
+
+        Measure.of("${repo.getRepoKey()}:Ca").on(node).withValue(total)
+        total
     }
 
+    private Set<Type> findCouplings(List<Type> containedTypes) {
+        Set<Type> couplings = new HashSet<>()
+
+        containedTypes.each {
+            couplings.addAll(it.getRealizedBy())
+            couplings.addAll(it.getGeneralizes())
+            couplings.addAll(it.getAssociatedFrom())
+            couplings.addAll(it.getAggregatedFrom())
+            couplings.addAll(it.getComposedFrom())
+            couplings.addAll(it.getDependencyFrom())
+            couplings.addAll(it.getUseFrom())
+        }
+
+        couplings.removeAll(containedTypes)
+
+        couplings
+    }
 }

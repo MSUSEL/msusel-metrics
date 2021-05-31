@@ -28,6 +28,7 @@ package edu.montana.gsoc.msusel.metrics.impl
 
 import com.google.common.graph.Graph
 import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
 import edu.isu.isuese.datamodel.Method
 import edu.isu.isuese.datamodel.cfg.ControlFlowNode
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
@@ -38,11 +39,11 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
  * @version 1.3.0
  */
 @MetricDefinition(
-        name = "",
-        primaryHandle = "",
+        name = "McCabe's Cyclomatic Complexity",
+        primaryHandle = "MCC",
         description = "",
         properties = @MetricProperties(
-                range = "",
+                range = "Positive Integers",
                 aggregation = [],
                 scope = MetricScope.METHOD,
                 type = MetricType.Derived,
@@ -70,12 +71,18 @@ class CyclomaticComplexity extends MetricEvaluator {
         int total = 0
 
         if (node instanceof Method) {
-            Graph<ControlFlowNode> cfg = node.getCfg().getGraph()
+            if (node.isAbstract())
+                total = 1
+            else {
+                Graph<ControlFlowNode> cfg = node.getCfg().getGraph()
 
-            int nodes = cfg.nodes().size()
-            int edges = cfg.edges().size()
+                int nodes = cfg.nodes().size()
+                int edges = cfg.edges().size()
 
-            total = edges - nodes + 2
+                total = edges - nodes + 2
+            }
+
+            Measure.of("${repo.getRepoKey()}:MCC").on(node).withValue(total)
         }
 
         total

@@ -26,8 +26,15 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
+import edu.isu.isuese.datamodel.File
 import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
 import edu.isu.isuese.datamodel.Method
+import edu.isu.isuese.datamodel.Namespace
+import edu.isu.isuese.datamodel.PatternInstance
+import edu.isu.isuese.datamodel.Project
+import edu.isu.isuese.datamodel.System
+import edu.isu.isuese.datamodel.Type
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -36,11 +43,11 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
  * @version 1.3.0
  */
 @MetricDefinition(
-        name = "",
-        primaryHandle = "",
-        description = "",
+        name = "Number of Method Parameters",
+        primaryHandle = "NOMP",
+        description = "A count of the number of parameters to a method, excluding template params.",
         properties = @MetricProperties(
-                range = "",
+                range = "Positive Integers",
                 aggregation = [],
                 scope = MetricScope.METHOD,
                 type = MetricType.Derived,
@@ -65,12 +72,48 @@ class NumberOfMethodParameters extends MetricEvaluator {
      */
     @Override
     def measure(Measurable node) {
-        int total = 0
+        double total = 0
 
         if (node instanceof Method) {
             total = node.getParams().size()
+        } else if (node instanceof Type) {
+            Type type = node as Type
+            type.getAllMethods().each {
+                total += Measure.valueFor(repo.getRepoKey(), "NOPM", it)
+            }
+        }
+        else if (node instanceof File) {
+            File file = node as File
+            file.getAllTypes().each {
+                total += Measure.valueFor(repo.getRepoKey(), "NOPM", it)
+            }
+        }
+        else if (node instanceof PatternInstance) {
+            PatternInstance inst = node as PatternInstance
+            inst.getTypes().each {
+                total += Measure.valueFor(repo.getRepoKey(), "NOPM", it)
+            }
+        }
+        else if (node instanceof System) {
+            System sys = node as System
+            sys.getProjects().each {
+                total += Measure.valueFor(repo.getRepoKey(), "NOPM", it)
+            }
+        }
+        else if (node instanceof Namespace) {
+            Namespace ns = node as Namespace
+            ns.getAllTypes().each {
+                total += Measure.valueFor(repo.getRepoKey(), "NOPM", it)
+            }
+        }
+        else if (node instanceof Project) {
+            Project ns = node as Project
+            ns.getNamespaces().each {
+                total += Measure.valueFor(repo.getRepoKey(), "NOPM", it)
+            }
         }
 
+        Measure.of("${repo.getRepoKey()}:NOPM").on(node).withValue(total)
         total
     }
 
