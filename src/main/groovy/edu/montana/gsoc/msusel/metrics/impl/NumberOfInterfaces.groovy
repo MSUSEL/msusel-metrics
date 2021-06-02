@@ -26,12 +26,7 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.isu.isuese.datamodel.Interface
-import edu.isu.isuese.datamodel.Measurable
-import edu.isu.isuese.datamodel.Namespace
-import edu.isu.isuese.datamodel.File
-import edu.isu.isuese.datamodel.PatternInstance
-import edu.isu.isuese.datamodel.Structure
+import edu.isu.isuese.datamodel.*
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -72,13 +67,13 @@ class NumberOfInterfaces extends MetricEvaluator {
         int total = 0
 
         if (node instanceof Structure) {
-            total = node.getTypes().findAll { it instanceof Interface }.size()
+            total = node.getAllTypes().findAll { it.getType() == Type.INTERFACE }.size()
         } else if (node instanceof File) {
-            total = node.getAllTypes().findAll { it instanceof Interface }.size()
+            total = node.getAllTypes().findAll { it.getType() == Type.INTERFACE }.size()
         } else if (node instanceof PatternInstance) {
-            total = node.getTypes().findAll { it instanceof Interface }.size() // FIXME
+            total = node.getTypes().findAll { it.getType() == Type.INTERFACE }.size() // FIXME
         } else if (node instanceof Namespace) {
-            total = node.getAllTypes().findAll { it instanceof Interface }.size()
+            total = node.getAllTypes().findAll { it.getType() == Type.INTERFACE }.size()
         }
 
         //Measure.of(this).on(node).withValue(total).store())

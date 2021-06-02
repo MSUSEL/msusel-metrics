@@ -26,13 +26,7 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-import edu.isu.isuese.datamodel.Field
-import edu.isu.isuese.datamodel.Measurable
-import edu.isu.isuese.datamodel.Measure
-import edu.isu.isuese.datamodel.Project
-import edu.isu.isuese.datamodel.Type
-import edu.isu.isuese.datamodel.TypeRefType
-import edu.isu.isuese.datamodel.UnknownType
+import edu.isu.isuese.datamodel.*
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -96,6 +90,7 @@ class MeasureOfAggregation extends MetricEvaluator {
     private boolean shouldCount(Field field, Measurable node) {
         field.getType().getType() == TypeRefType.Type &&
                 field.getType().getReference() &&
-                !(field.getType().getReference().getReferencedComponent(node.getParentProject()) instanceof UnknownType)
+                !(field.getType().getReference().getReferencedComponent(node.getParentProject()) instanceof Type &&
+                        ((Type) field.getType().getReference().getReferencedComponent(node.getParentProject())).getType() == Type.UNKNOWN)
     }
 }
