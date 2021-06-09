@@ -64,23 +64,6 @@ class AfferentCoupling extends MetricEvaluator {
      */
     @Override
     def measure(Measurable node) {
-        Set<Type> couplings = new HashSet<>()
-        List<Type> types = []
-        types.each {
-            couplings.addAll(it.getRealizedBy())
-            couplings.addAll(it.getGeneralizedBy())
-            couplings.addAll(it.getAssociatedTo())
-            couplings.addAll(it.getAggregatedTo())
-            couplings.addAll(it.getComposedTo())
-            couplings.addAll(it.getDependencyTo())
-            couplings.addAll(it.getUseTo())
-        }
-
-        couplings.removeAll(types)
-        total = couplings.size()
-
-        total
-
         double total = 0
 
         if (node instanceof Type) {
