@@ -112,7 +112,7 @@ class NumberOfMethodParameters extends MetricEvaluator {
                 total += Measure.valueFor(repo.getRepoKey(), "NOMP", it)
             }
         }
-zoom
+
         Measure.of("${repo.getRepoKey()}:NOMP").on(node).withValue(total)
         total
     }
