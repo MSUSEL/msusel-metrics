@@ -29,6 +29,9 @@ package edu.montana.gsoc.msusel.metrics
 import edu.isu.isuese.datamodel.Component
 import edu.isu.isuese.datamodel.Measurable
 import edu.isu.isuese.datamodel.Measure
+import edu.isu.isuese.datamodel.Module
+import edu.isu.isuese.datamodel.Namespace
+import edu.isu.isuese.datamodel.Project
 import edu.isu.isuese.datamodel.Structure
 import edu.montana.gsoc.msusel.metrics.annotations.MetricDefinition
 
@@ -90,6 +93,21 @@ abstract class LOCMetricEvaluator extends SourceMetricEvaluator {
 
             cnt = count(lines)
         } else if (node instanceof Structure) {
+            node.getFiles().each { file ->
+                MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
+                cnt += Measure.retrieve(file, "${repo.getRepoKey()}:${mdef.primaryHandle()}")
+            }
+        } else if (node instanceof Project) {
+            node.getFiles().each { file ->
+                MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
+                cnt += Measure.retrieve(file, "${repo.getRepoKey()}:${mdef.primaryHandle()}")
+            }
+        } else if (node instanceof Namespace) {
+            node.getFiles().each { file ->
+                MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
+                cnt += Measure.retrieve(file, "${repo.getRepoKey()}:${mdef.primaryHandle()}")
+            }
+        } else if (node instanceof Module) {
             node.getFiles().each { file ->
                 MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
                 cnt += Measure.retrieve(file, "${repo.getRepoKey()}:${mdef.primaryHandle()}")
