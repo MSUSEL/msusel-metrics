@@ -74,7 +74,7 @@ abstract class LOCMetricEvaluator extends SourceMetricEvaluator {
      */
     @Override
     def measure(Measurable node) {
-        int cnt = 0
+        double cnt = 0
 
         if (node instanceof Component) {
             List<String> lines = getLines(node)
@@ -95,22 +95,22 @@ abstract class LOCMetricEvaluator extends SourceMetricEvaluator {
         } else if (node instanceof Structure) {
             node.getFiles().each { file ->
                 MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
-                cnt += Measure.retrieve(file, "${repo.getRepoKey()}:${mdef.primaryHandle()}")
+                cnt += Measure.retrieve(file, "${repo.getRepoKey()}:${mdef.primaryHandle()}").getValue()
             }
         } else if (node instanceof Project) {
             node.getFiles().each { file ->
                 MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
-                cnt += Measure.retrieve(file, "${repo.getRepoKey()}:${mdef.primaryHandle()}")
+                cnt += Measure.retrieve(file, "${repo.getRepoKey()}:${mdef.primaryHandle()}").getValue()
             }
         } else if (node instanceof Namespace) {
             node.getAllTypes().each { type ->
                 MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
-                cnt += Measure.retrieve(type, "${repo.getRepoKey()}:${mdef.primaryHandle()}")
+                cnt += Measure.retrieve(type, "${repo.getRepoKey()}:${mdef.primaryHandle()}").getValue()
             }
         } else if (node instanceof Module) {
             node.getFiles().each { file ->
                 MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
-                cnt += Measure.retrieve(file, "${repo.getRepoKey()}:${mdef.primaryHandle()}")
+                cnt += Measure.retrieve(file, "${repo.getRepoKey()}:${mdef.primaryHandle()}").getValue()
             }
         }
 
