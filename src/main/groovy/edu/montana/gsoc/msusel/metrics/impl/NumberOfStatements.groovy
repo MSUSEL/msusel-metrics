@@ -73,7 +73,7 @@ class NumberOfStatements extends MetricEvaluator {
         } else if (node instanceof Type) {
             total = measureType(node)
             Measure.of("${repo.getRepoKey()}:NOS").on(node).withValue(total)
-        } else if (node instanceof ComponentContainer) {
+        } else if (node instanceof ComponentContainer && !(node instanceof Type)) {
             node.getAllTypes().each { Type type ->
                 total += measureType(type)
             }

@@ -77,10 +77,7 @@ class NumberOfTypes extends MetricEvaluator {
             total = 1 + node.getContained().size()
             Measure.of("${repo.getRepoKey()}:NOT").on(node).withValue(total)
         }
-        else if (node instanceof Structure) {
-            total = node.getAllTypes().findAll { it instanceof Class }.size()
-            Measure.of("${repo.getRepoKey()}:NOT").on(node).withValue(total)
-        } else if (node instanceof ComponentContainer) {
+        else if (node instanceof ComponentContainer && !(node instanceof Type)) {
             node.getAllTypes().each { Type type ->
                 total += Measure.valueFor(repo.getRepoKey(), "NC", type)
             }

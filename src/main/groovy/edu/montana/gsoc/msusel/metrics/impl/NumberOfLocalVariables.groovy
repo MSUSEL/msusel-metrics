@@ -81,7 +81,7 @@ class NumberOfLocalVariables extends MetricEvaluator {
                 total += Measure.valueFor(repo.getRepoKey(), "NOV", it)
             }
             Measure.of("${repo.getRepoKey()}:NOV").on(node).withValue(total)
-        } else if (node instanceof ComponentContainer) {
+        } else if (node instanceof ComponentContainer && !(node instanceof Type)) {
             node.getAllTypes().each { Type type ->
                 total += Measure.valueFor(repo.getRepoKey(), "NOV", type)
             }

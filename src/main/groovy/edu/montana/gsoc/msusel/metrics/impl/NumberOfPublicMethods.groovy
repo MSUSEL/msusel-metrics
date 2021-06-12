@@ -72,13 +72,13 @@ class NumberOfPublicMethods extends MetricEvaluator {
 
         if (node instanceof Type) {
             total = node.getMethods().findAll { it.accessibility == Accessibility.PUBLIC }.size()
-        } else if (node instanceof ComponentContainer) {
+            Measure.of("${repo.getRepoKey()}:NPUBM").on(node).withValue(total)
+        } else if (node instanceof ComponentContainer && !(node instanceof Type)) {
             node.getAllTypes().each { Type type ->
                 total += Measure.valueFor(repo.getRepoKey(), "NPUBM", type)
             }
+            Measure.of("${repo.getRepoKey()}:NPUBM").on(node).withValue(total)
         }
-
-        Measure.of("${repo.getRepoKey()}:NPUBM").on(node).withValue(total)
 
         total
     }

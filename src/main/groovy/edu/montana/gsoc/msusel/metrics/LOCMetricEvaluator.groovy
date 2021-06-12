@@ -106,7 +106,8 @@ abstract class LOCMetricEvaluator extends SourceMetricEvaluator {
         } else if (node instanceof Project) {
             node.getFiles().each { file ->
                 MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
-                cnt += Measure.retrieve(file, "${repo.getRepoKey()}:${mdef.primaryHandle()}").getValue()
+                if (Measure.retrieve(file, "${repo.getRepoKey()}:${mdef.primaryHandle()}"))
+                    cnt += Measure.retrieve(file, "${repo.getRepoKey()}:${mdef.primaryHandle()}").getValue()
             }
             MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
             Measure.of("${repo.getRepoKey()}:${mdef.primaryHandle()}").on(node).withValue(cnt)

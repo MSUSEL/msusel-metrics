@@ -72,13 +72,13 @@ class NumberOfProtectedAttributes extends MetricEvaluator {
 
         if (node instanceof Type) {
             total = node.getFields().findAll { it.accessibility == Accessibility.PROTECTED }.size()
-        } else if (node instanceof ComponentContainer) {
+            Measure.of("${repo.getRepoKey()}:NPROTA").on(node).withValue(total)
+        } else if (node instanceof ComponentContainer && !(node instanceof Type)) {
             node.getAllTypes().each { Type type ->
                 total += Measure.valueFor(repo.getRepoKey(), "NPROTA", type)
             }
+            Measure.of("${repo.getRepoKey()}:NPROTA").on(node).withValue(total)
         }
-
-        Measure.of("${repo.getRepoKey()}:NPROTA").on(node).withValue(total)
 
         total
     }

@@ -87,7 +87,7 @@ class LogicalLinesOfCode extends MetricEvaluator {
                 total += Measure.valueFor(repo.getRepoKey(), "LLOC", it)
             }
             Measure.of("${repo.getRepoKey()}:LLOC").on(node).withValue(total)
-        } else if (node instanceof ComponentContainer) {
+        } else if (node instanceof ComponentContainer && !(node instanceof Type) && !(node instanceof File)) {
             node.getAllTypes().each {
                 total += Measure.valueFor(repo.getRepoKey(), "LLOC", it)
             }
