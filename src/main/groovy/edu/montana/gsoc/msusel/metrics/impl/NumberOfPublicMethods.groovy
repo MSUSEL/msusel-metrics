@@ -75,7 +75,7 @@ class NumberOfPublicMethods extends MetricEvaluator {
             Measure.of("${repo.getRepoKey()}:NPUBM").on(node).withValue(total)
         } else if (node instanceof ComponentContainer && !(node instanceof Type)) {
             node.getAllTypes().each { Type type ->
-                total += Measure.valueFor(repo.getRepoKey(), "NPUBM", type)
+                total += type.getValueFor("${repo.getRepoKey()}:NPUBM")
             }
             Measure.of("${repo.getRepoKey()}:NPUBM").on(node).withValue(total)
         }

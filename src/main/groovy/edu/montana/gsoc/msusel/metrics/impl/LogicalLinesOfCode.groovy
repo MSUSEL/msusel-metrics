@@ -78,18 +78,18 @@ class LogicalLinesOfCode extends MetricEvaluator {
         } else if (node instanceof Type) {
             total += node.getFields().size()
             node.getMethods().each {
-                total += Measure.valueFor(repo.getRepoKey(), "LLOC", it)
+                total += it.getValueFor("${repo.getRepoKey()}:LLOC")
             }
             Measure.of("${repo.getRepoKey()}:LLOC").on(node).withValue(total)
         } else if (node instanceof File) {
             total += node.getImports().size()
             node.getAllTypes().each {
-                total += Measure.valueFor(repo.getRepoKey(), "LLOC", it)
+                total += it.getValueFor("${repo.getRepoKey()}:LLOC")
             }
             Measure.of("${repo.getRepoKey()}:LLOC").on(node).withValue(total)
         } else if (node instanceof ComponentContainer && !(node instanceof Type) && !(node instanceof File)) {
             node.getAllTypes().each {
-                total += Measure.valueFor(repo.getRepoKey(), "LLOC", it)
+                total += it.getValueFor("${repo.getRepoKey()}:LLOC")
             }
             Measure.of("${repo.getRepoKey()}:LLOC").on(node).withValue(total)
         }

@@ -75,7 +75,7 @@ class NumberOfProtectedAttributes extends MetricEvaluator {
             Measure.of("${repo.getRepoKey()}:NPROTA").on(node).withValue(total)
         } else if (node instanceof ComponentContainer && !(node instanceof Type)) {
             node.getAllTypes().each { Type type ->
-                total += Measure.valueFor(repo.getRepoKey(), "NPROTA", type)
+                total += type.getValueFor("${repo.getRepoKey()}:NPROTA")
             }
             Measure.of("${repo.getRepoKey()}:NPROTA").on(node).withValue(total)
         }

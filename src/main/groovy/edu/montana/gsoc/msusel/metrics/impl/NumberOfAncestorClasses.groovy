@@ -92,7 +92,7 @@ class NumberOfAncestorClasses extends MetricEvaluator {
             Measure.of("${repo.getRepoKey()}:NOA").on(node).withValue(total)
         } else if (node instanceof ComponentContainer && !(node instanceof Type)) {
             node.getAllTypes().each { Type type ->
-                total += Measure.valueFor(repo.getRepoKey(), "NOA", type)
+                total += type.getValueFor("${repo.getRepoKey()}:NOA")
             }
             if (!node.getAllTypes().isEmpty())
                 total /= node.getAllTypes().size()

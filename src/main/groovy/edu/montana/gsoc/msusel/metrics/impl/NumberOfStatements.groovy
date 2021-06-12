@@ -95,7 +95,7 @@ class NumberOfStatements extends MetricEvaluator {
     static measureType(Type type) {
         int total = 0
         type.getMethods().each { Method method ->
-//            total += measureMethod(method)
+            total += method.getValueFor("${repo.getRepoKey()}:NOS")
         }
         total
     }
