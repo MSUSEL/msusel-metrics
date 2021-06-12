@@ -34,6 +34,7 @@ import edu.isu.isuese.datamodel.Module
 import edu.isu.isuese.datamodel.Namespace
 import edu.isu.isuese.datamodel.Project
 import edu.isu.isuese.datamodel.Structure
+import edu.isu.isuese.datamodel.System
 import edu.montana.gsoc.msusel.metrics.annotations.MetricDefinition
 
 import java.util.regex.Matcher
@@ -97,24 +98,28 @@ abstract class LOCMetricEvaluator extends SourceMetricEvaluator {
             cnt = count(lines)
             MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
             Measure.of("${repo.getRepoKey()}:${mdef.primaryHandle()}").on(node).withValue(cnt)
-        } else if (node instanceof Structure) {
-            node.getFilesByType(FileType.SOURCE).each { file ->
+        } else if (node instanceof System) {
+            (node as System).getProjects().each { proj ->
                 MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
-                cnt += file.getValueFor("${repo.getRepoKey()}:${mdef.primaryHandle()}")
+                cnt += proj.getValueFor("${repo.getRepoKey()}:${mdef.primaryHandle()}")
             }
             MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
             Measure.of("${repo.getRepoKey()}:${mdef.primaryHandle()}").on(node).withValue(cnt)
         } else if (node instanceof Project) {
-            node.getFilesByType(FileType.SOURCE).each { file ->
+            node.getNamespaces().each { ns ->
                 MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
-                cnt += file.getValueFor("${repo.getRepoKey()}:${mdef.primaryHandle()}")
+                cnt += ns.getValueFor("${repo.getRepoKey()}:${mdef.primaryHandle()}")
+            }
+            node.getModules().each {mod ->
+                MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
+                cnt += mod.getValueFor("${repo.getRepoKey()}:${mdef.primaryHandle()}")
             }
             MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
             Measure.of("${repo.getRepoKey()}:${mdef.primaryHandle()}").on(node).withValue(cnt)
         } else if (node instanceof Namespace) {
-            node.getAllTypes().each { type ->
+            node.getFiles().each { file ->
                 MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
-                cnt += type.getValueFor("${repo.getRepoKey()}:${mdef.primaryHandle()}")
+                cnt += file.getValueFor("${repo.getRepoKey()}:${mdef.primaryHandle()}")
             }
             MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
             Measure.of("${repo.getRepoKey()}:${mdef.primaryHandle()}").on(node).withValue(cnt)
