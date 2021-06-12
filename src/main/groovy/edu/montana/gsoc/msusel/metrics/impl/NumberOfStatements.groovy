@@ -83,7 +83,7 @@ class NumberOfStatements extends MetricEvaluator {
         total
     }
 
-    static measureMethod(Method method) {
+    int measureMethod(Method method) {
         if (method.getCfg() == null)
             return 0
         Set<ControlFlowNode> nodes = method.getCfg().getGraph().nodes()
@@ -92,7 +92,7 @@ class NumberOfStatements extends MetricEvaluator {
         nodes.size() - ends.size() - 2
     }
 
-    static measureType(Type type) {
+    int measureType(Type type) {
         int total = 0
         type.getMethods().each { Method method ->
             total += method.getValueFor("${repo.getRepoKey()}:NOS")
