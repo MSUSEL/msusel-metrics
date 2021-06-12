@@ -75,7 +75,7 @@ class NumberOfStatements extends MetricEvaluator {
             Measure.of("${repo.getRepoKey()}:NOS").on(node).withValue(total)
         } else if (node instanceof ComponentContainer && !(node instanceof Type)) {
             node.getAllTypes().each { Type type ->
-                total += measureType(type)
+                total += type.getValueFor("${repo.getRepoKey()}:NOS")
             }
             Measure.of("${repo.getRepoKey()}:NOS").on(node).withValue(total)
         }
@@ -87,14 +87,14 @@ class NumberOfStatements extends MetricEvaluator {
         if (method.getCfg() == null)
             return 0
         Set<ControlFlowNode> nodes = method.getCfg().getGraph().nodes()
-        Set<ControlFlowNode> ends = nodes.findAll { it.type == StatementType.END }
+        Set<ControlFlowNode> stmtNodes = nodes.findAll { it.type != StatementType.METHSTRT && it.type != StatementType.METHEND && it.type != StatementType.END && it.type != StatementType.BLKSTRT && it.type != StatementType.BLKEND }
 
-        nodes.size() - ends.size() - 2
+        return stmtNodes.size()
     }
 
     int measureType(Type type) {
         int total = 0
-        type.getMethods().each { Method method ->
+        type.getAllMethods().each { Method method ->
             total += method.getValueFor("${repo.getRepoKey()}:NOS")
         }
         total
