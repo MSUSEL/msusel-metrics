@@ -48,7 +48,7 @@ abstract class SourceMetricEvaluator extends MetricEvaluator {
 
             x[start..end]
         } else if (node instanceof File) {
-            Files.readAllLines(Paths.get(node.getFullPath()))
+            Files.readAllLines(Paths.get(node.getName()))
         } else {
             []
         }
