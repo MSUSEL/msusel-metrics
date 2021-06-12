@@ -27,6 +27,7 @@
 package edu.montana.gsoc.msusel.metrics
 
 import edu.isu.isuese.datamodel.Component
+import edu.isu.isuese.datamodel.File
 import edu.isu.isuese.datamodel.FileType
 import edu.isu.isuese.datamodel.Measurable
 import edu.isu.isuese.datamodel.Measure
@@ -117,9 +118,9 @@ abstract class LOCMetricEvaluator extends SourceMetricEvaluator {
             MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
             Measure.of("${repo.getRepoKey()}:${mdef.primaryHandle()}").on(node).withValue(cnt)
         } else if (node instanceof Namespace) {
-            node.getFiles().each { file ->
+            node.getAllTypes().each { type ->
                 MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
-                cnt += file.getValueFor("${repo.getRepoKey()}:${mdef.primaryHandle()}")
+                cnt += type.getValueFor("${repo.getRepoKey()}:${mdef.primaryHandle()}")
             }
             MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
             Measure.of("${repo.getRepoKey()}:${mdef.primaryHandle()}").on(node).withValue(cnt)
