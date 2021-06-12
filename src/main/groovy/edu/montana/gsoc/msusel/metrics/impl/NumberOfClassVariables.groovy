@@ -75,13 +75,13 @@ class NumberOfClassVariables extends MetricEvaluator {
             total = node.getFields().findAll {
                 it.hasModifier(Modifier.Values.STATIC) || it.hasModifier(Modifier.Values.CONST)
             }.size()
+            Measure.of("${repo.getRepoKey()}:NCV").on(node).withValue(total)
         } else if (node instanceof ComponentContainer) {
             node.getAllTypes().each { Type type ->
                 total += Measure.valueFor(repo.getRepoKey(), "NCV", type)
             }
+            Measure.of("${repo.getRepoKey()}:NCV").on(node).withValue(total)
         }
-
-        Measure.of("${repo.getRepoKey()}:NCV").on(node).withValue(total)
     }
 
 }

@@ -75,21 +75,23 @@ class NumberOfFields extends MetricEvaluator {
 
         if (node instanceof Type) {
             total = node.getFields().size()
+            Measure.of("${repo.getRepoKey()}:NOF").on(node).withValue(total)
         } else if (node instanceof File) {
 //            ((File) node).getAllTypes().each { Type type ->
 //                total += type.getFields().size()
 //            }
+//            Measure.of("${repo.getRepoKey()}:NOF").on(node).withValue(total)
         } else if (node instanceof Namespace) {
             ((Namespace) node).getAllTypes().each { Type type ->
                 total += Measure.valueFor(repo.getRepoKey(), "NOF", type)
             }
+            Measure.of("${repo.getRepoKey()}:NOF").on(node).withValue(total)
         } else if (node instanceof ComponentContainer) {
             node.getAllTypes().each { Type type ->
                 total += Measure.valueFor(repo.getRepoKey(), "NOF", type)
             }
+            Measure.of("${repo.getRepoKey()}:NOF").on(node).withValue(total)
         }
-
-        Measure.of("${repo.getRepoKey()}:NOF").on(node).withValue(total)
     }
 
 }

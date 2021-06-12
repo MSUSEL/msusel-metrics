@@ -32,6 +32,7 @@ import edu.isu.isuese.datamodel.Measurable
 import edu.isu.isuese.datamodel.Measure
 import edu.isu.isuese.datamodel.Namespace
 import edu.isu.isuese.datamodel.Structure
+import edu.isu.isuese.datamodel.Type
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
 
@@ -72,11 +73,19 @@ class NumberOfTypes extends MetricEvaluator {
     def measure(Measurable node) {
         int total = 0
 
-        if (node instanceof ComponentContainer) {
-            total = node.getAllTypes().size()
+        if (node instanceof Type) {
+            total = 1 + node.getContained().size()
+            Measure.of("${repo.getRepoKey()}:NOT").on(node).withValue(total)
         }
-
-        Measure.of("${repo.getRepoKey()}:NOT").on(node).withValue(total)
+        else if (node instanceof Structure) {
+            total = node.getAllTypes().findAll { it instanceof Class }.size()
+            Measure.of("${repo.getRepoKey()}:NOT").on(node).withValue(total)
+        } else if (node instanceof ComponentContainer) {
+            node.getAllTypes().each { Type type ->
+                total += Measure.valueFor(repo.getRepoKey(), "NC", type)
+            }
+            Measure.of("${repo.getRepoKey()}:NOT").on(node).withValue(total)
+        }
     }
 
 }

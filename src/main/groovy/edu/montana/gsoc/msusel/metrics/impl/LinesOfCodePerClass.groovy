@@ -73,13 +73,13 @@ class LinesOfCodePerClass extends MetricEvaluator {
             node.getMethods().each {
                 total += Measure.valueFor(repo.getRepoKey(), "LOC", it)
             }
+            Measure.of("${repo.getRepoKey()}:LOCPC").on(node).withValue(total)
         } else if (node instanceof ComponentContainer) {
             node.getAllTypes().each { Type type ->
                 total += Measure.valueFor(repo.getRepoKey(), "LOCPC", type)
             }
+            Measure.of("${repo.getRepoKey()}:LOCPC").on(node).withValue(total)
         }
-
-        Measure.of("${repo.getRepoKey()}:LOCPC").on(node).withValue(total)
 
         total
     }

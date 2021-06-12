@@ -72,13 +72,13 @@ class NumberOfPrivateAttributes extends MetricEvaluator {
 
         if (node instanceof Type) {
             total = node.getFields().findAll { it.accessibility == Accessibility.PRIVATE }.size()
+            Measure.of("${repo.getRepoKey()}:NPRIVA").on(node).withValue(total)
         } else if (node instanceof ComponentContainer) {
             node.getAllTypes().each { Type type ->
                 total += Measure.valueFor(repo.getRepoKey(), "NPRIVA", type)
             }
+            Measure.of("${repo.getRepoKey()}:NPRIVA").on(node).withValue(total)
         }
-
-        Measure.of("${repo.getRepoKey()}:NPRIVA").on(node).withValue(total)
 
         total
     }

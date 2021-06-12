@@ -76,44 +76,50 @@ class NumberOfMethodParameters extends MetricEvaluator {
 
         if (node instanceof Method) {
             total = node.getParams().size()
+            Measure.of("${repo.getRepoKey()}:NOMP").on(node).withValue(total)
         } else if (node instanceof Type) {
             Type type = node as Type
             type.getAllMethods().each {
                 total += Measure.valueFor(repo.getRepoKey(), "NOMP", it)
             }
+            Measure.of("${repo.getRepoKey()}:NOMP").on(node).withValue(total)
         }
         else if (node instanceof File) {
             File file = node as File
             file.getAllTypes().each {
                 total += Measure.valueFor(repo.getRepoKey(), "NOMP", it)
             }
+            Measure.of("${repo.getRepoKey()}:NOMP").on(node).withValue(total)
         }
         else if (node instanceof PatternInstance) {
             PatternInstance inst = node as PatternInstance
             inst.getTypes().each {
                 total += Measure.valueFor(repo.getRepoKey(), "NOMP", it)
             }
+            Measure.of("${repo.getRepoKey()}:NOMP").on(node).withValue(total)
         }
         else if (node instanceof System) {
             System sys = node as System
             sys.getProjects().each {
                 total += Measure.valueFor(repo.getRepoKey(), "NOMP", it)
             }
+            Measure.of("${repo.getRepoKey()}:NOMP").on(node).withValue(total)
         }
         else if (node instanceof Namespace) {
             Namespace ns = node as Namespace
             ns.getAllTypes().each {
                 total += Measure.valueFor(repo.getRepoKey(), "NOMP", it)
             }
+            Measure.of("${repo.getRepoKey()}:NOMP").on(node).withValue(total)
         }
         else if (node instanceof Project) {
             Project ns = node as Project
             ns.getNamespaces().each {
                 total += Measure.valueFor(repo.getRepoKey(), "NOMP", it)
             }
+            Measure.of("${repo.getRepoKey()}:NOMP").on(node).withValue(total)
         }
 
-        Measure.of("${repo.getRepoKey()}:NOMP").on(node).withValue(total)
         total
     }
 

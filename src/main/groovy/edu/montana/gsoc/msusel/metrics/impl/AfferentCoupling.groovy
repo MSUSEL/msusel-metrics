@@ -69,39 +69,44 @@ class AfferentCoupling extends MetricEvaluator {
         if (node instanceof Type) {
             Type type = node as Type
             total += findCouplings([type]).size()
+            Measure.of("${repo.getRepoKey()}:Ca").on(node).withValue(total)
         }
         else if (node instanceof File) {
             File file = node as File
             file.getAllTypes().each {
                 total += findCouplings(file.getAllTypes()).size()
             }
+            Measure.of("${repo.getRepoKey()}:Ca").on(node).withValue(total)
         }
         else if (node instanceof PatternInstance) {
             PatternInstance inst = node as PatternInstance
             inst.getTypes().each {
                 total += findCouplings(inst.getAllTypes()).size()
             }
+            Measure.of("${repo.getRepoKey()}:Ca").on(node).withValue(total)
         }
         else if (node instanceof System) {
             System sys = node as System
             sys.getProjects().each {
                 total += findCouplings(sys.getAllTypes()).size()
             }
+            Measure.of("${repo.getRepoKey()}:Ca").on(node).withValue(total)
         }
         else if (node instanceof Namespace) {
             Namespace ns = node as Namespace
             ns.getAllTypes().each {
                 total += findCouplings(ns.getAllTypes()).size()
             }
+            Measure.of("${repo.getRepoKey()}:Ca").on(node).withValue(total)
         }
         else if (node instanceof Project) {
             Project proj = node as Project
             proj.getNamespaces().each {
                 total += findCouplings(proj.getAllTypes()).size()
             }
+            Measure.of("${repo.getRepoKey()}:Ca").on(node).withValue(total)
         }
 
-        Measure.of("${repo.getRepoKey()}:Ca").on(node).withValue(total)
         total
     }
 
