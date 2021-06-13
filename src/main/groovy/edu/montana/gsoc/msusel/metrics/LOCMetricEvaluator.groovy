@@ -38,6 +38,7 @@ import edu.isu.isuese.datamodel.Structure
 import edu.isu.isuese.datamodel.System
 import edu.montana.gsoc.msusel.metrics.annotations.MetricDefinition
 
+import java.nio.charset.MalformedInputException
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -89,7 +90,7 @@ abstract class LOCMetricEvaluator extends SourceMetricEvaluator {
                 loadProfile(LoCProfileManager.instance.getProfileByExtension(ext))
 
                 cnt = count(lines)
-            } catch (IllegalArgumentException | IndexOutOfBoundsException ex) {
+            } catch (IllegalArgumentException | IndexOutOfBoundsException | MalformedInputException ex) {
                 cnt = node.getEnd() - node.getStart()
             }
             MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
