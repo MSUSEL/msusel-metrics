@@ -46,10 +46,12 @@ abstract class SourceMetricEvaluator extends MetricEvaluator {
             int start = node.start - 1
             int end = node.end - 1
 
-            if (end > x.size())
-                return x.subList(start, x.size())
-            else
+            try {
                 x[start..end]
+            } catch (IllegalArgumentException ex) {
+                println "Component: $node"
+                throw ex
+            }
         } else if (node instanceof File) {
             Files.readAllLines(Paths.get(node.getName()))
         } else {
