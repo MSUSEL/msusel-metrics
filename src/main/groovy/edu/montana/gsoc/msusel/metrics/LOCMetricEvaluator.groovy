@@ -89,7 +89,7 @@ abstract class LOCMetricEvaluator extends SourceMetricEvaluator {
                 loadProfile(LoCProfileManager.instance.getProfileByExtension(ext))
 
                 cnt = count(lines)
-            } catch (IllegalArgumentException ex) {
+            } catch (IllegalArgumentException | IndexOutOfBoundsException ex) {
                 cnt = node.getEnd() - node.getStart()
             }
             MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)

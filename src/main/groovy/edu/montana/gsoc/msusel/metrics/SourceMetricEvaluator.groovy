@@ -48,7 +48,7 @@ abstract class SourceMetricEvaluator extends MetricEvaluator {
 
             try {
                 x[start..end]
-            } catch (IllegalArgumentException ex) {
+            } catch (IllegalArgumentException | IndexOutOfBoundsException ex) {
                 println "Component: $node"
                 throw ex
             }
