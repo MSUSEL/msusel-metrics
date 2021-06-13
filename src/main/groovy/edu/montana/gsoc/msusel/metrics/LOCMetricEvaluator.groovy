@@ -80,13 +80,18 @@ abstract class LOCMetricEvaluator extends SourceMetricEvaluator {
         double cnt = 0
 
         if (node instanceof Component) {
-            List<String> lines = getLines(node)
-            String ext = node.getParentFile().getRefKey().find(/\.\w{2,4}$/)
-            ext = ext.substring(1)
+            try {
+                List<String> lines = getLines(node)
 
-            loadProfile(LoCProfileManager.instance.getProfileByExtension(ext))
+                String ext = node.getParentFile().getRefKey().find(/\.\w{2,4}$/)
+                ext = ext.substring(1)
 
-            cnt = count(lines)
+                loadProfile(LoCProfileManager.instance.getProfileByExtension(ext))
+
+                cnt = count(lines)
+            } catch (IllegalArgumentException ex) {
+                cnt = node.getEnd() - node.getStart()
+            }
             MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
             Measure.of("${repo.getRepoKey()}:${mdef.primaryHandle()}").on(node).withValue(cnt)
         } else if (node instanceof File) {
