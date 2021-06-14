@@ -89,7 +89,7 @@ class PolymorphicMethods extends MetricEvaluator {
             }
         } else if (node instanceof ComponentContainer) {
             node.getAllTypes().each { Type type ->
-                total += getMeasure(type, repo.getRepoKey(), "PM")
+                total += Measure.valueFor(repo.getRepoKey(), "PM", type)
             }
         }
 
