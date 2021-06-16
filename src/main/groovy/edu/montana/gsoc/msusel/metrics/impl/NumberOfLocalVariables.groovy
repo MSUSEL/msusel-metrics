@@ -69,11 +69,12 @@ class NumberOfLocalVariables extends MetricEvaluator {
         double total = 0
 
         if (node instanceof Method) {
-            ControlFlowGraph cfg = node.getCfg()
-            cfg.graph.nodes().each {
-                if (it.getType() == StatementType.VARDECL)
-                    total += 1
-            }
+//            ControlFlowGraph cfg = node.getCfg()
+//            cfg.graph.nodes().each {
+//                if (it.getType() == StatementType.VARDECL)
+//                    total += 1
+//            }
+            total = node.getLocalVarCount()
             total += node.getParams().size()
             Measure.of("${repo.getRepoKey()}:NOV").on(node).withValue(total)
         }

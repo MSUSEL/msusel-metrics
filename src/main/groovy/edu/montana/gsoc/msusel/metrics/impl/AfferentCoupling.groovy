@@ -73,9 +73,11 @@ class AfferentCoupling extends MetricEvaluator {
         }
         else if (node instanceof File) {
             File file = node as File
+            List<Double> measures = []
             file.getAllTypes().each {
-                total += findCouplings(file.getAllTypes()).size()
+                measures << Measure.valueFor(repo.getRepoKey(), "Ca", it)
             }
+            total = measures.max()
             Measure.of("${repo.getRepoKey()}:Ca").on(node).withValue(total)
         }
         else if (node instanceof PatternInstance) {
@@ -85,13 +87,13 @@ class AfferentCoupling extends MetricEvaluator {
             }
             Measure.of("${repo.getRepoKey()}:Ca").on(node).withValue(total)
         }
-        else if (node instanceof System) {
-            System sys = node as System
-            sys.getProjects().each {
-                total += findCouplings(sys.getAllTypes()).size()
-            }
-            Measure.of("${repo.getRepoKey()}:Ca").on(node).withValue(total)
-        }
+//        else if (node instanceof System) {
+//            System sys = node as System
+//            sys.getProjects().each {
+//                total += findCouplings(sys.getAllTypes()).size()
+//            }
+//            Measure.of("${repo.getRepoKey()}:Ca").on(node).withValue(total)
+//        }
         else if (node instanceof Namespace) {
             Namespace ns = node as Namespace
             ns.getAllTypes().each {
@@ -99,13 +101,13 @@ class AfferentCoupling extends MetricEvaluator {
             }
             Measure.of("${repo.getRepoKey()}:Ca").on(node).withValue(total)
         }
-        else if (node instanceof Project) {
-            Project proj = node as Project
-            proj.getNamespaces().each {
-                total += findCouplings(proj.getAllTypes()).size()
-            }
-            Measure.of("${repo.getRepoKey()}:Ca").on(node).withValue(total)
-        }
+//        else if (node instanceof Project) {
+//            Project proj = node as Project
+//            proj.getNamespaces().each {
+//                total += findCouplings(proj.getAllTypes()).size()
+//            }
+//            Measure.of("${repo.getRepoKey()}:Ca").on(node).withValue(total)
+//        }
 
         total
     }

@@ -74,12 +74,16 @@ class CyclomaticComplexity extends MetricEvaluator {
             if (node.isAbstract())
                 total = 1
             else {
-                Graph<ControlFlowNode> cfg = node.getCfg().getGraph()
+//                Graph<ControlFlowNode> cfg = node.getCfg().getGraph()
+//
+//                int nodes = cfg.nodes().size()
+//                int edges = cfg.edges().size()
 
-                int nodes = cfg.nodes().size()
-                int edges = cfg.edges().size()
+//                total = edges - nodes + 2
+                int numDecPts = (node as Method).getNumDecisionPoints()
+                int numReturns = (node as Method).getReturnStmts()
 
-                total = edges - nodes + 2
+                total = numDecPts - numReturns + 2
             }
 
             Measure.of("${repo.getRepoKey()}:MCC").on(node).withValue(total)

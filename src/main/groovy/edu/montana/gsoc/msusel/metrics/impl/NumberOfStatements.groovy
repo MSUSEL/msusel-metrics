@@ -84,12 +84,13 @@ class NumberOfStatements extends MetricEvaluator {
     }
 
     int measureMethod(Method method) {
-        if (method.getCfg() == null)
-            return 0
-        Set<ControlFlowNode> nodes = method.getCfg().getGraph().nodes()
-        Set<ControlFlowNode> stmtNodes = nodes.findAll { it.type != StatementType.METHSTRT && it.type != StatementType.METHEND && it.type != StatementType.END && it.type != StatementType.BLKSTRT && it.type != StatementType.BLKEND }
+//        if (method.getCfg() == null)
+//            return 0
+//        Set<ControlFlowNode> nodes = method.getCfg().getGraph().nodes()
+//        Set<ControlFlowNode> stmtNodes = nodes.findAll { it.type != StatementType.METHSTRT && it.type != StatementType.METHEND && it.type != StatementType.END && it.type != StatementType.BLKSTRT && it.type != StatementType.BLKEND }
 
-        return stmtNodes.size()
+//        return stmtNodes.size()
+        return method.getNumStmts()
     }
 
     int measureType(Type type) {

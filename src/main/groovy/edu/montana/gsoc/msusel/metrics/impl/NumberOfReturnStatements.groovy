@@ -70,9 +70,10 @@ class NumberOfReturnStatements extends MetricEvaluator {
         int total = 0
 
         if (node instanceof Method) {
-            total = ((Method) node).getCfg().getGraph().nodes().findAll { ControlFlowNode stmt ->
-                stmt.type == StatementType.RETURN
-            }.size() + 1
+//            total = ((Method) node).getCfg().getGraph().nodes().findAll { ControlFlowNode stmt ->
+//                stmt.type == StatementType.RETURN
+//            }.size() + 1
+            total = (node as Method).getReturnStmts()
         }
 
         total
