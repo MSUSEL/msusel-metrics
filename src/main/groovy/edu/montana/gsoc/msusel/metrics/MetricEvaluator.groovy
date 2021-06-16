@@ -47,7 +47,7 @@ abstract class MetricEvaluator implements Comparable<MetricEvaluator> {
     Metric toMetric(MetricRepository repository) {
         repo = repository
         MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
-        Metric metric = Metric.findFirst("metricKey = ?", "${repository.getRepoKey()}:${mdef.primaryHandle()}")
+        Metric metric = Metric.findFirst("metricKey = ?", (String) "${repository.getRepoKey()}:${mdef.primaryHandle()}")
         if (!metric) {
             metric = Metric.builder()
                     .key("${repository.getRepoKey()}:${mdef.primaryHandle()}")
