@@ -79,4 +79,6 @@ abstract class MetricEvaluator implements Comparable<MetricEvaluator> {
 
         proj.getMeasuredValue(comp, repo, handle)
     }
+
+    void resetState() {}
 }

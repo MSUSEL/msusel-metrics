@@ -26,6 +26,7 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
+
 import edu.isu.isuese.datamodel.*
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
@@ -52,11 +53,14 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
 )
 class AfferentCoupling extends MetricEvaluator {
 
+    Map<String, Set<String>> rels = [:]
+
     /**
      *
      */
     AfferentCoupling() {
         // TODO Auto-generated constructor stub
+        rels = [:]
     }
 
     /**
@@ -68,7 +72,7 @@ class AfferentCoupling extends MetricEvaluator {
 
         if (node instanceof Type) {
             Type type = node as Type
-            total += findCouplings([type]).size()
+            total += findCouplings([type.getCompKey()]).size()
             Measure.of("${repo.getRepoKey()}:Ca").on(node).withValue(total)
         }
         else if (node instanceof File) {
@@ -112,21 +116,34 @@ class AfferentCoupling extends MetricEvaluator {
         total
     }
 
-    private Set<Type> findCouplings(List<Type> containedTypes) {
-        Set<Type> couplings = new HashSet<>()
+    private Set<String> findCouplings(List<String> containedTypes) {
+        Set<String> couplings = new HashSet<>()
 
         containedTypes.each {
-            couplings.addAll(it.getRealizedBy())
-            couplings.addAll(it.getGeneralizes())
-            couplings.addAll(it.getAssociatedFrom())
-            couplings.addAll(it.getAggregatedFrom())
-            couplings.addAll(it.getComposedFrom())
-            couplings.addAll(it.getDependencyFrom())
-            couplings.addAll(it.getUseFrom())
+            if (rels.containsKey(it)) {
+                couplings.addAll(rels[it])
+            } else {
+                Type type = Type.findFirst("compKey = ?", it)
+                Set<String> set = [] as Set<String>
+                set += type.getRealizedBy()*.getCompKey()
+                set += type.getGeneralizes()*.getCompKey()
+                set += type.getAssociatedFrom()*.getCompKey()
+                set += type.getAggregatedFrom()*.getCompKey()
+                set += type.getComposedFrom()*.getCompKey()
+                set += type.getDependencyFrom()*.getCompKey()
+                set += type.getUseFrom()*.getCompKey()
+                rels[it] = set
+
+                couplings += set
+            }
         }
 
         couplings.removeAll(containedTypes)
 
         couplings
+    }
+
+    void resetState() {
+        rels = [:]
     }
 }
