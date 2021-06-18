@@ -79,9 +79,12 @@ class AfferentCoupling extends MetricEvaluator {
             File file = node as File
             List<Double> measures = []
             file.getAllTypes().each {
-                measures << Measure.valueFor(repo.getRepoKey(), "Ca", it)
+                measures << it.getValueFor("${repo.getRepoKey()}:Ca")
             }
-            total = measures.max()
+            if (measures)
+                total = measures.max()
+            if (!total)
+                total = 0
             Measure.of("${repo.getRepoKey()}:Ca").on(node).withValue(total)
         }
         else if (node instanceof PatternInstance) {

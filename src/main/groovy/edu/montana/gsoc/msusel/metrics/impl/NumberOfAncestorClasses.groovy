@@ -56,6 +56,8 @@ import org.apache.commons.lang3.tuple.Pair
 )
 class NumberOfAncestorClasses extends MetricEvaluator {
 
+    static Map<String, Integer> typeAncs = [:]
+
     /**
      *
      */
@@ -71,23 +73,31 @@ class NumberOfAncestorClasses extends MetricEvaluator {
         int total = 0
 
         if (node instanceof Type) {
-            Queue<Pair<Integer, Type>> q = new ArrayDeque<>()
-            q.offer(Pair.of(1, node))
+            Type t = (node as Type)
+            if (typeAncs.containsKey(t.getCompKey())) {
+                total = typeAncs[t.getCompKey()]
+            } else {
+                Queue<Type> q = new ArrayDeque<>()
+                q.offer(node)
 
-            while (!q.isEmpty()) {
-                Pair<Integer, Type> pair = q.poll()
-                Type type = pair.right
-                Integer current = pair.left
+                while (!q.isEmpty()) {
+                    Type type = q.poll()
 
-                type.getRealizes().each { Type t ->
-                    q.offer(Pair.of(current + 1, t))
+                    if (typeAncs.containsKey(t.getCompKey()))
+                        total += typeAncs[t.getCompKey()]
+                    else {
+                        type.getRealizes().each { Type real ->
+                            q.offer(real)
+                        }
+
+                        type.getGeneralizedBy().each {Type gen ->
+                            q.offer(gen)
+                        }
+
+                        total += 1
+                    }
                 }
-
-                type.getGeneralizedBy().each {
-                    q.offer(Pair.of(current + 1, it))
-                }
-
-                total += 1
+                typeAncs[t.getCompKey()] = total
             }
             Measure.of("${repo.getRepoKey()}:NOA").on(node).withValue(total)
         } else if (node instanceof ComponentContainer && !(node instanceof Type)) {
@@ -103,5 +113,4 @@ class NumberOfAncestorClasses extends MetricEvaluator {
 
         total
     }
-
 }
