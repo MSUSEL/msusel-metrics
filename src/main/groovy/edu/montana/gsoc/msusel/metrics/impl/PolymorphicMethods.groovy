@@ -67,7 +67,7 @@ class PolymorphicMethods extends MetricEvaluator {
      * {@inheritDoc}
      */
     @Override
-    def measure(final Measurable node) {
+    def measureValue(final Measurable node) {
         int total = 0
 
         if (node instanceof Type) {

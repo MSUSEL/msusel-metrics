@@ -77,7 +77,7 @@ abstract class LOCMetricEvaluator extends SourceMetricEvaluator {
      * {@inheritDoc}
      */
     @Override
-    def measure(Measurable node) {
+    def measureValue(Measurable node) {
         double cnt = 0
 
         if (node instanceof Component) {

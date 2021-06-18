@@ -28,6 +28,7 @@ package edu.montana.gsoc.msusel.metrics
 
 import edu.isu.isuese.datamodel.Component
 import edu.isu.isuese.datamodel.Measurable
+import edu.isu.isuese.datamodel.Measure
 import edu.isu.isuese.datamodel.Metric
 import edu.isu.isuese.datamodel.MetricRepository
 import edu.isu.isuese.datamodel.Project
@@ -42,7 +43,15 @@ abstract class MetricEvaluator implements Comparable<MetricEvaluator> {
 
     MetricRepository repo
 
-    abstract def measure(Measurable node)
+    def measure(Measurable node) {
+        MetricDefinition mdef = this.getClass().getAnnotation(MetricDefinition.class)
+        if (node.hasValueFor((String) "${repo.getRepoKey()}:${mdef.primaryHandle()}"))
+            return node.getValueFor((String) "${repo.getRepoKey()}:${mdef.primaryHandle()}")
+        else
+            measureValue(node)
+    }
+
+    abstract def measureValue(Measurable node)
 
     Metric toMetric(MetricRepository repository) {
         repo = repository

@@ -65,7 +65,7 @@ class EncapsulationRatio extends MetricEvaluator {
      * {@inheritDoc}
      */
     @Override
-    def measure(Measurable node) {
+    def measureValue(Measurable node) {
         double total = 0.0
 
         if (node instanceof Type) {

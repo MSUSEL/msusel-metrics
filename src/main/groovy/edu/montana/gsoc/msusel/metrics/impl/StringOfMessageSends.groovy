@@ -63,7 +63,7 @@ class StringOfMessageSends extends MetricEvaluator {
      * {@inheritDoc}
      */
     @Override
-    def measure(Measurable node) {
+    def measureValue(Measurable node) {
         // TODO Auto-generated method stub
         return null
     }

@@ -52,7 +52,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.*
 class NumberOfSemicolons extends SourceMetricEvaluator {
 
     @Override
-    def measure(Measurable node) {
+    def measureValue(Measurable node) {
         return null
     }
 }

@@ -66,7 +66,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.MetricType
 class RatioOfCohesiveInteractions extends MetricEvaluator{
 
     @Override
-    def measure(Measurable node) {
+    def measureValue(Measurable node) {
         double total = 0.0
         // 1. Create a graph of all DD and DM interactions
         //    add type nodes

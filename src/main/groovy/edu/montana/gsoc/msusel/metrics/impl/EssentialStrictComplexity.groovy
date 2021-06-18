@@ -62,7 +62,7 @@ class EssentialStrictComplexity extends MetricEvaluator {
      * {@inheritDoc}
      */
     @Override
-    def measure(Measurable node) {
+    def measureValue(Measurable node) {
         return null
     }
 }

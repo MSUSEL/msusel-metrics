@@ -65,7 +65,7 @@ import edu.montana.gsoc.msusel.metrics.annotations.MetricType
 class NumberOfLocalVariables extends MetricEvaluator {
 
     @Override
-    def measure(Measurable node) {
+    def measureValue(Measurable node) {
         double total = 0
 
         if (node instanceof Method) {

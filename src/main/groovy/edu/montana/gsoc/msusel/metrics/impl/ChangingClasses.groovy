@@ -64,7 +64,7 @@ class ChangingClasses extends MetricEvaluator {
      * {@inheritDoc}
      */
     @Override
-    def measure(Measurable node) {
+    def measureValue(Measurable node) {
         int total = 0
 
         if (node instanceof Method) {

@@ -61,7 +61,7 @@ class NumberOfPrimitiveVariables extends MetricEvaluator {
     }
 
     @Override
-    def measure(Measurable node) {
+    def measureValue(Measurable node) {
         double total = 0
 
         if (node instanceof Type) {
