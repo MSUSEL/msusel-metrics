@@ -80,6 +80,7 @@ class NumberOfAncestorClasses extends MetricEvaluator {
                 Queue<Type> q = new ArrayDeque<>()
                 q.offer(node)
 
+                boolean start = true
                 while (!q.isEmpty()) {
                     Type type = q.poll()
 
@@ -94,7 +95,10 @@ class NumberOfAncestorClasses extends MetricEvaluator {
                             q.offer(gen)
                         }
 
-                        total += 1
+                        if (!start)
+                            total += 1
+                        else
+                            start = false
                     }
                 }
                 typeAncs[t.getCompKey()] = total
