@@ -26,7 +26,9 @@
  */
 package edu.montana.gsoc.msusel.metrics
 
-
+import com.google.common.collect.HashBasedTable
+import com.google.common.collect.Lists
+import com.google.common.collect.Table
 import edu.isu.isuese.datamodel.MetricRepository
 import edu.montana.gsoc.msusel.metrics.annotations.MetricDefinition
 
@@ -38,8 +40,11 @@ class MetricsRegistrar {
 
     public static Map<String, MetricsRegistrar> instances = [:]
 
-    Map<String, MetricEvaluator> primary = [:]
-    Map<String, MetricEvaluator> secondary = [:]
+    private static final String PRIMARY = "primary"
+    private static final String SECONDARY = "secondary"
+
+    Table<String, String, MetricEvaluator> registry = HashBasedTable.create()
+
     Map<String, String> handles = [:]
     MetricRepository repo
 
@@ -49,24 +54,18 @@ class MetricsRegistrar {
     }
 
     void registerPrimary(MetricEvaluator evaluator) {
-        Class<? extends MetricEvaluator> clazz = evaluator.getClass()
-        MetricDefinition mdef = clazz.getAnnotation(MetricDefinition.class)
-        if ((mdef.name() != null && !mdef.name().isEmpty()) && (mdef.primaryHandle() != null && !mdef.primaryHandle().isEmpty())) {
-            primary[mdef.primaryHandle()] = evaluator
-            handles[mdef.primaryHandle()] = mdef.primaryHandle()
-            mdef.otherHandles().each {
-                handles[it] = mdef.primaryHandle()
-            }
-        }
-
-        evaluator.setRepo(this.repo)
+        register(evaluator, PRIMARY)
     }
 
     void registerSecondary(MetricEvaluator evaluator) {
+        register(evaluator, SECONDARY)
+    }
+
+    void register(MetricEvaluator evaluator, String category) {
         Class<? extends MetricEvaluator> clazz = evaluator.getClass()
         MetricDefinition mdef = clazz.getAnnotation(MetricDefinition.class)
         if ((mdef.name() != null && !mdef.name().isEmpty()) && (mdef.primaryHandle() != null && !mdef.primaryHandle().isEmpty())) {
-            secondary[mdef.primaryHandle()] = evaluator
+            registry.put(category, mdef.primaryHandle(), evaluator)
             handles[mdef.primaryHandle()] = mdef.primaryHandle()
             mdef.otherHandles().each {
                 handles[it] = mdef.primaryHandle()
@@ -76,34 +75,41 @@ class MetricsRegistrar {
         evaluator.setRepo(this.repo)
     }
 
-    MetricEvaluator getMetric(String primaryHandle) {
-        if (primary[primaryHandle])
-            primary[primaryHandle]
-        else if (secondary[primaryHandle])
-            secondary[primaryHandle]
-        else
-            null
+    MetricEvaluator getMetric(String primaryHandle, String category = null) {
+        if (!category) {
+            if (registry.get(PRIMARY, primaryHandle))
+                registry.get(PRIMARY, primaryHandle)
+            else if (registry.get(SECONDARY, primaryHandle))
+                registry.get(SECONDARY, primaryHandle)
+            else
+                null
+        } else {
+            registry.get(category, primaryHandle)
+        }
     }
 
     List<MetricEvaluator> getPrimaryEvaluators() {
-        return primary.values().asList()
+        getCategoryEvaluators(PRIMARY)
     }
 
     List<MetricEvaluator> getSecondaryEvaluators() {
-        return secondary.values().asList()
+        getCategoryEvaluators(SECONDARY)
+    }
+
+    List<MetricEvaluator> getCategoryEvaluators(String category) {
+        if (registry.containsRow(category)) {
+            return registry.row(category).values().asList()
+        } else {
+            return Lists.newArrayList()
+        }
     }
 
     String getHandle(String handle) {
         handles[handle]
     }
 
-    MetricEvaluator getEvaluator(String handle) {
+    MetricEvaluator getEvaluator(String handle, String category = null) {
         String eval = getHandle(handle)
-        if (this.primary[eval])
-            this.primary[eval]
-        else if (this.secondary[eval])
-            this.secondary[eval]
-        else
-            null
+        getMetric(eval, category)
     }
 }
