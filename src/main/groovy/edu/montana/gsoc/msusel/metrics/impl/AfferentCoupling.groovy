@@ -26,7 +26,7 @@
  */
 package edu.montana.gsoc.msusel.metrics.impl
 
-
+import com.google.common.collect.Sets
 import edu.isu.isuese.datamodel.*
 import edu.montana.gsoc.msusel.metrics.MetricEvaluator
 import edu.montana.gsoc.msusel.metrics.annotations.*
@@ -87,7 +87,7 @@ class AfferentCoupling extends MetricEvaluator {
         else if (node instanceof PatternInstance) {
             PatternInstance inst = node as PatternInstance
             inst.getTypes().each {
-                total += findCouplings(inst.getAllTypes()).size()
+                total += findCouplings(inst.getAllTypes()*.getCompKey()).size()
             }
             Measure.of("${repo.getRepoKey()}:Ca").on(node).withValue(total)
         }
@@ -101,7 +101,7 @@ class AfferentCoupling extends MetricEvaluator {
         else if (node instanceof Namespace) {
             Namespace ns = node as Namespace
             ns.getAllTypes().each {
-                total += findCouplings(ns.getAllTypes()).size()
+                total += findCouplings(ns.getAllTypes()*.getCompKey()).size()
             }
             Measure.of("${repo.getRepoKey()}:Ca").on(node).withValue(total)
         }
@@ -124,14 +124,14 @@ class AfferentCoupling extends MetricEvaluator {
                 couplings.addAll(rels[it])
             } else {
                 Type type = Type.findFirst("compKey = ?", (String) it)
-                Set<String> set = [] as Set<String>
-                set += type.getRealizedBy()*.getCompKey()
-                set += type.getGeneralizes()*.getCompKey()
-                set += type.getAssociatedFrom()*.getCompKey()
-                set += type.getAggregatedFrom()*.getCompKey()
-                set += type.getComposedFrom()*.getCompKey()
-                set += type.getDependencyFrom()*.getCompKey()
-                set += type.getUseFrom()*.getCompKey()
+                Set<String> set = Sets.newHashSet()
+                set.addAll(type.getRealizedBy()*.getCompKey())
+                set.addAll(type.getGeneralizes()*.getCompKey())
+                set.addAll(type.getAssociatedFrom()*.getCompKey())
+                set.addAll(type.getAggregatedFrom()*.getCompKey())
+                set.addAll(type.getComposedFrom()*.getCompKey())
+                set.addAll(type.getDependencyFrom()*.getCompKey())
+                set.addAll(type.getUseFrom()*.getCompKey())
                 rels[it] = set
 
                 couplings += set
