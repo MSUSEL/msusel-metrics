@@ -123,7 +123,7 @@ class AfferentCoupling extends MetricEvaluator {
             if (rels.containsKey(it)) {
                 couplings.addAll(rels[it])
             } else {
-                Type type = Type.findFirst("compKey = ?", it)
+                Type type = Type.findFirst("compKey = ?", (String) it)
                 Set<String> set = [] as Set<String>
                 set += type.getRealizedBy()*.getCompKey()
                 set += type.getGeneralizes()*.getCompKey()
