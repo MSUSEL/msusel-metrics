@@ -77,7 +77,6 @@ class NumberOfStatements extends MetricEvaluator {
             node.getAllTypes().each { Type type ->
                 total += type.getValueFor("${repo.getRepoKey()}:NOS")
             }
-            println "${repo.getRepoKey()}:NOS"
             Measure.of("${repo.getRepoKey()}:NOS").on(node).withValue(total)
         }
 
