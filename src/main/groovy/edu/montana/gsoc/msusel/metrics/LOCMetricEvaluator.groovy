@@ -84,8 +84,10 @@ abstract class LOCMetricEvaluator extends SourceMetricEvaluator {
             try {
                 List<String> lines = getLines(node)
 
-                String ext = node.getParentFile().getRefKey().find(/\.\w{2,4}$/)
-                ext = ext.substring(1)
+                String ext = ""
+                if (node.getName().contains(".")) {
+                    ext = node.getParentFile().getName().substring(node.getParentFile().getName().lastIndexOf(".") + 1)
+                }
 
                 loadProfile(LoCProfileManager.instance.getProfileByExtension(ext))
 
@@ -99,8 +101,10 @@ abstract class LOCMetricEvaluator extends SourceMetricEvaluator {
             try {
                 List<String> lines = getLines(node)
 
-                String ext = node.getRefKey().find(/\.\w{2,4}$/)
-                ext = ext.substring(1)
+                String ext = ""
+                if (node.getName().contains(".")) {
+                    ext = node.getName().substring(node.getName().lastIndexOf(".") + 1)
+                }
 
                 loadProfile(LoCProfileManager.instance.getProfileByExtension(ext))
 

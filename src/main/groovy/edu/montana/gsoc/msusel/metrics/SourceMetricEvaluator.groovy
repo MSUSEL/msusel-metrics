@@ -42,7 +42,7 @@ abstract class SourceMetricEvaluator extends MetricEvaluator {
         if (node instanceof Component) {
             File f = node.getParentFile()
 
-            def x = Files.readAllLines(Paths.get(f.getName()))
+            def x = Paths.get(f.getName()).toFile().readLines()
             int start = node.start - 1
             int end = node.end - 1
 
@@ -53,7 +53,7 @@ abstract class SourceMetricEvaluator extends MetricEvaluator {
                 throw ex
             }
         } else if (node instanceof File) {
-            Files.readAllLines(Paths.get(node.getName()))
+            Paths.get(node.getName()).toFile().readLines()
         } else {
             []
         }
