@@ -49,7 +49,6 @@ abstract class SourceMetricEvaluator extends MetricEvaluator {
             try {
                 x[start..end]
             } catch (IllegalArgumentException | IndexOutOfBoundsException ex) {
-                println "Component: $node"
                 throw ex
             }
         } else if (node instanceof File) {
